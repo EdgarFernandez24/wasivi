@@ -1,0 +1,13 @@
+$(document).ready(function(){
+   /*getMapLocation();
+    watchMapPosition();
+    getWeatherLocation();
+    watchWeatherPosition();
+    autoCompletar();
+   */
+   /*$("#direccionMPu").click(function(){
+    	autoCompletar();
+    });
+    */
+    //getPosition();
+});

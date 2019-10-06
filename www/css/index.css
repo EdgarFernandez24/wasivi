@@ -1,0 +1,1185 @@
+@import "https://fonts.googleapis.com/css?family=Noto+Sans";
+html, body {
+      /*position: relative;*/
+      height: 100%;
+    }
+body {
+  font-family: 'Noto Sans', sans-serif;
+  background: url(../img/fondo1440x2560.jpg) no-repeat fixed center center;
+  background-size: cover;
+  /*border: 1px #38DE5B solid;*/
+ /* height:100vh;
+  width:100%;*/
+  padding:0;  
+  margin:0;
+}
+/* css general */
+.container .label-custom {    
+    color:#f2f2f2;
+}
+/***************************************************/
+/* div inicio */
+/******************************************************/
+.container-custom-inicio {
+    padding: 0px;
+    margin: 0px;
+   
+}
+.container-custom-inicio .div-custom-inicio
+{
+    padding: 25px 0px 0px 0px;
+    margin: 0 auto;    
+    width: 100%;
+    height: 100%;
+    /*border: 1px #F70BEF solid ;*/
+}
+/*nav tabs */
+.div-custom-inicio .navtab-custom-inicio {
+  margin: 0px 0px 1px 5px;
+  border-radius:1px;
+}
+.div-custom-inicio .nav-tabs{
+  border-bottom: none;
+}
+.div-custom-inicio .nav-tabs > li > a,
+.div-custom-inicio .nav-tabs > li > a:hover,
+.div-custom-inicio .nav-tabs > li > a:focus {
+    color: #f2f2f2;/*#b3cccc;*/ 
+    /*border: 1px solid #000;*/
+}
+.div-custom-inicio .nav-tabs > .open > a,
+.div-custom-inicio .nav-tabs > .open > a:hover,
+.div-custom-inicio .nav-tabs > .open > a:focus,
+.div-custom-inicio .nav-tabs > li > a:hover,
+.div-custom-inicio .nav-tabs > li > a:focus {
+  color:  #009999;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-color: transparent;
+}
+.div-custom-inicio .nav-tabs > li.active > a,
+.div-custom-inicio .nav-tabs > li.active > a:hover,
+.div-custom-inicio .nav-tabs > li.active > a:focus {
+  color: #009999;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-color: transparent; ;
+  
+  border-bottom-color: transparent;
+}
+.div-custom-inicio .tab-content-custom-inicio {
+    margin-top:0px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    /*border: 1px solid #000;*/
+}
+
+/* formularios de inicio y registro */
+.div-custom-inicio .form-registro-inicio input[type="text"],
+.div-custom-inicio .form-registro-inicio input[type="email"], 
+.div-custom-inicio .form-registro-inicio input[type="password"] {
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  border-bottom: 1px solid #f2f2f2;
+  color: #f2f2f2; 
+  outline: none;
+}
+.div-custom-inicio .form-group ::placeholder{
+  color: rgba(255,255,255,0.7);
+}
+.div-custom-inicio .form-registro-inicio input[type="file"] { 
+width: 100%; 
+height: 100%; 
+opacity: 0; 
+/*cursor:  pointer;*/
+}
+/*imagen, logotipo */
+.div-custom-inicio .tab-pane img{
+  width: 75px;
+  height: 75px;
+  margin: 10px auto;  
+}
+.div-custom-inicio .tab-pane .imgLogo{
+  text-align: center; 
+
+} 
+/*img carrusel */
+.div-custom-inicio .carousel img{
+  margin: 0 auto;
+  padding: 0px;
+  width: 100%;
+  height: 20%;
+  background: transparent;
+  
+}
+
+/* para subir foto */
+.container-custom-inicio .foto-collapse-custom {
+   color:#f2f2f2; 
+}
+.container-custom-inicio .foto-collapse-custom :focus{
+   color:#b3cccc;
+}
+.form-group .foto-collapse-custom{
+  background:transparent;
+  border-bottom: 1px solid #f2f2f2;
+  color: #f2f2f2;
+  border-radius: 0;
+}
+.panel-heading{ 
+    position: relative;
+    margin-top: 0px;
+    color: #f2f2f2;
+    /*border: 1px solid #000;*/
+}
+/* style icon */
+.panel-heading .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+  color:#008080;    
+  /*border: 1px solid #000;*/
+}
+.right .glyphicon { 
+  right: 10px;
+}
+
+.fotoMensaje { 
+/*display: inline-block;*/
+width: 100%;
+ }
+.contendorFotoPerfil{
+  height: 150px; 
+ width: 150px;
+}
+.fotoMensaje .fotoRegistro {
+ margin: 0;
+ padding: 0;
+ background: url(../img/usuario.jpg) no-repeat center center; 
+ background-size: contain, cover;
+  width: 100%;
+  height: 100%;
+ border-radius: 5px;
+ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+ opacity: 0.8;
+ /*border: 1px solid #000;*/
+}
+/*papelera del img registro*/
+#clist {
+/*margin: 2px;*/
+/*padding: 3px;*/
+padding-top: 5px;
+background: #f2f2f2;
+width: 24px;
+height: 24px;
+visibility: hidden;
+border-radius: 12px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+color:#008080; 
+text-align: center;
+}
+/* iconos dentro del input tipo 2*/
+
+.container-custom-inicio .inner-addon {
+  position: relative;
+}
+.container-custom-inicio .inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+.container-custom-inicio .left-addon .glyphicon {
+  left: 1px;
+  color:#009999;  /*#246175;*/
+}
+.container-custom-inicio .left-addon input {
+  padding-left: 30px;
+}
+.container-custom-inicio .right-addon input {
+  padding-right: 30px;
+}
+.container-custom-inicio  .label-custom {    
+    color:#b3cccc;
+}
+.container-custom-inicio .label-custom-gris {
+  margin: 0;
+  text-align: center;    
+  color:#b3cccc;
+}
+.container-custom-inicio .label-custom-gris a {    
+  color:#f2f2f2;
+}
+.container-custom-inicio button.btnFormulario {
+    border:none;
+    background-color:#008080; 
+    text-decoration:none; 
+    color:#f2f2f2; 
+    cursor:pointer;
+    outline: none;
+}
+.container-custom-inicio button.btnFormulario:focus {
+    border:none;
+    background-color:#004d4d; 
+    text-decoration:none; 
+    color:#f2f2f2; 
+    cursor:pointer;
+    outline: none
+}
+.container-custom-inicio.text-danger-custom{
+  color: #ffcccc;
+}
+.container-custom-inicio #mensajefoto{
+    margin: auto;
+    padding: 5px;
+    display: none;
+}
+.container-custom-inicio .text-success-custom{
+  color: #cce6ff;
+}
+.container-custom-inicio .text-danger-custom{
+  color: #ffcccc;
+}
+
+.container-custom-inicio .label-custom-gris {
+  margin: 0;
+  text-align: center;    
+  color:#b3cccc;
+}
+/*fin de div container container custom inicio*/
+/*******************************************************************/
+/*general principal ************************************************/
+.container-custom-principal .text-success-custom{
+  color: #cce6ff;
+}
+.container-custom-principal .text-danger-custom{
+  color: #ffcccc;
+}
+
+
+/******************************************************************/
+/*contenedor divPrincipal*/
+/******************************************************************/
+#divPrincipal{
+    display: none;        
+}
+.container-custom-principal{
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;  
+}
+.container-custom-principal .div-custom-principal{
+  
+  margin-top:10px;
+  padding: 0px;
+  background-color: #f2f2f2;
+  
+  
+}
+.container-custom-principal .header{
+  padding: 5px 10px 0px 10px ;
+  color: #f2f2f2;
+  background-color:#008080;
+ /* border: 1px solid blue;/**********************************************/
+}
+.div-custom-principal .inner-addon {
+  position: relative;
+
+}
+.div-custom-principal .inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+.container-custom-principal .right-addon .glyphicon {
+  right: 0px;
+  color: #008080;  /*#f2f2f2#246175;*/
+
+}
+
+.container-custom-principal .left-addon input {
+  padding-left: 30px;
+
+}
+.container-custom-principal  .label-custom {    
+    color:#b3cccc;
+}
+.container-custom-principal .label-custom-gris {
+  margin: 0;
+  text-align: center;    
+  color:#b3cccc;
+}
+.container-custom-principal .mensajeDondeVivir{
+padding: 0px 0px 5px 0px ;
+font-size: 16px;
+color: #f2f2f2;
+}
+.container-custom-principal .mensajePrincipal{
+margin: 5px 0px 5px 0px ;/*arriba derecha abajo izquierda */
+font-size: 16px;
+background: #fff;
+}
+
+/*Btn Flotante Publicar*/
+.container-custom-principal button.btnPrincipalPublicar {
+    display:scroll;
+    position:fixed;
+    bottom:65px;
+    left: 25%;
+    width: 50%;
+    height: 30px;
+    background: linear-gradient(135deg, #4fd8f5, #008080);
+    border:none;
+    font-size: 13px;
+    text-decoration:none; 
+    color:#f2f2f2; 
+    cursor:pointer;
+    outline: none;
+    border-radius: 15px;
+    /*background-color:#008080; */
+}
+
+.container-custom-principal .contenedorFotosCiudad{
+display: -webkit-flex; /* Safari */        
+display: grid;
+grid-template-columns: auto ;
+background-color:white;
+
+margin: 5px 0px 5px 0px;
+
+}
+.container-custom-principal .fotoC{
+  
+  margin: 5px 0px 5px 0px;
+  display: flex;
+  flex-direction: column;   
+  border-radius: 3px; 
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);  
+}
+#mensajeCiudad{
+ margin-top: 85px; 
+}
+.container-custom-principal .contenedorFotosBarrios {
+  width: 100%;
+  margin-bottom: 90px;
+  padding: 10px;
+  display: -webkit-flex; /* Safari */        
+ /*display: flex;
+  flex-wrap: wrap;*/
+  display: grid;
+  grid-template-columns: auto auto;
+  background-color: #fff;
+  border-radius: 2px;
+  
+  /*border: 1px #000 solid; */
+}
+.container-custom-principal .fotoB{
+  /*display: grid;
+  grid-template-columns: auto;*/
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  height: 550px;
+  /*height: 95%;    */
+  /* width: 550px;
+  height: 540px;*/
+  margin:10px;  
+  padding:0;
+  background-color: #fff;
+  border-radius: 5px; 
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+  /*border: 1px solid red; */
+}
+.container-custom-principal .imgZona {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px; 
+    width: 100%;
+    height:65%; /*auto;*/
+}
+.container-custom-principal .imgCiudad {
+    width: 100%;
+    height: auto;
+}
+/*****************************************************************/
+/*justify-content: center;
+   align-items: center;*/
+/***************fin div principal ***********************************/
+
+.container-custom-principal .posHeadDerecha{
+position: absolute;
+right: 5px;  
+/*border: 1px solid red;*/
+}
+
+
+.container-custom-principal .posHeadCenter{
+position: absolute;
+left: 30%;  
+/*border: 1px solid red;*/
+}
+.container-custom-principal .btnPosIzq{
+position: absolute;
+left: 5px;
+top: 10px;  
+
+}
+/*********************buscarListaMapa*****************************/
+#paginaListaMapas{
+    display: none;    
+}
+.navtab-custom-principal {
+   background-color:#008080;
+}
+
+/*nav tabs */
+.div-custom-principal .nav-tabs{
+  border-bottom:none;  /*#EC1A1A;*/
+  
+}
+.div-custom-principal .nav-tabs > li > a,
+.div-custom-principal .nav-tabs > li > a:hover,
+.div-custom-principal .nav-tabs > li > a:focus {
+    color: #b3cccc;/*#b3cccc;*/ 
+    /*border: 1px solid #000;*/
+}
+.div-custom-principal .nav-tabs > .open > a,
+.div-custom-principal .nav-tabs > .open > a:hover,
+.div-custom-principal .nav-tabs > .open > a:focus,
+.div-custom-principal .nav-tabs > li > a:hover,
+.div-custom-principal .nav-tabs > li > a:focus {
+  color:  #fff;
+  background-color: #008080;
+ /* background-color: rgb(0, 0, 0, 0.6);*/
+  border-color: transparent;
+}
+.div-custom-principal .nav-tabs > li.active > a,
+.div-custom-principal .nav-tabs > li.active > a:hover,
+.div-custom-principal .nav-tabs > li.active > a:focus {
+  color: #fff;
+   background-color: #008080;
+  /*background-color: rgb(0, 0, 0, 0.6);*/
+  border-color: transparent; 
+  
+  border-bottom:4px #fff solid; /*transparent;*/
+}
+/*.container-custom-principal .contenedorListaMapa{
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background: #fff;
+
+}*/
+.container-custom-principal .tab-content-custom-principal {
+  padding-top: 65px;
+  background: #e6e6e6;
+  height: 100%;
+ /* border:3px solid orange;*/
+}
+.container-custom-principal .fotosLista{
+/* border: 1px #000 solid;      */
+display: grid;
+grid-template-columns: auto ;
+}
+.container-custom-principal .fotoL{  
+  margin: 5px 0px 5px 0px;
+  display: flex;
+  flex-direction: column;   
+  border-radius: 3px; 
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);  
+}
+.container-custom-principal .fotosLista img {
+width:100%;
+height: auto;
+}
+
+.container-custom-principal .swiper-container {
+      /*padding-top: 20px;*/
+      width: 100%;
+      height: 25%;
+      background: #fff;
+      /*border: 1px solid red;*/
+    }
+.container-custom-principal .swiper-slide {
+       margin:  5px;   
+      text-align: center;
+      font-size: 14px;
+      background: #fff;
+
+      /* Center slide text vertically */
+     /* display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;*/
+      display: inline-grid;
+      /*-webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;*/
+      justify-content: center;
+     /*-webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;*/
+      align-items: center;
+      width: 80%;
+      /*border: 1px solid black;*/
+      border-radius: 3px; 
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+      
+    }
+.container-custom-principal .fotoD{
+   
+    width: 100%;
+  }
+.container-custom-principal .fotoD .imgD{
+    width: 100%;
+  }
+.contenedorMapa{
+  margin: 10px 2px 2px 2px;
+  background: #fff;
+  /*padding: 0px auto;*/
+  border: 1px solid #f2f2f2;
+  position: absolute;
+  /*bottom:2px;*/
+  width: 98%;
+  height: 65%;
+}
+#map{
+  position: relative;  
+  width: 100%;
+  height: 100%; 
+  margin: 0;
+  padding: 0; 
+  /*border: 1px solid #000;*/
+    
+}
+
+ 
+
+
+
+
+
+
+
+
+
+
+/**********************fin buscarListaMapa***********************/
+/****************************a publicar ***************************/
+.div-custom-principal .div-secundario{
+  padding: 10px;
+  
+}
+.div-custom-principal .divPublicar{
+  /*border: 1px solid pink;*/
+  margin: 30px 0px 0px 0px;
+  /*margin-top:40px;*/
+  /*padding: 10px;*/
+  background-color: #fff;
+  
+}
+.container-custom-principal .label-custom-medio{
+  
+  margin: 1px;
+  text-align: center;
+  color:#008080;
+}
+/*a perfil */
+.container-custom-principal .right-addon input {
+  padding-right: 30px;
+}
+
+.div-custom-principal .left-addon .glyphicon {
+  left: 0px;
+  color:#009999;  /*#246175;*/
+}
+.container-custom-principal button.btnFormularioPrincipal {
+    border:none;
+    background-color:#008080; 
+    text-decoration:none; 
+    color:#f2f2f2; 
+    cursor:pointer;
+    outline: none;
+    border-radius: 0;
+
+}
+.container-custom-principal button.btnFormularioPrincipal:focus {
+    border:none;
+    background-color:#004d4d; 
+    text-decoration:none; 
+    color:#f2f2f2; 
+    cursor:pointer;
+    /*outline: none
+    border-radius: 0;*/
+}
+
+
+
+.container-custom-principal .form-group ::placeholder{
+  color: rgba(128, 128, 128,.6);
+}
+.container-custom-principal .text-danger-custom{
+  color: #ffcccc;
+}
+.text-danger-custom1{
+  color: #ff8080;
+}
+.container-custom-principal #mensajefotoA{
+    margin: auto;
+    padding: 5px;
+    display: none;
+}
+.contenedorMapa{
+  
+  background: #fff;  
+  border: 1px solid #f2f2f2;
+  position: absolute;  
+  width: 98%;
+  height: 65%;
+}
+.contenedorMapaDireccion{
+  margin: 10px 2px 2px 2px;  
+  background: #fff;
+  border: 1px solid #f2f2f2;
+  position: absolute; 
+  width: 98%;
+  height: 75%;
+  display: none;
+}
+
+#mapDireccionBuscar{
+  position: relative;
+  /*display: none;*/
+  width: 100%;
+  height: 100%; 
+  margin: 0;
+  padding: 0; 
+  /*border: 1px solid #000;*/
+    
+}
+#mapDireccionLink{
+  position: relative;
+  /*display: none;*/
+  width: 100%;
+  height: 100%; 
+  margin: 0;
+  padding: 0; 
+  /*border: 1px solid #000;*/
+    
+}
+
+
+#paginaUsuarioPerfilEditar{
+    display: none;    
+}
+#paginaUsuarioPerfilMostrar{
+    display: none;    
+}
+
+/* paginaListaMapas */
+
+
+
+
+
+/*div Publicar*/
+#paginaPublicar{
+    display: none;    
+}
+.publicarFotoUbicacion{
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+.publicarDirecion{
+  display: none;
+ } 
+.publicarCaracteristicas{
+  display: none;
+}
+.publicarPiso{
+  display: none;
+}
+
+.div-custom-principal .contenedorDireccion{
+  /*position: absolute;*/
+  /*border: 1px solid red;  */
+  padding: 30px 10px 10px 10px;
+  width: 100%;
+  margin: 0px;
+  /*padding: 10px;*/
+  background-color: #fff;
+}
+
+.container-custom-principal button.btnFormularioContinuar {
+    border:none;
+    background-color:#008080;/*transparent;*/
+    text-decoration:none; 
+    color:#f2f2f2;
+    cursor:pointer;
+    outline: none;
+    border-radius: 0;
+
+}
+.container-custom-principal .progress-custom{
+  padding: 0;
+  margin:0;
+  height: 5px;
+  border-radius: 0;
+  /*border: 1px solid red;*/
+}
+.container-custom-principal .progressbar-bar-custom{
+  padding: 0;
+  margin:0;
+  width: 33%;
+  background-color:#008080;
+  /* border: 1px solid blue;*/
+}
+.form-principal-publicar input[type="text"],
+
+.form-principal-publicar input[type="date"] {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  border-bottom: 1px solid #008080;
+  color: #0d0d0d;
+  box-shadow: none; 
+}
+.form-principal-publicar textarea {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  border-bottom: 1px solid #008080;
+  color: #0d0d0d;
+  box-shadow: none; 
+}
+.form-principal-publicar textarea:focus {
+  box-shadow: none; 
+}
+/*.form-principal-publicar input[type="text"]:focus,
+
+.form-principal-publicar input[type="date"]:focus {
+  border: none;
+  outline: 0; 
+  box-shadow: none; 
+}*/
+.form-principal-publicar input[type="file"]{
+opacity: 0;
+position: absolute;
+z-index: -1;  
+}
+
+
+
+/*
+.imgPublicar{
+  width: 100%;
+  height: 20%;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  font-size: 12px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  border:1px solid #000;
+}*/
+.container-custom-principal .imgPublicar {
+  width: 100%; 
+  height: 400px;
+  border-radius: 5px;  
+  font-size: 12px;
+  margin: 5px;
+  display: -webkit-flex; /* Safari */        
+  /*display: flex;
+  flex-wrap: wrap;*/
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background-color: #fff;
+  /*border:1px solid #000;  */ 
+}
+#divImgPublicarG {
+  width: 90%;
+  height: 90%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+}
+.divImgPublicarG img{
+  margin:10px auto;
+  display:block;
+  width: 40%;
+  height: 40%;
+ /* border:1px solid #008080;  */
+}
+
+.container-custom-principal .fotoPublicar{
+  width:200px;
+  height:190px;
+  margin: 0;
+  margin: 5px;
+  /*padding: 5px;*/
+  display: flex;
+  flex-direction: column;      
+  border-radius: 5px; 
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+  /*background-color: #000;*/
+}
+#divImgPublicarP{
+  /*background: url('../img/photo-camera2.png') no-repeat center center;*/
+  width: 200px;
+  height:190px;
+  padding: 5px;
+  background-size: contain,cover;
+  display: none;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+ /* border:1px solid #008080; */
+
+}
+
+.divImgPublicarP img{
+  margin:0 auto;
+  /*display:block;*/
+  width: 100%;
+  height:80%;
+/*border:1px solid #008080;  */
+}
+
+
+.removeImgPublicar {
+
+padding: 4px;
+background: #f2f2f2;
+width: 26px;
+height: 26px;
+border-radius: 13px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+background-color:#008080; 
+color:#fff; 
+font-size: 14px;
+}
+
+.container-custom-principal .label-custom-negro{
+  margin: 0;
+  text-align: center;
+  color:#000; 
+}
+.container-custom-principal .label-custom-color{
+  padding-left: 10px;
+  color:#008080; /*#f2f2f2;*/
+}
+.container-custom-principal .headerPublicar {
+  font-size: 17px;
+  
+  
+}
+/*div Perfil */
+.container-custom-principal button.btn-circle {
+        display:scroll;
+        position:relative;
+        top:5px;
+        left: 5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    padding: 6px 0;
+    line-height: 1.428571429;
+    text-align: center;
+    border:none;
+    background-color:#008080; 
+    text-decoration:none; 
+    color:#f2f2f2; 
+    cursor:pointer;
+    outline: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);  
+    
+}
+.container-custom-principal button.btn-circle:focus {
+    
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    text-align: center;
+    border:none;
+    background-color:#004d4d; 
+    text-decoration:none; 
+    color:#f2f2f2; 
+    cursor:pointer;
+    outline: none
+    
+}
+/*.btn-circle {
+  
+  
+  
+  font-size: 12px;
+  line-height: 1.428571429;
+  
+}*/
+.form-principal-perfil input[type="text"],
+.form-principal-perfil input[type="email"],
+.form-principal-perfil input[type="date"],
+.form-principal-perfil input[type="tel"], 
+.form-principal-perfil input[type="password"] {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  border-bottom: 1px solid #008080;
+  color: #0d0d0d; 
+  box-shadow: none;
+  /*outline: none;*/
+}
+/* transparente al radio*/
+.form-principal-perfil input[type="radio"] { 
+  opacity: 0.5; 
+  width: 90%;
+  height: 90%;
+  
+}
+
+/* IMAGE STYLES */
+/*.form-principal-perfil input[type=radio] + img {
+  cursor: pointer;
+}*/
+.form-principal-perfil ::placeholder{
+  color: rgba(128,128,128,.6);
+}
+/*.fotoMensaje .imgPerfil {
+ margin-left: 5px; 
+ background: #c2c2c2 url(../img/usuario.jpg) no-repeat center center;
+ /*height: 150px; 
+ width: 200px;
+ background-size: 200px 100px;*/
+ /*border-radius: 3px;
+ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+ /*opacity: 0.8;*/
+ /*border: 1px solid #000;*/
+/*}
+
+/*icono basurero */
+#clistA {
+margin: 2px;
+padding: 2px;
+background: #f2f2f2;
+width: 17px;
+height: 17px;
+visibility: hidden;
+border-radius: 2px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+color:#008080; 
+}
+.contendorFotoPerfilM{
+  padding: 0;
+  background-color: #000;
+  width: 100%;
+  height: 500px;
+ /* border: 1px solid blue;*/
+}
+.fotoPerfilM{
+ 
+  width: 100%;
+  height: 100%;
+
+}
+.contendorFotoPerfilE{
+  background-color: #000;
+  width: 70%;
+  height: 200px;
+ /* border: 1px solid blue;*/
+}
+
+.fotoPerfilE{
+  width: 100%;
+  height: 100%;
+/*   border: 1px solid red; */
+}
+
+.divSexo{
+text-align: center;
+color: #999999;
+font-size: 6px;
+margin-left: 30px;
+padding: 6px; 
+border-radius: 5px;
+border:1px solid #999999;   
+}
+.divSexo .imgSexoRH {
+ 
+ margin-bottom: 10px; 
+ background: url(../img/hombreG.png) no-repeat center center;
+ height: 25px; 
+ width: 25px;
+ background-size: 25px 25px;
+ border-radius: 4px;
+ /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+ /*opacity: 0.8;*/
+ /*border: 1px solid #000;*/
+}
+.divSexo .imgSexoRM {
+  margin-bottom: 10px; 
+ background: url(../img/mujerG.png) no-repeat center center;
+ height: 25px; 
+ width: 25px;
+ background-size: 25px 25px;
+ border-radius: 4px;
+ /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+ /*opacity: 0.8;*/
+ /*border: 1px solid #000;*/
+}
+.divCarac{
+text-align: center;
+color: #999999;
+font-size: 6px;
+margin-left: 10px;
+padding: 6px; 
+border-radius: 5px;
+border:1px solid #999999;   
+}
+.divCarac #imgSexo {
+ 
+ margin-bottom: 10px; 
+ background: url(../img/mujerG.png) no-repeat center center;
+ height: 20px; 
+ width: 20px;
+ background-size: 20px 20px;
+ border-radius: 2px;
+}
+.form-principal-perfil input[type="file"] { 
+width: 100%; 
+height: 100%; 
+opacity: 0; 
+/*cursor:  pointer;*/
+}
+/*fin de perfil*/
+/*iconos footer*/
+.container-custom-principal .footer{
+  padding: 0 auto;
+  border-top: 3px solid #b3cccc;
+  /*background-color:rgb(0, 0, 0,0.5 )/*#008080;*/
+  background-color:#f2f2f2;/*rgb(0, 128, 128,0.8 )/**/
+  color: rgba(128, 128, 128,.8);
+  
+}
+.footer .glyphicon {
+  font-size: 14px;
+  pointer-events: none;
+  color:rgba(128, 128, 128,.8);/*#008080;  */
+}
+ .footer .icoFooter{
+  
+  display: inline-block;
+  width:24%;
+  text-align: center; 
+   padding: 5px;
+}
+.footer .icoFooterMensaje{
+  font-size: 8px;
+ /* display: none;*/
+}
+@media screen and (max-width: 1200px) {
+  .contendorFotoPerfilM {    
+    height: 400px;
+  }
+  /*.divImgPublicarG{
+    width: 400px;
+  }*/
+  .container-custom-principal .imgPublicar {    
+    height: 620px;
+  }
+  #divImgPublicarP{
+  /*background: url('../img/photo-camera2.png') no-repeat center center;*/
+   width: 300px;
+    height:290px;
+  }
+  .container-custom-principal .fotoPublicar{
+    width:300px;
+    height:290px;  
+    margin: 5px;
+    border-radius: 5px; 
+}
+  .removeImgPublicar {
+    padding: 4px;
+    width: 28px;
+    height: 28px;
+    border-radius: 14px;
+    background-color:#008080; 
+    /*color:#008080; */
+    color: #f2f2f2; 
+    font-size: 14px;
+  }  
+  .container-custom-principal .fotoB{
+  height: 350px;
+  }
+}
+@media screen and (max-width: 900px) {
+  .contendorFotoPerfilM {    
+    height: 300px;
+  }
+ /* .divImgPublicarG{
+    width: 300px;
+  }*/
+  .container-custom-principal .imgPublicar {    
+    height: 410px;
+  }
+  #divImgPublicarP{
+  
+    width: 200px;
+    height:190px;
+  }
+   .container-custom-principal .fotoPublicar{
+    width:200px;
+    height:170px;  
+    margin: 3px;
+    border-radius: 3px; 
+  }
+  .removeImgPublicar {
+
+    padding: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color:#008080; 
+    /*color:#008080; */
+    color: #f2f2f2; 
+    font-size: 12px;
+  }  
+  .container-custom-principal .fotoB{
+  height: 150px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .contendorFotoPerfilM {    
+    height: 250px;
+  }
+ /* .divImgPublicarG{
+    width: 200px;
+  }*/
+  .container-custom-principal .imgPublicar {
+     height: 210px;
+  }
+  #divImgPublicarP{
+    /*background: url('../img/photo-camera2.png') no-repeat center center;*/
+    width: 110px;
+    height:100px;
+  }
+  .container-custom-principal .fotoPublicar{
+    width:110px;
+    height:100px;    
+    margin: 2px;
+    border-radius: 2px; 
+  }
+  .removeImgPublicar {
+    padding: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background-color:#008080; 
+    /*color:#008080; */
+    color: #f2f2f2;
+    font-size: 10px;
+  }
+  .container-custom-principal .fotoB{
+  height: 150px;
+  }
+  
+}
+
