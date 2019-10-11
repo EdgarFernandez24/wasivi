@@ -1112,7 +1112,7 @@ opacity: 0;
 }
 @media screen and (max-width: 900px) {
   .contendorFotoPerfilM {    
-    height: 300px;
+    height: 350px;
   }
  /* .divImgPublicarG{
     width: 300px;
@@ -1148,7 +1148,7 @@ opacity: 0;
 }
 @media screen and (max-width: 600px) {
   .contendorFotoPerfilM {    
-    height: 250px;
+    height: 300px;
   }
  /* .divImgPublicarG{
     width: 200px;

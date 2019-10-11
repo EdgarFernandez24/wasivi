@@ -20,13 +20,13 @@
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.SoftBot.WasiVI"
     },
-    "cordova-plugin-file-transfer": {
-      "PACKAGE_NAME": "com.SoftBot.WasiVI"
-    },
     "cordova-plugin-image-picker": {
       "PACKAGE_NAME": "com.SoftBot.WasiVI"
     },
     "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.SoftBot.WasiVI"
+    },
+    "cordova-plugin-file-transfer": {
       "PACKAGE_NAME": "com.SoftBot.WasiVI"
     }
   },

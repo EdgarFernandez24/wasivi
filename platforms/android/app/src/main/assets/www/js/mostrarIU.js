@@ -135,9 +135,10 @@ $(document).ready(function(){
             $("#paginaUsuarioPerfilEditar").css("display", "block");
             $("#paginaUsuarioPerfilMostrar").css("display", "none");
             $("#divFooter").css("display", "none");
-            /*datdo recuperados de local storage*/
+            $("#clistA").css("visibility", "hidden");
+            /*datos recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilE").css({"background": "url(http://192.168.0.21/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -177,7 +178,7 @@ $(document).ready(function(){
             $("#divFooter").css("display", "none");
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilE").css({"background": "url(http://192.168.0.21/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size":"cover"});
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.108/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -205,7 +206,7 @@ $(document).ready(function(){
                                     
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilM").css({"background": "url(http://192.168.0.21/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#fotoPerfilM").css({"background": "url(http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombrePM").html($datosLocal.usrName);
             $("#apellidosPM").html($datosLocal.usrLname);
             if ($datosLocal.usrSexo==1) {
@@ -428,7 +429,7 @@ function inicioSesion(){
     if($datosLocal!= undefined || $datosLocal!= null ){
         /*$.each($datosLocal, function(key, value){alert(key + ' = ' + value);});*/
         $("#nombreCompleto").html($datosLocal['usrName']);//http://192.168.1.145/wasiWeb/
-        $("#imgPerfilHeader").attr({"src":"http://192.168.0.21/wasiWeb/"+ $datosLocal['usrImg']});// fotos/eddyfer_77@hotmail.com/paisaje1.jpg}); //mostramos foto por defecto 
+        $("#imgPerfilHeader").attr({"src":"http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg']}); 
         $("body").css("background","#f2f2f2");
         $("#divInicio").css("display", "none");
         $("#divPrincipal").css("display", "block");
@@ -474,7 +475,7 @@ function iniciarSession(){
     event.preventDefault();
     $.ajax({
         type :'POST',
-        url:'http://192.168.0.21/wasiWeb/php/ingresar.php', //'http://192.168.1.145/wasiWeb/php/ingresar.php',
+        url:'http://192.168.1.108/wasiWeb/php/ingresar.php',
         dataType : 'json',        
         data: new FormData($("#formIngreso")[0]),        
         //async: false,
@@ -564,7 +565,7 @@ function continuarFotoUbi(){
     }
     $.ajax({
         type : 'POST',
-        url: 'http://192.168.0.21/wasiWeb/php/publicarFotos.php', //'http://192.168.1.145/wasiWeb/php/registrar.php',
+        url: 'http://192.168.1.108/wasiWeb/php/publicarFotos.php',
         data: $formDatos,           
         dataType : 'json',
         crossDomain: true,

@@ -5,8 +5,9 @@ var app = {
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
         navigator.geolocation.getCurrentPosition(onMapSuccess, onMapError, { enableHighAccuracy: false, timeout: 3000,maximumAge: 50000 }); 
-        watchMapPosition();
-        watchWeatherPosition();
+       
+        //watchMapPosition();
+        //watchWeatherPosition(); reinicia varias veces 
         autoCompletar();
 
     },
@@ -19,6 +20,7 @@ var app = {
 app.initialize();
 var Latitude = undefined;
 var Longitude = undefined;
+var mFotoR="sin foto";//mensaje de retorno insertarfotoregistro.php
 var imagenPerfilRegistro = "";
 var imagenPerfilEditar = "";
 var imgPerfilAnt="";// guarda img anterior para comparar con el actua si es lo mismo    
@@ -31,6 +33,7 @@ var onMapSuccess = function (position) {
     Longitude = position.coords.longitude;
     alert( "onMapSuccess "+Latitude+" "+Longitude);
     getMap(Latitude, Longitude);
+    //watchMapPosition();
     getWeather(Latitude, Longitude);
 }
 // Get map by using coordinates
@@ -56,7 +59,7 @@ function getMap(latitude, longitude) {
      var infoWindow = new google.maps.InfoWindow;
 
           // Change this depending on the name of your PHP or XML file
-          downloadUrl('http://192.168.0.21/wasiWeb/php/marcas.php', function(data) {
+          downloadUrl('http://192.168.1.108/wasiWeb/php/marcas.php', function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName('marker');
             Array.prototype.forEach.call(markers, function(markerElem) {
@@ -106,7 +109,8 @@ function getMap(latitude, longitude) {
         request.send(null);
 }
 // Success callback for watching your changing position
-var onMapWatchSuccess = function (position) {
+/*var onMapWatchSuccess = function (position) {
+  alert('onMapWatchSuccess');
     var updatedLatitude = position.coords.latitude;
     var updatedLongitude = position.coords.longitude;
     if (updatedLatitude != Latitude && updatedLongitude != Longitude) {
@@ -114,16 +118,17 @@ var onMapWatchSuccess = function (position) {
         Longitude = updatedLongitude;
         getMap(updatedLatitude, updatedLongitude);
     }
-}
+}*/
 // Error callback
 function onMapError(error) {
+    alert('code: ' + error.code + '\n' +'message: ' + error.message + '\n');
     console.log('code: ' + error.code + '\n' +'message: ' + error.message + '\n');
 }
 // Watch your changing position
-function watchMapPosition() {
-    //alert("watchMapPosition");
-    return navigator.geolocation.watchPosition(onMapWatchSuccess, onMapError, { enableHighAccuracy: false,timeout: 3000,maximumAge: 50000 });
-}
+/*function watchMapPosition() {
+    alert("watchMapPosition");
+    return navigator.geolocation.watchPosition(onMapWatchSuccess, onMapError, { enableHighAccuracy: false,timeout: 5000,maximumAge: 50000 });
+}*/
 /*var onWeatherSuccess = function (position) {
 
     Latitude = position.coords.latitude;
@@ -133,7 +138,7 @@ function watchMapPosition() {
 }*/
 // Get weather by using coordinates
 function getWeather(latitude, longitude) {
-   // alert(" getWeather lat"+ latitude + "lon "+ longitude);
+  alert(" getWeather lat"+ latitude + "lon "+ longitude);
     // Get a free key at http://openweathermap.org/. Replace the "Your_Key_Here" string with that key.
     var OpenWeatherAppKey = "ac4af321583aa6f9cb9580218d463657";
     var queryString ='http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + OpenWeatherAppKey + '&units=imperial';
@@ -157,11 +162,12 @@ function onWeatherError(error) {
 }
 // Watch your changing position
 function watchWeatherPosition() {
-   // alert("watchWeatherPosition");
+    alert("watchWeatherPosition");
     return navigator.geolocation.watchPosition(onWeatherWatchSuccess, onWeatherError, { enableHighAccuracy: false, timeout: 3000,maximumAge: 50000});
 }
 // Success callback for watching your changing position
 var onWeatherWatchSuccess = function (position) {
+  alert('onWeatherWatchSuccess');
     var updatedLatitude = position.coords.latitude;
     var updatedLongitude = position.coords.longitude;
     if (updatedLatitude != Latitude && updatedLongitude != Longitude) {
@@ -265,7 +271,7 @@ function autoCompletar() {
 //callback al hacer clic en el marcador lo que hace es quitar y poner la animacion BOUNCE
 
 function hacerFoto(){
-  var cameraOptionsHF = {
+  var cameraOptionsHFR = {
     quality: 25,
     destinationType: navigator.camera.DestinationType.FILE_URI,
     sourceType: navigator.camera.PictureSourceType.CAMERA,
@@ -273,44 +279,32 @@ function hacerFoto(){
     correctOrientation: true
   }
   //alert("hacerFoto");
-  navigator.camera.getPicture(onSuccessHF, onFail, cameraOptionsHF);
+  navigator.camera.getPicture(onSuccessHFR, onFail, cameraOptionsHFR);
 }
-function onSuccessHF(imageURI) {
- // alert(imageURI);
-  $("#modalRegistrarPerfil").modal("hide");
-   
+function onSuccessHFR(imageURI) { 
+  $("#modalRegistrarPerfil").modal("hide");   
   $("#fotoRegistro").css({"backgroundImage": "url('" + imageURI + "')","backgroundSize" : "150px 150px"});
   $("#clist").css("visibility", "visible");
   $("#mensajefoto").css("display", "none");
-  imagenPerfilRegistro=imageURI;
-  
-  //$("#aa").html(imageURI);
+  imagenPerfilRegistro=imageURI;  
 }
 function cargarFoto(){
   //alert("cargarFoto");
-  var cameraOptionsCF = {
+  var cameraOptionsCFR = {
     quality: 25,
     encodingType: navigator.camera.EncodingType.JPEG,
     destinationType: navigator.camera.DestinationType.FILE_URI,
     sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
     correctOrientation: true
-  }
-  //alert("hacerFoto");
-  navigator.camera.getPicture(onSuccessCF, onFail, cameraOptionsCF);
+  }  
+  navigator.camera.getPicture(onSuccessCFR, onFail, cameraOptionsCFR);
 }
-function onSuccessCF(imageURI) {
-  //alert(JSON.stringify(imageURI));
-  $("#modalRegistrarPerfil").modal("hide");
-  //event.preventDefault();
-  //var image = document.getElementById('fotoLocal');
-  //image.src = imageURI;
-  //subirImagen(imageURI);  
+function onSuccessCFR(imageURI) { 
+  $("#modalRegistrarPerfil").modal("hide");    
   $("#fotoRegistro").css({"backgroundImage": "url('" + imageURI + "')","backgroundSize" : "150px 150px"});
   $("#clist").css("visibility", "visible");
   $("#mensajefoto").css("display", "none");
-  imagenPerfilRegistro=imageURI;
-  
-  //$("#aa").html(imageURI);
+  imagenPerfilRegistro=imageURI; 
 }
 $("#clist").click(function(event){ //click en el icono basurero para ocultar la imagen mostrada
         event.stopPropagation();
@@ -323,7 +317,7 @@ $("#clist").click(function(event){ //click en el icono basurero para ocultar la 
 });
 
 function subirImagen(fileURL, vEmail) {
-    alert("subirImagen "+fileURL+" "+vEmail );       
+    //alert("subirImagen "+fileURL+" "+vEmail );       
     var optionsR = new FileUploadOptions();
     optionsR.fileKey = "fotoPerfil";
     optionsR.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
@@ -335,13 +329,13 @@ function subirImagen(fileURL, vEmail) {
     optionsR.params = miParams;
       
     var ft = new FileTransfer();
-    ft.upload(fileURL, encodeURI("http://192.168.0.21/wasiWeb/php/insertarFotoRegistro.php"), uploadSuccessR, uploadFailR, optionsR);
+    ft.upload(fileURL, encodeURI("http://192.168.1.108/wasiWeb/php/insertarFotoRegistro.php"), uploadSuccessR, uploadFailR, optionsR);
 }
 
 function uploadSuccessR(r) {
-    alert("uploadSuccess Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
-    //var image = document.getElementById('fotoServidor');
-    //image.src = r.response;
+   // alert("uploadSuccess Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
+    mfotoR=JSON.parse(r.response);
+    $('mISF').html=mfotoR['msg'];
 }
 
 function uploadFailR(error) {
@@ -352,7 +346,7 @@ function registrarUsuario(){ //evento activado por onsubmit en validarformulario
   event.preventDefault();    
     $.ajax({
         type : 'POST',
-        url: 'http://192.168.0.21/wasiWeb/php/registrar.php',
+        url: 'http://192.168.1.108/wasiWeb/php/registrar.php',
         data:new FormData($('#formRegistro')[0]),
         dataType: 'json',
         crossDomain: true,
@@ -365,10 +359,10 @@ function registrarUsuario(){ //evento activado por onsubmit en validarformulario
               //aqui file uploader 
                 $('#mID').html("");
                 $('#mIS').html(datosR.msg + " " + datosR.umEmail);
-                alert(" exito registrarUsuario "+imagenPerfilRegistro+" "+datosR.email);
+               // alert(" exito registrarUsuario "+imagenPerfilRegistro+" "+datosR.email);
                 if (imagenPerfilRegistro) {                
                 subirImagen(imagenPerfilRegistro, datosR.email);
-                }
+                }                
               }
                 if(datosR.uReg==0){
                     $('#mIS').html("");
@@ -383,8 +377,8 @@ function registrarUsuario(){ //evento activado por onsubmit en validarformulario
 }
 
 function hacerFotoEditar(){
-  alert("hacerFotoEditar");
-  var cameraOptionsHF = {
+  //alert("hacerFotoEditar ");
+  var cameraOptionsHFE = {
     quality: 25,
     destinationType: navigator.camera.DestinationType.FILE_URI,
     sourceType: navigator.camera.PictureSourceType.CAMERA,
@@ -392,22 +386,23 @@ function hacerFotoEditar(){
     correctOrientation: true
   }
   //alert("hacerFoto");
-  navigator.camera.getPicture(onSuccessHFE, onFail, cameraOptionsHF);
+  navigator.camera.getPicture(onSuccessHFE, onFail, cameraOptionsHFE);
 }
 function onSuccessHFE(imageURI) {
-  alert("onSuccessHFE "+imageURI);
+  //alert("onSuccessHFE "+imageURI);
+  imagenPerfilEditar=imageURI;
+  // $imgPerfilAnt=$datosLocal['usrImg']; 
+  subirImagenPerfilEditar(imageURI,$datosLocal['usrImg'], $datosLocal['usrEmail']); 
+  
   $("#modalEditarPerfil").modal("hide");
-   
   $("#fotoPerfilE").css({"backgroundImage": "url('" + imageURI + "')","background-size": "cover"});
   $("#clistA").css("visibility", "visible");
-  $("#mensajefotoA").css("display", "none");
-  imagenPerfilEditar=imageURI;
-  
+  $("#mensajefotoA").css("display", "none");  
   //$("#aa").html(imageURI);
 }
 function cargarFotoEditar(){
-  alert("cargarFotoEditar");
-  var cameraOptionsCF = {
+  //alert("cargarFotoEditar");
+  var cameraOptionsCFE = {
     quality: 25,
     encodingType: navigator.camera.EncodingType.JPEG,
     destinationType: navigator.camera.DestinationType.FILE_URI,
@@ -415,71 +410,75 @@ function cargarFotoEditar(){
     correctOrientation: true
   }
   //alert("hacerFoto");
-  navigator.camera.getPicture(onSuccessCFE, onFail, cameraOptionsCF);
+  navigator.camera.getPicture(onSuccessCFE, onFail, cameraOptionsCFE);
 }
 function onSuccessCFE(imageURI) { 
-  alert("onSuccessCFE "+imageURI);
+  //alert("onSuccessCFE "+imageURI);  
+  imagenPerfilEditar=imageURI; 
+  subirImagenPerfilEditar(imageURI,$datosLocal['usrImg'],$datosLocal['usrEmail']); 
+
   $("#modalEditarPerfil").modal("hide");   
   $("#fotoPerfilE").css({"backgroundImage": "url('" + imageURI + "')","background-size": "cover"});
   $("#clistA").css("visibility", "visible");
-  $("#mensajefotoA").css("display", "none");
-  imagenPerfilEditar=imageURI;  
+  $("#mensajefotoA").css("display", "none");  
 }
-
 function onFail(message) {
   alert('Failed because: ' + message);
 }
  $("#clistA").click(function(event){ //click en el icono basurero para ocultar la imagen mostrada
       event.stopPropagation();
-      //mensajefotoalert("The p element was clicked.");
-      $("#fotoPerfilE").css({"background": "url(img/usuario.jpg) no-repeat center center","background-size": "cover"}); 
+       subirImagenPerfilEditar(imagenPerfilEditar,'',$datosLocal['usrEmail']);
+      $("#fotoPerfilE").css({"background": "url(./img/usuario.jpg) ","background-size": "cover"}); 
       $("#clistA").css("visibility", "hidden");
+      //en este caso mandamos la img capturado por camara o galeria y enviamos vacio imagen perfi anterior 
+     
       imagenPerfilEditar="";
-    /*  $el = $('#fotoPerfilA');
-      $el.wrap('<form>').closest('form').get(0).reset();
-      $el.unwrap();*/
+      
   });
 
 function subirImagenPerfilEditar(fileURL, fileUrlAnt ,emailP) {
-     alert("subirImagenPerfilEditar"+" "+fileURL+" "+fileUrlAnt+" "+emailP);       
+     //alert("subirImagenPerfilEditar IMG "+fileURL+" IMGA "+fileUrlAnt+" EMAILP "+emailP);       
     var optionsPE = new FileUploadOptions();
     optionsPE.fileKey = "fotoPerfilA";
     optionsPE.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
     optionsPE.mimeType="image/jpeg";
-    optionsPE.chumkedmode="false";
-    optionsPE.headers = { Connection: "close" }
+    //optionsPE.chumkedmode="false";
+    //optionsPE.headers = { Connection: "close" }
     var miParams = {};
       miParams.imgPerfilAnt=fileUrlAnt;
       miParams.emailP = emailP;
     optionsPE.params = miParams;
       
-    var ft = new FileTransfer();
-    ft.upload(fileURL, encodeURI("http://192.168.0.21/wasiWeb/php/insertarFotoEditar.php"), uploadSuccessPE, uploadFailPE, optionsPE);
+    var ft = new FileTransfer();  
+    ft.upload(fileURL, encodeURI("http://192.168.1.108/wasiWeb/php/insertarFotoEditar.php"), uploadSuccessPE, uploadFailPE, optionsPE);
 }
 
 function uploadSuccessPE(r) {
-    alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
-    //$("#fotoPerfilM").css({"background": "url(http://192.168.0.21/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
-    //var image = document.getElementById('fotoServidor');
-    //image.src = r.response;
+   // alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
+    $fotoA=JSON.parse(r.response);
+    //alert('fotoA '+ $fotoA['fotoActual']);
+
+    $datosLocal['usrImg']=$fotoA['fotoActual'];
+    
 }
 function uploadFailPE(error) {
-    alert("An error has occurred: Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
+    alert("An error has occurred uploadFailPE : Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
+    $("#fotoPerfilE").css({"background": "url(./img/usuario.jpg) ","background-size": "cover"}); 
+    $("#clistA").css("visibility", "hidden");
+    imagenPerfilEditar="";
+
 }
 function actualizarPerfil(cPassword)
 {   event.preventDefault(); 
-    $imgPerfilAnt=$datosLocal['usrImg'];
-    if (imagenPerfilEditar) {
-      subirImagenPerfilEditar(imagenPerfilEditar,$imgPerfilAnt, $datosLocal['usrEmail']);
-    }
-    
+        
     $myFormD=new FormData($("#formPerfil")[0]);
     $myFormD.append("usrIdP",$datosLocal['usrId']);//id usuario para la consulta
     $myFormD.append("cambioPasswordNP",cPassword);//si cambio el password
-    //$myFormD.append("imgPerfilAnt",$imgPerfilAnt);  //imagen perfil antiguo
+    $myFormD.append("imgPerfilAnt",$datosLocal['usrImg']);  //imagen perfil antiguo
+    $myFormD.append("imagenPerfilEditar",imagenPerfilEditar);
     $.ajax({
         type : 'POST',
-        url:'http://192.168.0.21/wasiWeb/php/actualizarPerfil.php',
+        url:'http://192.168.1.108/wasiWeb/php/actualizarPerfil.php',
         data:$myFormD,
         dataType: 'json',
         crossDomain: true,
@@ -510,8 +509,8 @@ function actualizarPerfil(cPassword)
             $("#icoFMPerfil").css({"color":"#008080"}); 
             if(datosP.uReg==1){
                 $('#mPMD').html("");
-                $('#mPMS').html(datosP.msg + " " + datosP.uPer+" "+datosP.usrEmail+" "+datosP.img +" "+datosP.imga);
-                $("#fotoPerfilM").css({"background": "url(http://192.168.0.21/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+                $('#mPMS').html(datosP.msg + " id " + datosP.uPer+" em "+datosP.usrEmail+" imga "+datosP.img +" img "+datosP.usrImg);
+                $("#fotoPerfilM").css({"background": "url(http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center","background-size": "cover"});
                 $('#nombrePM').html($datosLocal.usrName);
                 $('#apellidosPM').html($datosLocal.usrLname);
                 if ($datosLocal.usrSexo==1) {
