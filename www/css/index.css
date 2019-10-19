@@ -156,7 +156,7 @@ width: 100%;
  margin: 0;
  padding: 0;
  background: url(../img/usuario.jpg) no-repeat center center; 
- background-size: contain, cover;
+ background-size:cover;
   width: 100%;
   height: 100%;
  border-radius: 5px;
@@ -341,7 +341,8 @@ background: #fff;
 }
 
 .container-custom-principal .contenedorFotosCiudad{
-display: -webkit-flex; /* Safari */        
+display: -webkit-flex; /* Safari */   
+    
 display: grid;
 grid-template-columns: auto ;
 background-color:white;
@@ -351,11 +352,32 @@ margin: 5px 0px 5px 0px;
 }
 .container-custom-principal .fotoC{
   
+  position: relative; 
+  text-align: center;
   margin: 5px 0px 5px 0px;
   display: flex;
   flex-direction: column;   
   border-radius: 3px; 
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);  
+  /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);  */
+  /*width: 100%;
+  height: 150px;
+  background-size: cover;
+  background-repeat: no-repeat;*/
+}
+.texto-titulo{
+    width: 100%;
+    margin: 0;
+    position: absolute;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+}
+.container-custom-principal .imgCiudad {
+    width: 100%;
+    height: auto;
 }
 #mensajeCiudad{
  margin-top: 85px; 
@@ -397,10 +419,7 @@ margin: 5px 0px 5px 0px;
     width: 100%;
     height:65%; /*auto;*/
 }
-.container-custom-principal .imgCiudad {
-    width: 100%;
-    height: auto;
-}
+
 /*****************************************************************/
 /*justify-content: center;
    align-items: center;*/
@@ -798,7 +817,7 @@ z-index: -1;
   /*border:1px solid #000;  */ 
 }
 #divImgPublicarG {
-  width: 90%;
+  width: 100%;
   height: 90%;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
@@ -828,7 +847,7 @@ z-index: -1;
   width: 200px;
   height:190px;
   padding: 5px;
-  background-size: contain,cover;
+  background-size: cover;
   display: none;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

@@ -220,14 +220,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "runs": true
     },
     {
-      "id": "cordova-plugin-image-picker.ImagePicker",
-      "file": "plugins/cordova-plugin-image-picker/www/imagepicker.js",
-      "pluginId": "cordova-plugin-image-picker",
-      "clobbers": [
-        "plugins.imagePicker"
-      ]
-    },
-    {
       "id": "cordova-plugin-splashscreen.SplashScreen",
       "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
       "pluginId": "cordova-plugin-splashscreen",
@@ -250,6 +242,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "window.FileTransfer"
       ]
+    },
+    {
+      "id": "cordova-plugin-imagepicker.ImagePicker",
+      "file": "plugins/cordova-plugin-imagepicker/www/imagepicker.js",
+      "pluginId": "cordova-plugin-imagepicker",
+      "clobbers": [
+        "plugins.imagePicker"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -257,8 +257,8 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-whitelist": "1.3.4",
     "cordova-plugin-camera": "4.1.0",
     "cordova-plugin-file": "6.0.2",
-    "cordova-plugin-image-picker": "1.1.1",
     "cordova-plugin-splashscreen": "5.0.3",
-    "cordova-plugin-file-transfer": "1.7.1"
+    "cordova-plugin-file-transfer": "1.7.1",
+    "cordova-plugin-imagepicker": "1.1.0"
   };
 });

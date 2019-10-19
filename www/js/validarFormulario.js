@@ -56,7 +56,7 @@ $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: 'http://192.168.1.108/wasiWeb/php/consultaEmail.php',//'http://192.168.1.145/wasiWeb/php/consultaEmail.php',
+                    url: 'http://192.168.1.101/wasiWeb/php/consultaEmail.php',
                     //data: {email : $('#email').val()},
                     data: "email="+$vEmail,
                     crossDomain: true,
@@ -262,7 +262,7 @@ $("#passwordP").change(function(){ //validar
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: 'http://192.168.1.108/wasiWeb/php/consultaPassword.php',//'http://192.168.1.145/wasiWeb/php/',
+                    url: 'http://192.168.1.101/wasiWeb/php/consultaPassword.php',
                     data: {password : $passwordP,idUsuario:$vidUsuario},                 
                     crossDomain: true,
                     cache: false,
@@ -425,11 +425,13 @@ $("#formPerfil").submit(function(){
        actualizarPerfil($passwordExiste);        
     });
     $("#formPublicarDireccion").submit(function(){
-        //alert("tienes que elegir al menos 1 foto");
+    //alert("tienes que elegir al menos 1 foto");
         
        continuarDireccion();        
     });
     $("#formPublicarFotoUbicaion").submit(function(){
+        //alert("formPublicarFotoUbicaion "+ $("#imgPublicar").data("cont"));
+        console.log("hola " + $("#imgPublicar").data("cont"));
         //alert("tienes que elegir al menos 1 foto");
         $precioPu = $("#precioMPu").val();
         if (!/^([0-9])*$/.test($precioPu)){
@@ -440,11 +442,11 @@ $("#formPerfil").submit(function(){
             } else{
                 $("#mensajeErrorPrecioPu").html("");
         }
-        if ($("#filePublicar")[0].files.length<=0){
-            alert("tienes que elegir al menos 1 foto");
-            //$("#mensajeModalFotoPublicar").html("No hay fotos");
+        if ($("#imgPublicar").data("cont")<=0){
+            alert("tienes que elegir al menos 1 foto");           
+            $("#mensajeModalFotoPublicar").html("tienes que elegir al menos 1 foto");
             return false;
-        } 
+        }
        continuarFotoUbi();        
     });
     

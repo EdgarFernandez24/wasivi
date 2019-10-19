@@ -1,21 +1,36 @@
   $(document).ready(function(){
-    $("#CamaraRegistroPerfil").click(function(){
-      //alert("entra CamaraRegistroPerfil");
+    $("#CamaraRegistroPerfil").click(function(){      
       hacerFoto();
     });
-    $("#CargarRegistroPerfil").click(function(){
-      //alert("entra CargarRegistroPerfil");
-      cargarFoto();
-      /* editar foto perfil ppor camara o abrir carpeta fotos*/
+    $("#CargarRegistroPerfil").click(function(){      
+      cargarFoto();      
     });
-     $("#CamaraEditarPerfil").click(function(){
-      //alert("entra CamaraRegistroPerfil");
+    $("#CamaraEditarPerfil").click(function(){      
       hacerFotoEditar();
     });
-    $("#CargarEditarPerfil").click(function(){
-      //alert("entra CargarRegistroPerfil");
+    $("#CargarEditarPerfil").click(function(){      
       cargarFotoEditar();
     });
+    $("#fotoPublicarCamara").click(function(){ 
+      if ($("#imgPublicar").data("cont") < 5) {
+        fotoPublicarCamara();  
+      }
+      else{
+      alert("No. Puedes subir mas de 5 fotos");
+       $('#modalPublicar').modal('hide');  
+      }
+      
+    });
+    $("#fotoPublicarGaleria").click(function(){  
+      if ($("#imgPublicar").data("cont") < 5) {
+        fotoPublicarGaleria();
+      }
+      else{
+      alert("No. Puedes subir mas de 5 fotos"); 
+       $('#modalPublicar').modal('hide'); 
+      }      
+    });
+    
 
 
  /*  function archivo(evt){

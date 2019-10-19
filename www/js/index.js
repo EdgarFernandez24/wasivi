@@ -20,9 +20,14 @@ var app = {
 app.initialize();
 var Latitude = undefined;
 var Longitude = undefined;
+var storedFiles = [];//array de img por foto libreria
+var storedFilesDb = [];//array de img obtenidas de la base de datos
+var contImg=0;//catidad de img para publicar o publicados
+var maxImg=5;//maxima img fotos
 var mFotoR="sin foto";//mensaje de retorno insertarfotoregistro.php
 var imagenPerfilRegistro = "";
 var imagenPerfilEditar = "";
+var imagenPublicar="";
 var imgPerfilAnt="";// guarda img anterior para comparar con el actua si es lo mismo    
 var customLabel = {restaurant: {label: 'R'}, bar: {label: 'B'},casa:{label: 'C'}};
 
@@ -31,14 +36,16 @@ var customLabel = {restaurant: {label: 'R'}, bar: {label: 'B'},casa:{label: 'C'}
 var onMapSuccess = function (position) {
     Latitude = position.coords.latitude;
     Longitude = position.coords.longitude;
-    alert( "onMapSuccess "+Latitude+" "+Longitude);
+    //alert( "onMapSuccess "+Latitude+" "+Longitude);
+    console.log( "onMapSuccess "+Latitude+" "+Longitude);
     getMap(Latitude, Longitude);
     //watchMapPosition();
     getWeather(Latitude, Longitude);
 }
 // Get map by using coordinates
 function getMap(latitude, longitude) {
-    alert( "getMap "+latitude+" "+longitude);
+    //alert( "getMap "+latitude+" "+longitude);
+    console.log( "getMap "+latitude+" "+longitude);
     var mapOptions = {
         center: new google.maps.LatLng(0, 0),
         zoom: 1,
@@ -59,7 +66,7 @@ function getMap(latitude, longitude) {
      var infoWindow = new google.maps.InfoWindow;
 
           // Change this depending on the name of your PHP or XML file
-          downloadUrl('http://192.168.1.108/wasiWeb/php/marcas.php', function(data) {
+          downloadUrl('http://192.168.1.101/wasiWeb/php/marcas.php', function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName('marker');
             Array.prototype.forEach.call(markers, function(markerElem) {
@@ -121,7 +128,7 @@ function getMap(latitude, longitude) {
 }*/
 // Error callback
 function onMapError(error) {
-    alert('code: ' + error.code + '\n' +'message: ' + error.message + '\n');
+    //alert('code: ' + error.code + '\n' +'message: ' + error.message + '\n');
     console.log('code: ' + error.code + '\n' +'message: ' + error.message + '\n');
 }
 // Watch your changing position
@@ -138,7 +145,8 @@ function onMapError(error) {
 }*/
 // Get weather by using coordinates
 function getWeather(latitude, longitude) {
-  alert(" getWeather lat"+ latitude + "lon "+ longitude);
+  //alert(" getWeather lat"+ latitude + "lon "+ longitude);
+  console.log(" getWeather lat"+ latitude + "lon "+ longitude);
     // Get a free key at http://openweathermap.org/. Replace the "Your_Key_Here" string with that key.
     var OpenWeatherAppKey = "ac4af321583aa6f9cb9580218d463657";
     var queryString ='http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + OpenWeatherAppKey + '&units=imperial';
@@ -162,12 +170,12 @@ function onWeatherError(error) {
 }
 // Watch your changing position
 function watchWeatherPosition() {
-    alert("watchWeatherPosition");
+    //alert("watchWeatherPosition");
     return navigator.geolocation.watchPosition(onWeatherWatchSuccess, onWeatherError, { enableHighAccuracy: false, timeout: 3000,maximumAge: 50000});
 }
 // Success callback for watching your changing position
 var onWeatherWatchSuccess = function (position) {
-  alert('onWeatherWatchSuccess');
+  //alert('onWeatherWatchSuccess');
     var updatedLatitude = position.coords.latitude;
     var updatedLongitude = position.coords.longitude;
     if (updatedLatitude != Latitude && updatedLongitude != Longitude) {
@@ -283,7 +291,7 @@ function hacerFoto(){
 }
 function onSuccessHFR(imageURI) { 
   $("#modalRegistrarPerfil").modal("hide");   
-  $("#fotoRegistro").css({"backgroundImage": "url('" + imageURI + "')","backgroundSize" : "150px 150px"});
+  $("#fotoRegistro").css({"backgroundImage": "url('" + imageURI + "')","backgroundSize" : "cover"});
   $("#clist").css("visibility", "visible");
   $("#mensajefoto").css("display", "none");
   imagenPerfilRegistro=imageURI;  
@@ -301,14 +309,14 @@ function cargarFoto(){
 }
 function onSuccessCFR(imageURI) { 
   $("#modalRegistrarPerfil").modal("hide");    
-  $("#fotoRegistro").css({"backgroundImage": "url('" + imageURI + "')","backgroundSize" : "150px 150px"});
+  $("#fotoRegistro").css({"backgroundImage": "url('" + imageURI + "')","backgroundSize" : "cover"});
   $("#clist").css("visibility", "visible");
   $("#mensajefoto").css("display", "none");
   imagenPerfilRegistro=imageURI; 
 }
 $("#clist").click(function(event){ //click en el icono basurero para ocultar la imagen mostrada
         event.stopPropagation();
-      $("#fotoRegistro").css({"background": "url(img/usuario.jpg) no-repeat center center","backgroundSize" : "150px 150px"}); 
+      $("#fotoRegistro").css({"background": "url(img/usuario.jpg) no-repeat center center","backgroundSize" : "cover"}); 
       $("#clist").css("visibility", "hidden");
       imagenPerfilRegistro="";
      /* $el = $('#fotoPerfil');
@@ -317,7 +325,8 @@ $("#clist").click(function(event){ //click en el icono basurero para ocultar la 
 });
 
 function subirImagen(fileURL, vEmail) {
-    //alert("subirImagen "+fileURL+" "+vEmail );       
+    //alert("subirImagen "+fileURL+" "+vEmail ); 
+    console.log("subirImagen "+fileURL+" "+vEmail );       
     var optionsR = new FileUploadOptions();
     optionsR.fileKey = "fotoPerfil";
     optionsR.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
@@ -329,7 +338,7 @@ function subirImagen(fileURL, vEmail) {
     optionsR.params = miParams;
       
     var ft = new FileTransfer();
-    ft.upload(fileURL, encodeURI("http://192.168.1.108/wasiWeb/php/insertarFotoRegistro.php"), uploadSuccessR, uploadFailR, optionsR);
+    ft.upload(fileURL, encodeURI("http://192.168.1.101/wasiWeb/php/insertarFotoRegistro.php"), uploadSuccessR, uploadFailR, optionsR);
 }
 
 function uploadSuccessR(r) {
@@ -337,16 +346,14 @@ function uploadSuccessR(r) {
     mfotoR=JSON.parse(r.response);
     $('mISF').html=mfotoR['msg'];
 }
-
 function uploadFailR(error) {
     alert("An error has occurred: Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
 }
-
 function registrarUsuario(){ //evento activado por onsubmit en validarformulario.js
   event.preventDefault();    
     $.ajax({
         type : 'POST',
-        url: 'http://192.168.1.108/wasiWeb/php/registrar.php',
+        url: 'http://192.168.1.101/wasiWeb/php/registrar.php',
         data:new FormData($('#formRegistro')[0]),
         dataType: 'json',
         crossDomain: true,
@@ -375,7 +382,6 @@ function registrarUsuario(){ //evento activado por onsubmit en validarformulario
         }
     });    
 }
-
 function hacerFotoEditar(){
   //alert("hacerFotoEditar ");
   var cameraOptionsHFE = {
@@ -450,7 +456,15 @@ function subirImagenPerfilEditar(fileURL, fileUrlAnt ,emailP) {
     optionsPE.params = miParams;
       
     var ft = new FileTransfer();  
-    ft.upload(fileURL, encodeURI("http://192.168.1.108/wasiWeb/php/insertarFotoEditar.php"), uploadSuccessPE, uploadFailPE, optionsPE);
+    ft.onprogress = function(progressEvent) {
+      if (progressEvent.lengthComputable) {
+          loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
+      } 
+      else {
+        loadingStatus.increment();
+      }
+    };
+    ft.upload(fileURL, encodeURI("http://192.168.1.101/wasiWeb/php/insertarFotoEditar.php"), uploadSuccessPE, uploadFailPE, optionsPE);
 }
 
 function uploadSuccessPE(r) {
@@ -478,7 +492,7 @@ function actualizarPerfil(cPassword)
     $myFormD.append("imagenPerfilEditar",imagenPerfilEditar);
     $.ajax({
         type : 'POST',
-        url:'http://192.168.1.108/wasiWeb/php/actualizarPerfil.php',
+        url:'http://192.168.1.101/wasiWeb/php/actualizarPerfil.php',
         data:$myFormD,
         dataType: 'json',
         crossDomain: true,
@@ -486,7 +500,8 @@ function actualizarPerfil(cPassword)
         contentType: false,
         processData: false,
         success: function(datosP)
-        {  alert("exito actualizarPerfil");            
+        {   //alert("exito actualizarPerfil");            
+            console.log(JSON.stringify(datosP));
             $datosRemotoP=JSON.stringify(datosP);
             localStorage.setItem('datosInicioSesion', $datosRemotoP);
             $datosLocal=JSON.parse(localStorage.getItem('datosInicioSesion'));
@@ -510,7 +525,7 @@ function actualizarPerfil(cPassword)
             if(datosP.uReg==1){
                 $('#mPMD').html("");
                 $('#mPMS').html(datosP.msg + " id " + datosP.uPer+" em "+datosP.usrEmail+" imga "+datosP.img +" img "+datosP.usrImg);
-                $("#fotoPerfilM").css({"background": "url(http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center","background-size": "cover"});
+                $("#fotoPerfilM").css({"background": "url(http://192.168.1.101/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center","background-size": "cover"});
                 $('#nombrePM').html($datosLocal.usrName);
                 $('#apellidosPM').html($datosLocal.usrLname);
                 if ($datosLocal.usrSexo==1) {
@@ -533,3 +548,126 @@ function actualizarPerfil(cPassword)
         }
     });   
 }
+function fotoPublicarCamara(){
+  //alert("hacerFotoEditar ");
+  var cameraOptionsFPC = {
+    quality: 25,
+    destinationType: navigator.camera.DestinationType.FILE_URI,
+    sourceType: navigator.camera.PictureSourceType.CAMERA,
+    allowEdit: true,
+    correctOrientation: true
+  }
+  //alert("hacerFoto");
+  navigator.camera.getPicture(onSuccessFPC, onFail, cameraOptionsFPC);
+}
+function onSuccessFPC(imageURI) {
+  console.log('Image URI: ' + imageURI);
+  console.log('img.name'+ imageURI.substr(imageURI.lastIndexOf('/') + 1));
+  imagenPublicar=imageURI;
+  $("#mensajeModalFotoPublicar").html("");
+  //encodeURI() para codificar reemplazar espasios o caracteres especiales por code utf8
+  //decodeURI() para decodificar 
+  var html = "<div class = 'fotoPublicar' style='background:#141f1f url("+imagenPublicar+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+imageURI.substr(imageURI.lastIndexOf('/') + 1) +"></span></div>";
+  selDiv.append(html); 
+  storedFiles.push(imageURI);
+  $('#mensajePublicar1').html("almacen + "+storedFiles.length); 
+  $('#modalPublicar').modal('hide');
+  $('.divImgPublicarG').css({'display':'none'});
+  $('#divImgPublicarP').css({'display':'flex'});
+  contImg++;
+  $("#imgPublicar").data("cont",contImg);
+  maxImg--;
+  alert('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
+  // $imgPerfilAnt=$datosLocal['usrImg']; 
+  /*subirImagenPerfilEditar(imageURI,$datosLocal['usrImg'], $datosLocal['usrEmail']); 
+  
+  $("#modalEditarPerfil").modal("hide");
+  $("#fotoPerfilE").css({"backgroundImage": "url('" + imageURI + "')","background-size": "cover"});
+  $("#clistA").css("visibility", "visible");
+  $("#mensajefotoA").css("display", "none");  
+  //$("#aa").html(imageURI);*/
+}
+
+
+function fotoPublicarGaleria(){
+  var cameraOptionsFPG = {
+    quality:50,
+    maximumImagesCount: maxImg,
+    width: 800
+  }
+  console.log("max "+JSON.stringify(cameraOptionsFPG)); 
+  plugins.imagePicker.getPictures(onSuccessFPG, onFailFPG, cameraOptionsFPG);
+}
+  
+function onSuccessFPG(results) {
+   /*var files = results;//$("#filePublicar")[0].files.length
+    if ((($("#filePublicar").files.length)+(storedFiles.length)) > 5 ){//+(storedFilesDb.length)
+        alert("solo puedes elegir maximo 5 fotos");
+        $('#modalPublicar').modal('hide');
+        //e.preventDefault();
+        return;
+    }*/
+    $("#mensajeModalFotoPublicar").html("");
+    $('#modalPublicar').modal('hide');
+  $('.divImgPublicarG').css({'display':'none'});
+  $('#divImgPublicarP').css({'display':'flex'});
+  alert('onSuccessFPG maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
+  for (var i = 0; i < results.length && i < maxImg; i++) {
+    //alert("Code = " + results[i].responseCode+" Response = " + results[i].response+" Sent = " + results[i].bytesSent);
+    //alert('Image URI: ' + JSON.stringify(results[i]));
+    console.log('Image URI: ' + results[i]);
+    var html = "<div class = 'fotoPublicar' style='background:#141f1f url("+results[i]+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+encodeURI(results[i].substr(results[i].lastIndexOf('/') + 1))+"></span></div>";
+    selDiv.append(html);
+    storedFiles.push(results[i]);
+    contImg++;
+    $("#imgPublicar").data("cont",contImg); 
+  }
+  $('#mensajePublicar1').html("almacen + "+storedFiles.length); 
+
+  if ((maxImg=maxImg-results.length)<0) {
+    maxImg=0;
+    alert('if maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
+  }    
+  else
+  {
+   // maxImg=maxImg-results.length;     
+  
+  alert(' else maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
+  }  
+  
+}
+function onFailFPG(error) {
+  console.log('Error: ' + error);
+} 
+
+function removeFile(e) {
+    var file = $(this).data("file");
+    //decodeURI(file) decodifica los espacion y otros ()    
+    for(var i=0;i<storedFiles.length;i++) {
+        if(storedFiles[i].substr(storedFiles[i].lastIndexOf('/')+1) === decodeURI(file)) {
+            storedFiles.splice(i,1);     
+            break;
+        }
+    }
+    /*for (var j = 0 ; j < storedFilesDb.length; j++) {
+        if (storedFilesDb[j].nombre_foto === file) {
+            storedFilesDb.splice(j,1);        
+            break;
+        }
+    } */   
+    $(this).parent().remove();
+    alert('removeFile1 contImg '+contImg+' maxImg '+maxImg);
+    contImg--;
+    maxImg++;
+    $('#mensajePublicar2').html("almacen db - "+storedFilesDb.length);
+    $("#imgPublicar").data("cont",contImg);
+    $('#mensajePublicar3').html("almacen - "+storedFiles.length);    
+    if (storedFiles.length + storedFilesDb.length == 0) {
+        $('.divImgPublicarG').css({'display':'block'});
+        $('#divImgPublicarP').css({'display':'none'});
+        $("#imgPublicar").data("cont",0); // no hay fotos
+    }
+    
+    alert('removeFile2 contImg '+contImg+' maxImg '+maxImg);
+  }
+

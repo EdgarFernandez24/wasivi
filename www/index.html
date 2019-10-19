@@ -140,8 +140,7 @@
                         </div>
                       </div>                              
                     </div>
-                  </div>
-                  <!--input type="button" onclick="hacerFoto();"  value="Hacer Foto"-->
+                  </div>                
                   <!-- Modal Registrar -->
                   <div class="modal fade" id="modalRegistrarPerfil" role="dialog">
                     <div class="modal-dialog">
@@ -166,7 +165,6 @@
                   </div><!--fin modalRegistrarPerfil--> 
                 </div>                     
                 <div class="form-group">
-
                 </div>
                 <div class="form-group">         
                   <div class="inner-addon left-addon">
@@ -243,16 +241,27 @@
       <div id="mensajeCiudad" class="text-center mensajePrincipal" >
         <div id="" > Ciudad para vivir.!</div>                      
       </div> 
-      <div class="contenedorFotosCiudad colorFondo">        
-        <div class="fotoC">
-          <img src="./img/barcelona3.jpg"  class="imgCiudad">      
+      <div class="contenedorFotosCiudad colorFondo" >        
+        <div class="fotoC"><!-- style="background-image:url('./img/barcelona.jpeg');"-->
+          <div class="texto-titulo">BARCELONA</div>
+          <img src="./img/barcelona.jpeg"  class="imgCiudad">      
+        </div>
+        <div class="fotoC" ><!--style="background-image:url('./img/madrid.jpg');"-->
+          <div class="texto-titulo"s>MADRID</div>
+          <img src="./img/madrid.jpg"  class="imgCiudad">      
         </div>
         <div class="fotoC">
-          <img src="./img/madrid1.jpg"  class="imgCiudad">      
-        </div>
-        <div class="fotoC">
-          <img src="./img/londres1.jpg" class="imgCiudad"><!--width="150" height="100"-->
+          <div class="texto-titulo"s>CEVILLA</div>
+          <img src="./img/cevilla.jpg" class="imgCiudad">
         </div>        
+        <div class="fotoC">
+          <div class="texto-titulo"s>MALAGA</div>
+          <img src="./img/malaga.jpg" class="imgCiudad">
+        </div>
+        <div class="fotoC">
+          <div class="texto-titulo"s>BILBAO</div>
+          <img src="./img/bilbao.jpg" class="imgCiudad">
+        </div>
       </div>
       <div id="mensajeBarrios" class="text-center mensajePrincipal">
         <div id="" > Zona para vivir</div>                      
@@ -493,24 +502,25 @@
           <fieldset>                 
             <div class="form-group">
               <label class="label-custom-color">Sube fotos para tu anuncio</label>
-              <div class="imgPublicar" id="imgPublicar">
+              <div class="text-center imgPublicar" id="imgPublicar" data-cont="0">
                 <div class="divImgPublicarG"></div>
                 <div data-toggle="modal" data-target="#modalPublicar" id="divImgPublicarG" class="divImgPublicarG">
+                  <span class="text-danger" id="mensajeModalFotoPublicar"></span>            
                   <img src="./img/photo-camera2.png">
                   <p class="label-custom-negro">Haz clic en la imagen.</p>
                   <p class="label-custom-medio">Para buscar en tus carpetas o hacer una foto.</p> 
-                  <p class="label-custom-medio">Sube maximo 5.</p>            
+                  <p class="label-custom-medio">Sube maximo 5.</p>                 
+                  
                 </div>
                 <div data-toggle="modal" data-target="#modalPublicar" id="divImgPublicarP" class="divImgPublicarP fotoPublicar ">
                   <span class="glyphicon glyphicon-plus" id=""></span>
                   <img src="./img/photo-camera2.png">            
                 </div>
+
               </div>
-              <span class="text-danger" id="mensajeModalFotoPublicar"></span>
-            </div>
-            
-            <label class="label-custom-color">Alquiler Mensual</label>
-            
+              
+            </div>            
+            <label class="label-custom-color">Alquiler Mensual</label>            
             <div class="form-group">         
               <div class="inner-addon left-addon">
                 <i class="glyphicon glyphicon-euro"></i>
@@ -518,24 +528,19 @@
               </div>
               <span class="text-danger" id="mensajeErrorPrecioPu"></span>
             </div>
-            <label class="label-custom-color">Comentarios</label>
-            
+            <label class="label-custom-color">Comentarios</label>            
             <div class="form-group">         
               <div class="inner-addon left-addon">
                 <textarea name="comentarioMPu" id="comentarioMPu" cols="3" placeholder="Que te gustaria contar sobre el piso y tus compañeros" class="form-control" required ></textarea>
               </div>
               <span class="text-danger" id="mensajeErrorNombreP"></span>
-            </div>
-               
-      
+            </div>     
             <p id="mensajePublicar">a</p>
             <p id="mensajePublicar1">b</p>
             <p id="mensajePublicar2">c</p>
             <p id="mensajePublicar3">e</p>
-            <p id="mensajePublicar4">f</p>
-            <!--button name="btnPublicar" onclick="publicar()" id ="btnPublicar" class="btn btn-primary btn-md btn-block btnFormulario" value="1" >Publicar</button-->
-          </fieldset>
-          <!--/form-->
+            <p id="mensajePublicar4">f</p>            
+          </fieldset>         
           <!-- Modal -->
           <div class="modal fade" id="modalPublicar" role="dialog">
             <div class="modal-dialog">
@@ -547,12 +552,12 @@
                 </div>
                 <div class="modal-body">              
                 <!--form role="form" action="" method="post" name="signupform" class="form-principal-publicar" enctype="multipart/form-data"-->
-                  <div class="form-group" style=" ">
+                  <div class="form-group" id="fotoPublicarCamara">
                     <label for="">Camara</label>
                   </div>
-                  <div class="form-group" >
-                    <label for="filePublicar">Galeria</label>
-                    <input type="file" class="form-control-file" id="filePublicar" name="filePublicar" multiple />
+                  <div class="form-group" id="fotoPublicarGaleria">
+                    <label for="">Galeria</label>
+                    <!--input type="file" class="form-control-file" id="filePublicar" name="filePublicar" multiple /-->
                   </div>
                 </div>            
               </div>

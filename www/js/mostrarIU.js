@@ -137,8 +137,8 @@ $(document).ready(function(){
             $("#divFooter").css("display", "none");
             $("#clistA").css("visibility", "hidden");
             /*datos recuperados de local storage*/
-            // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilE").css({"background": "url(http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.101/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -148,8 +148,7 @@ $(document).ready(function(){
                 $("#radioH").prop('checked', true);
                 $("#imgSexoRH").css({"background": "url(img/hombreN.png) no-repeat center center ","background-size": "25px 25px"});
                 $("#imgSexoH").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
-                /*$("#imgSexoH img").attr("src","img/hombreN.png");*/
-                $("#mensjeHS").css({"color":"#000","font-size":"7px"});//html($contH);   : ;  :   
+                $("#mensjeHS").css({"color":"#000","font-size":"7px"}); 
                 $contM=0;   
             }
             if ($datosLocal.usrSexo==2) {
@@ -178,7 +177,7 @@ $(document).ready(function(){
             $("#divFooter").css("display", "none");
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilE").css({"background": "url(http://192.168.1.108/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.101/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -206,7 +205,7 @@ $(document).ready(function(){
                                     
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilM").css({"background": "url(http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#fotoPerfilM").css({"background": "url(http://192.168.1.101/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombrePM").html($datosLocal.usrName);
             $("#apellidosPM").html($datosLocal.usrLname);
             if ($datosLocal.usrSexo==1) {
@@ -350,7 +349,7 @@ $(document).ready(function(){
     });
     selDiv = $("#imgPublicar");//para las foto publicadas 
 
-    $("#filePublicar").on("change", handleFileSelect);     
+//    $("#filePublicar").on("change", handleFileSelect);     
     $("#imgPublicar").on("click", ".removeImgPublicar", removeFile);
 });//fin $(document).ready(function()
 
@@ -387,14 +386,14 @@ function handleFileSelect(e) {
       }
       reader.readAsDataURL(f);
     });
-    $('#mensajePublicar1').html("almacen + "+storedFiles.length); 
+  /*  $('#mensajePublicar1').html("almacen + "+storedFiles.length); 
     $('#modalPublicar').modal('hide');
     $('.divImgPublicarG').css({'display':'none'});
     $('#divImgPublicarP').css({'display':'flex'});
     //$actualizar++;
-    $publicarFoto=1;
+    $publicarFoto=1;*/
 }
-
+/*
 function removeFile(e) {
     var file = $(this).data("file");
     //decodeURI(file) decodifica los espacion y otros ()    
@@ -409,7 +408,8 @@ function removeFile(e) {
             storedFilesDb.splice(j,1);        
             break;
         }
-    } */   
+    } */ 
+/*      
     $(this).parent().remove();
    // $actualizar++;
     $publicar=1;
@@ -424,12 +424,13 @@ function removeFile(e) {
         $pu.unwrap();
     }
   }
+  */
 function inicioSesion(){
     $datosLocal=JSON.parse(localStorage.getItem('datosInicioSesion'));
     if($datosLocal!= undefined || $datosLocal!= null ){
         /*$.each($datosLocal, function(key, value){alert(key + ' = ' + value);});*/
-        $("#nombreCompleto").html($datosLocal['usrName']);//http://192.168.1.145/wasiWeb/
-        $("#imgPerfilHeader").attr({"src":"http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg']}); 
+        $("#nombreCompleto").html($datosLocal['usrName']);
+        $("#imgPerfilHeader").attr({"src":"http://192.168.1.101/wasiWeb/"+ $datosLocal['usrImg']}); 
         $("body").css("background","#f2f2f2");
         $("#divInicio").css("display", "none");
         $("#divPrincipal").css("display", "block");
@@ -475,7 +476,7 @@ function iniciarSession(){
     event.preventDefault();
     $.ajax({
         type :'POST',
-        url:'http://192.168.1.108/wasiWeb/php/ingresar.php',
+        url:'http://192.168.1.101/wasiWeb/php/ingresar.php',
         dataType : 'json',        
         data: new FormData($("#formIngreso")[0]),        
         //async: false,
@@ -565,7 +566,7 @@ function continuarFotoUbi(){
     }
     $.ajax({
         type : 'POST',
-        url: 'http://192.168.1.108/wasiWeb/php/publicarFotos.php',
+        url: 'http://192.168.1.101/wasiWeb/php/publicarFotos.php',
         data: $formDatos,           
         dataType : 'json',
         crossDomain: true,
