@@ -1,8 +1,9 @@
-var selDiv = "";
-var storedFiles = [];
-var storedFilesDb = [];
+
+//var storedFiles = [];
+//var storedFilesDb = [];
 var marker;          //variable del marcador
 var coords = {};//coordenadas obtenidas con la geolocalización 
+var linkBuscarDir=0;
 //var mapD;   
 $(document).ready(function(){
     //$idCliente = 0; //var para envio publicar
@@ -138,7 +139,7 @@ $(document).ready(function(){
             $("#clistA").css("visibility", "hidden");
             /*datos recuperados de local storage*/
             
-            $("#fotoPerfilE").css({"background": "url(http://192.168.1.101/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.103/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -177,7 +178,7 @@ $(document).ready(function(){
             $("#divFooter").css("display", "none");
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilE").css({"background": "url(http://192.168.1.101/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.103/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -205,7 +206,7 @@ $(document).ready(function(){
                                     
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilM").css({"background": "url(http://192.168.1.101/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#fotoPerfilM").css({"background": "url(http://192.168.1.103/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombrePM").html($datosLocal.usrName);
             $("#apellidosPM").html($datosLocal.usrLname);
             if ($datosLocal.usrSexo==1) {
@@ -315,12 +316,23 @@ $(document).ready(function(){
             geocoderD.geocode({'latLng': markerD.getPosition()}, function(results, status) {
            
                     if (status == google.maps.GeocoderStatus.OK) {
-                        //alert("entra");
                         $('#direccionMPu').val(results[0].address_components[1].short_name+", "+results[0].address_components[0].short_name);
                         $('#ciudadMpu').val(results[0].address_components[2].short_name+", "+results[0].address_components[3].short_name);
+                        linkBuscarDir=1;
+                        alert("entra linkBuscarDireccion " + linkBuscarDir);
+                        $("#mensajeErrorCiudad").html("");
+                        $("#mensajeErrorDireccion").html("");
+                        $("#mensajeErrorDireccionT").html("");
+                        autoCCiu=1;
+                        autoCDir=1;    
+
                     }
                     else {
-                        alert("El Servicio de Codificación Geográfica ha fallado con el siguiente error: " + status);
+                        alert("El Servicio de Codificación Geográfica ha fallado con el siguiente error: " + status + " Intente una vez mas por favor ");
+                        linkBuscarDir=0;
+                        autoCCiu=0;
+                        autoCDir=0;
+                        alert("else "+ linkBuscarDir)
                     
                     }
                 });                    
@@ -332,10 +344,12 @@ $(document).ready(function(){
                         $('#direccionMPu').val(results[0].address_components[1].short_name+", "+results[0].address_components[0].short_name);
                         $('#ciudadMpu').val(results[0].address_components[2].short_name+", "+results[0].address_components[3].short_name);
                         //alert(address);
+                        //linkBuscarDir=1;
                     }
                     else {
-                        alert("El Servicio de Codificación Geográfica ha fallado con el siguiente error: " + status);
-                    //dir = "<p>El Servicio de Codificación Geográfica ha fallado con el siguiente error: " + status + ".</p>";
+                        alert("El Servicio de Codificación Geográfica ha fallado con el siguiente error: " + status + " Intente una vez mas por favor ");
+                        //linkBuscarDir=0;
+                    
                     }
                 });
             });
@@ -362,6 +376,7 @@ function toggleBounce() {
 }
 
 //funciones para input  type file fotos add remove publicar 
+/*
 function handleFileSelect(e) { 
 //alert("handleFileSelect "+e.target.files.length);  
 //$("#mensajeModalFotoPublicar").html("");  
@@ -392,7 +407,9 @@ function handleFileSelect(e) {
     $('#divImgPublicarP').css({'display':'flex'});
     //$actualizar++;
     $publicarFoto=1;*/
+/*
 }
+
 /*
 function removeFile(e) {
     var file = $(this).data("file");
@@ -430,7 +447,7 @@ function inicioSesion(){
     if($datosLocal!= undefined || $datosLocal!= null ){
         /*$.each($datosLocal, function(key, value){alert(key + ' = ' + value);});*/
         $("#nombreCompleto").html($datosLocal['usrName']);
-        $("#imgPerfilHeader").attr({"src":"http://192.168.1.101/wasiWeb/"+ $datosLocal['usrImg']}); 
+        $("#imgPerfilHeader").attr({"src":"http://192.168.1.103/wasiWeb/"+ $datosLocal['usrImg']}); 
         $("body").css("background","#f2f2f2");
         $("#divInicio").css("display", "none");
         $("#divPrincipal").css("display", "block");
@@ -476,7 +493,7 @@ function iniciarSession(){
     event.preventDefault();
     $.ajax({
         type :'POST',
-        url:'http://192.168.1.101/wasiWeb/php/ingresar.php',
+        url:'http://192.168.1.103/wasiWeb/php/ingresar.php',
         dataType : 'json',        
         data: new FormData($("#formIngreso")[0]),        
         //async: false,
@@ -553,6 +570,7 @@ function continuarFotoUbi(){
     $("#paginaUsuarioPerfilMostrar").css("display", "none");
     $("#divFooter").css("display", "none");
     */    
+   /*
     if($publicarFoto==1){// cambiar 1 de insertar 2 de actualizar que lo manda el btn atras 
        
         $formDatos= new FormData($("#formPublicarFotoUbicaion")[0]);
@@ -560,13 +578,14 @@ function continuarFotoUbi(){
         $formDatos.append("emailCliente", $emailCliente);
         /*$formDatos.append("actualizar",$actualizar);
         $formDatos.append("datosUsEx",$datosUsEx);*/
+   /*
         for(var j=0, len=storedFiles.length; j<len; j++) {
             $formDatos.append('filePublicar[]', storedFiles[j]);//['+ j +'] 
         }
     }
     $.ajax({
         type : 'POST',
-        url: 'http://192.168.1.101/wasiWeb/php/publicarFotos.php',
+        url: 'http://192.168.1.102/wasiWeb/php/publicarFotos.php',
         data: $formDatos,           
         dataType : 'json',
         crossDomain: true,
@@ -597,7 +616,8 @@ function continuarFotoUbi(){
     else{
         alert("Ya hiciste una publicaste ");
         return;
-    }    */
+    */
+    } 
 
 
 

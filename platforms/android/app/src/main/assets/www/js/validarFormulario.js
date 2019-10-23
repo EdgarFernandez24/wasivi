@@ -56,7 +56,7 @@ $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: 'http://192.168.1.101/wasiWeb/php/consultaEmail.php',
+                    url: 'http://192.168.1.103/wasiWeb/php/consultaEmail.php',
                     //data: {email : $('#email').val()},
                     data: "email="+$vEmail,
                     crossDomain: true,
@@ -262,7 +262,7 @@ $("#passwordP").change(function(){ //validar
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: 'http://192.168.1.101/wasiWeb/php/consultaPassword.php',
+                    url: 'http://192.168.1.103/wasiWeb/php/consultaPassword.php',
                     data: {password : $passwordP,idUsuario:$vidUsuario},                 
                     crossDomain: true,
                     cache: false,
@@ -424,9 +424,37 @@ $("#formPerfil").submit(function(){
         }        
        actualizarPerfil($passwordExiste);        
     });
-    $("#formPublicarDireccion").submit(function(){
-    //alert("tienes que elegir al menos 1 foto");
+  /*  $("#ciudadMpu").click(function(){
+        autoCCiu=0;
         
+    });*/
+    $("#formPublicarDireccion").submit(function(){
+        
+        if (!linkBuscarDir) {
+            //alert("entra "+ linkBuscarDir );
+            $("#mensajeErrorDireccionT").html("Ingrese una direccion correcta ");
+            return false;
+        }
+        else{
+            $("#mensajeErrorDireccion").html(" ");
+        }
+        if (!autoCCiu) {
+            //alert("entra autoCCiu "+ autoCCiu );
+            $("#mensajeErrorCiudad").html("Ingrese una ciudad de la lista ! ");
+            return false;
+        }
+        else{
+            $("#mensajeErrorCiudad").html(" ");
+        }
+        if (!autoCDir) {
+            //alert("entra autoCDir "+ autoCDir );
+            $("#mensajeErrorDireccion").html("Ingrese una direccion de la lista ! ");
+            return false;
+        }
+        else{
+            $("#mensajeErrorDireccion").html(" ");
+        }
+
        continuarDireccion();        
     });
     $("#formPublicarFotoUbicaion").submit(function(){

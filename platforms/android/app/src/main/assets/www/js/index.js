@@ -20,6 +20,9 @@ var app = {
 app.initialize();
 var Latitude = undefined;
 var Longitude = undefined;
+var selDiv = "";
+var autoCDir=0;
+var autoCCiu=0;
 var storedFiles = [];//array de img por foto libreria
 var storedFilesDb = [];//array de img obtenidas de la base de datos
 var contImg=0;//catidad de img para publicar o publicados
@@ -30,6 +33,13 @@ var imagenPerfilEditar = "";
 var imagenPublicar="";
 var imgPerfilAnt="";// guarda img anterior para comparar con el actua si es lo mismo    
 var customLabel = {restaurant: {label: 'R'}, bar: {label: 'B'},casa:{label: 'C'}};
+var placeCiu = '';//almacenar direcion ciudad de google places
+var ciudadN1 = '';//almacenar datos obtenidos de placeCiu
+var ciudadN2 = '';//almacenar datos obtenidos de placeCiu
+var placeDir = '';// almacenar direcion de google places
+var addressD1 = '';//alamcenar dircion de placedir
+var addressD2 = '';//alamcenar dircion de placedir
+
 
 // Success callback for get geo coordinates
 
@@ -66,7 +76,7 @@ function getMap(latitude, longitude) {
      var infoWindow = new google.maps.InfoWindow;
 
           // Change this depending on the name of your PHP or XML file
-          downloadUrl('http://192.168.1.101/wasiWeb/php/marcas.php', function(data) {
+          downloadUrl('http://192.168.1.103/wasiWeb/php/marcas.php', function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName('marker');
             Array.prototype.forEach.call(markers, function(markerElem) {
@@ -188,11 +198,11 @@ var onWeatherWatchSuccess = function (position) {
 function doNothing() {}
 
 function autoCompletar() {
-    //alert("autoCompletar");
-    /*$("#mapDireccionBuscar").css("display", "block"); 
-    $("#mapDireccionLink").css("display", "none");*/
-
-       var mapDir = new google.maps.Map(document.getElementById('mapDireccionBuscar'),{
+   // alert("autoCompletar");
+      /*  var ciudadN1 = '';
+      var ciudadN2 = '';
+      var placeCiu = '';*/
+      var mapDir = new google.maps.Map(document.getElementById('mapDireccionBuscar'),{
         streetViewControl: false,
         zoomControl: true,
         rotateControl : false,
@@ -200,50 +210,67 @@ function autoCompletar() {
         streetViewControl: false,
         
        });
-
+//alert("1 placeCiu "+placeCiu +" ciudadN1 "+ ciudadN1 + " ciudadN2 "+ciudadN2);
         var ciudadPu = document.getElementById('ciudadMpu');
         var direccionPu = document.getElementById('direccionMPu'); 
 
        //{types: ['(cities)']} {types: ['address']}
-       var autocompleteCiu = new google.maps.places.Autocomplete( ciudadPu, {types: ['(cities)']} );
-       var autocompleteDir = new google.maps.places.Autocomplete( direccionPu, {types: ['address']} );        
-
+       var autocompleteCiu = new google.maps.places.Autocomplete( ciudadPu, {types: ['(cities)'],componentRestrictions: {country: 'es'}} );
+       var autocompleteDir = new google.maps.places.Autocomplete( direccionPu, {types: ['address'], componentRestrictions: {country: 'es'}} );        
+//alert("1 autocompleteCiu "+ autocompleteCiu + " autocompleteDir " +autocompleteDir);
         // Set the data fields to return when the user selects a place.
         autocompleteCiu.setFields(['address_components', 'geometry', 'icon', 'name']);        
         autocompleteDir.setFields(['address_components', 'geometry', 'icon', 'name']);
-
+//alert("2 autocompleteCiu "+ autocompleteCiu + " autocompleteDir " +autocompleteDir);
         var infowindow = new google.maps.InfoWindow();
         var infowindowContent = document.getElementById('infowindow-content');
         infowindow.setContent(infowindowContent);
+//alert("infowindow " + infowindow);
         var marker = new google.maps.Marker({
           map: mapDir,
           anchorPoint: new google.maps.Point(0, -29)
         });
-        autocompleteCiu.addListener('place_changed', function() {
-            var placeCiu = autocompleteCiu.getPlace();
-            console.log( JSON.stringify(placeCiu));
+          ciudadPu.addEventListener('change',noCompletarCiu);
+            function noCompletarCiu(){        
+                $("#mensajeErrorCiudad").html("Selecciona una ciudad de la lista. !");
+                autoCCiu=0;
+                ciudadN1 = '';
+                ciudadN2 = '';                
+            }
+        autocompleteCiu.addListener('place_changed',completarCiu);        
+         function completarCiu() {            
+            placeCiu = autocompleteCiu.getPlace(); 
+            console.log("placeCiu "+  JSON.stringify(placeCiu));
             if (!placeCiu.geometry) {
                 // User entered the name of a Place that was not suggested and
                 // pressed the Enter key, or the Place Details request failed.
                 alert("No details available for input: '" + placeCiu.name + "'");
                 return;
-            }        
-            var ciudadN1 = '';
-            var ciudadN2 = '';
+            }            
             if (placeCiu.address_components) {
                 ciudadN1 = (placeCiu.address_components[0] && placeCiu.address_components[0].short_name);
                 ciudadN2 = (placeCiu.address_components[1] && placeCiu.address_components[1].short_name);
                 $("#contenedorMapaDireccion").css("display", "none");
                 $('#direccionMPu').val("");
-                console.log( JSON.stringify(ciudadN1+"/"+ciudadN2));
+                console.log( JSON.stringify("1 "+ciudadN1+"/"+ciudadN2));
+                $("#mensajeErrorCiudad").html("");
+                $("#mensajeErrorDireccionT").html("");
+                linkBuscarDir=1;
+                autoCCiu=1;  
             }
-        });
-        
+            console.log( JSON.stringify("2 "+ciudadN1+"/"+ciudadN2));            
+        }
+        direccionPu.addEventListener('change',noCompletarDir);
+            function noCompletarDir(){        
+                $("#mensajeErrorDireccion").html("Selecciona una direccion de la lista. !");
+                autoCDir=0;
+                addressD1 = '';
+                addressD2 = '';               
+            }        
         autocompleteDir.addListener('place_changed', function() {
-            //alert("autocompleteDir place_changed");
             infowindow.close();
             marker.setVisible(false);
-            var placeDir = autocompleteDir.getPlace();
+            placeDir = autocompleteDir.getPlace();
             console.log( JSON.stringify(placeDir));
             if (!placeDir.geometry) {
                 // User entered the name of a Place that was not suggested and
@@ -261,13 +288,18 @@ function autoCompletar() {
             }
             marker.setPosition(placeDir.geometry.location);
             marker.setVisible(true);
-            var addressD1 = '';
-            var addressD2 = '';
+            //var addressD1 = '';
+            //var addressD2 = '';
             if (placeDir.address_components) {
                 addressD1 = placeDir.address_components[0].short_name;
                 addressD2 = placeDir.address_components[1].short_name;
                 $('#ciudadMpu').val(placeDir.address_components[2].short_name+", "+placeDir.address_components[3].short_name);
                 console.log( JSON.stringify(addressD1+"/"+addressD2));
+                $("#mensajeErrorDireccion").html("");
+                $("#mensajeErrorDireccionT").html("");
+                linkBuscarDir=1;
+                autoCDir=1;
+                //alert("autoCDir "+ autoCDir);
             }
             /*infowindowContent.children['place-icon'].src = placeDir.icon;
             infowindowContent.children['place-name'].textContent = placeDir.name;
@@ -338,7 +370,7 @@ function subirImagen(fileURL, vEmail) {
     optionsR.params = miParams;
       
     var ft = new FileTransfer();
-    ft.upload(fileURL, encodeURI("http://192.168.1.101/wasiWeb/php/insertarFotoRegistro.php"), uploadSuccessR, uploadFailR, optionsR);
+    ft.upload(fileURL, encodeURI("http://192.168.1.103/wasiWeb/php/insertarFotoRegistro.php"), uploadSuccessR, uploadFailR, optionsR);
 }
 
 function uploadSuccessR(r) {
@@ -353,7 +385,7 @@ function registrarUsuario(){ //evento activado por onsubmit en validarformulario
   event.preventDefault();    
     $.ajax({
         type : 'POST',
-        url: 'http://192.168.1.101/wasiWeb/php/registrar.php',
+        url: 'http://192.168.1.103/wasiWeb/php/registrar.php',
         data:new FormData($('#formRegistro')[0]),
         dataType: 'json',
         crossDomain: true,
@@ -464,7 +496,7 @@ function subirImagenPerfilEditar(fileURL, fileUrlAnt ,emailP) {
         loadingStatus.increment();
       }
     };
-    ft.upload(fileURL, encodeURI("http://192.168.1.101/wasiWeb/php/insertarFotoEditar.php"), uploadSuccessPE, uploadFailPE, optionsPE);
+    ft.upload(fileURL, encodeURI("http://192.168.1.103/wasiWeb/php/insertarFotoEditar.php"), uploadSuccessPE, uploadFailPE, optionsPE);
 }
 
 function uploadSuccessPE(r) {
@@ -492,7 +524,7 @@ function actualizarPerfil(cPassword)
     $myFormD.append("imagenPerfilEditar",imagenPerfilEditar);
     $.ajax({
         type : 'POST',
-        url:'http://192.168.1.101/wasiWeb/php/actualizarPerfil.php',
+        url:'http://192.168.1.103/wasiWeb/php/actualizarPerfil.php',
         data:$myFormD,
         dataType: 'json',
         crossDomain: true,
@@ -525,7 +557,7 @@ function actualizarPerfil(cPassword)
             if(datosP.uReg==1){
                 $('#mPMD').html("");
                 $('#mPMS').html(datosP.msg + " id " + datosP.uPer+" em "+datosP.usrEmail+" imga "+datosP.img +" img "+datosP.usrImg);
-                $("#fotoPerfilM").css({"background": "url(http://192.168.1.101/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center","background-size": "cover"});
+                $("#fotoPerfilM").css({"background": "url(http://192.168.1.103/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center","background-size": "cover"});
                 $('#nombrePM').html($datosLocal.usrName);
                 $('#apellidosPM').html($datosLocal.usrLname);
                 if ($datosLocal.usrSexo==1) {
@@ -577,15 +609,10 @@ function onSuccessFPC(imageURI) {
   contImg++;
   $("#imgPublicar").data("cont",contImg);
   maxImg--;
-  alert('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
-  // $imgPerfilAnt=$datosLocal['usrImg']; 
-  /*subirImagenPerfilEditar(imageURI,$datosLocal['usrImg'], $datosLocal['usrEmail']); 
-  
-  $("#modalEditarPerfil").modal("hide");
-  $("#fotoPerfilE").css({"backgroundImage": "url('" + imageURI + "')","background-size": "cover"});
-  $("#clistA").css("visibility", "visible");
-  $("#mensajefotoA").css("display", "none");  
-  //$("#aa").html(imageURI);*/
+  //alert('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
+  console.log('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
+  //$emailPu=$datosLocal['usrEmail']; 
+  subirImagenPublicar(imageURI,$datosLocal['usrEmail']);   
 }
 
 
@@ -611,7 +638,7 @@ function onSuccessFPG(results) {
     $('#modalPublicar').modal('hide');
   $('.divImgPublicarG').css({'display':'none'});
   $('#divImgPublicarP').css({'display':'flex'});
-  alert('maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
+  alert('onSuccessFPG maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
   for (var i = 0; i < results.length && i < maxImg; i++) {
     //alert("Code = " + results[i].responseCode+" Response = " + results[i].response+" Sent = " + results[i].bytesSent);
     //alert('Image URI: ' + JSON.stringify(results[i]));
@@ -656,7 +683,7 @@ function removeFile(e) {
         }
     } */   
     $(this).parent().remove();
-    alert('removeFile contImg '+contImg+' maxImg '+maxImg);
+    alert('removeFile1 contImg '+contImg+' maxImg '+maxImg);
     contImg--;
     maxImg++;
     $('#mensajePublicar2').html("almacen db - "+storedFilesDb.length);
@@ -668,6 +695,43 @@ function removeFile(e) {
         $("#imgPublicar").data("cont",0); // no hay fotos
     }
     
-    
+    alert('removeFile2 contImg '+contImg+' maxImg '+maxImg);
   }
+function subirImagenPublicar(fileURL,emailPu) {
+     //alert("subirImagenPerfilEditar IMG "+fileURL+" IMGA "+fileUrlAnt+" EMAILP "+emailP); 
+     console.log("subirImagenPublicar IMG "+fileURL+" EMAILP "+emailPu);       
+    var optionsP = new FileUploadOptions();
+    optionsP.fileKey = "fotoPublicar";
+    optionsP.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+    optionsP.mimeType="image/jpeg";
+    //optionsPE.chumkedmode="false";
+    //optionsPE.headers = { Connection: "close" }
+    var miParams = {};
+      miParams.emailPu = emailPu;
+    optionsPE.params = miParams;
+      
+    var ft = new FileTransfer();  
+    ft.onprogress = function(progressEvent) {
+      if (progressEvent.lengthComputable) {
+          loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
+      } 
+      else {
+        loadingStatus.increment();
+      }
+    };
+    ft.upload(fileURL, encodeURI("http://192.168.1.103/wasiWeb/php/insertarFotoPublicar.php"), uploadSuccessP, uploadFailP, optionsP);
+}
+function uploadSuccessP(r) {
+   //alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
+    console.log("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
+    //$fotoA=JSON.parse(r.response);
+    //alert('fotoA '+ $fotoA['fotoActual']);
 
+    //$datosLocal['usrImg']=$fotoA['fotoActual'];
+    
+}
+function uploadFailP(error) {
+    alert("An error has occurred uploadFailPE : Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
+    
+
+}
