@@ -4,6 +4,13 @@
 var marker;          //variable del marcador
 var coords = {};//coordenadas obtenidas con la geolocalización 
 var linkBuscarDir=0;
+var miresult='';
+$datosLocalDir='';
+$dirZona='';
+$dirCiudad='';
+$dirDireccion='';
+$dirLat='';
+$dirLon='';
 //var mapD;   
 $(document).ready(function(){
     //$idCliente = 0; //var para envio publicar
@@ -78,8 +85,9 @@ $(document).ready(function(){
         $(".div-custom-principal .divPublicar").css({"padding":"0px","background-color": "#f2f2f2"});
         $("#paginaPrincipal").css("display", "none");
         $("#paginaListaMapas").css("display", "none");
-        //
+        
         $("#paginaPublicar").css("display", "block");
+
         $("#publicarDireccion").css("display","block");
         $("#publicarFotoUbicacion").css("display","none");
         $("#publicarCaracteristicas").css("display","none");
@@ -87,8 +95,42 @@ $(document).ready(function(){
         $("#paginaMensaje").css("display", "none");            
         $("#paginaUsuarioPerfilEditar").css("display", "none");
         $("#paginaUsuarioPerfilMostrar").css("display", "none");
+
         $("#divFooter").css("display", "none");
         $(".container-custom-principal .progressbar-bar-custom").css("width", "25%");
+        
+        $.ajax({
+            type :'POST',
+            url:'http://192.168.1.105/wasiWeb/php/consultarDireccion.php',
+            dataType : 'json',                
+            data: {idUsuario:$datosLocal['usrId']},                 
+            crossDomain: true,
+            cache: false,
+            success: function(datosConsultaDir){
+                //if (datosConsultaDir['publicado']==0) {
+                $datosRemotoConsultarDir=JSON.stringify(datosConsultaDir);
+                localStorage.setItem('datosDir', $datosRemotoConsultarDir);
+                $datosLocalDir=JSON.parse(localStorage.getItem('datosDir'));        
+                if ($datosLocalDir['publicado']==0) {
+                    $('#ciudadMpu').val($datosLocalDir['ciudad']);
+                    $('#direccionMPu').val($datosLocalDir['direccion']);
+                    linkBuscarDir=1;
+                    autoCDir=1;
+                    autoCCiu=1;
+                    continuarDir=0;
+                    //console.log("datosLocalDir "+ $datosRemotoDir);
+                    console.log("datosLocalDir "+$datosLocalDir);
+                }
+            },
+            error : function(jqXHR, textStatus, errorThrown) {
+                alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+            }
+        });
+        
+        //if($datosLocalDir!= undefined || $datosLocalDir!= null ){
+                        
+        //}
+
      });
     $("#btnAtrasDireccion").click(function() {
        
@@ -102,8 +144,9 @@ $(document).ready(function(){
         $("#publicarDireccion").css("display","block");
         $("#publicarFotoUbicacion").css("display","none");
         $("#publicarCaracteristicas").css("display", "none"); 
-         $("#publicarPiso").css("display","none");
-        $(".container-custom-principal .progressbar-bar-custom").css("width", "25%");        
+        $("#publicarPiso").css("display","none");
+        $(".container-custom-principal .progressbar-bar-custom").css("width", "25%");
+        continuarDir=0;        
     });
 
     $("#btnAtrasCaracteristicas").click(function() {
@@ -139,7 +182,7 @@ $(document).ready(function(){
             $("#clistA").css("visibility", "hidden");
             /*datos recuperados de local storage*/
             
-            $("#fotoPerfilE").css({"background": "url(http://192.168.1.103/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.105/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -178,7 +221,7 @@ $(document).ready(function(){
             $("#divFooter").css("display", "none");
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilE").css({"background": "url(http://192.168.1.103/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.105/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -206,7 +249,7 @@ $(document).ready(function(){
                                     
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilM").css({"background": "url(http://192.168.1.103/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#fotoPerfilM").css({"background": "url(http://192.168.1.105/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombrePM").html($datosLocal.usrName);
             $("#apellidosPM").html($datosLocal.usrLname);
             if ($datosLocal.usrSexo==1) {
@@ -291,7 +334,8 @@ $(document).ready(function(){
                 rotateControl : false,
                 mapTypeControl: true,
                 streetViewControl: false,
-            });           
+            });
+            alert("latlon "+Latitude+" "+Longitude);           
             // Creamos el marcador
             //Creamos el marcador en el mapa con sus propiedades
             //para nuestro obetivo tenemos que poner el atributo draggable en true
@@ -301,10 +345,11 @@ $(document).ready(function(){
                 position: {lat: Latitude, lng: Longitude},
                 position: new google.maps.LatLng(Latitude,Longitude),
                 draggable: true
-            });           
+            });
+                      
             //agregamos un evento al marcador junto con la funcion callback al igual que el evento dragend que indica 
             //cuando el usuario a soltado el marcador
-            markerD.addListener('click', toggleBounce);      
+            markerD.addListener('click', toggleBounce);//para animar el marcador      
             markerD.addListener( 'dragend', function (event){
             //escribimos las coordenadas de la posicion actual del marcador dentro del input #coords
             //document.getElementById("latlon").innerHTML = this.getPosition().lat()+","+ this.getPosition().lng();
@@ -314,28 +359,36 @@ $(document).ready(function(){
             var geocoderD = new google.maps.Geocoder();
             // muestra las ciudad y la direccion 
             geocoderD.geocode({'latLng': markerD.getPosition()}, function(results, status) {
-           
-                    if (status == google.maps.GeocoderStatus.OK) {
-                        $('#direccionMPu').val(results[0].address_components[1].short_name+", "+results[0].address_components[0].short_name);
-                        $('#ciudadMpu').val(results[0].address_components[2].short_name+", "+results[0].address_components[3].short_name);
-                        linkBuscarDir=1;
-                        alert("entra linkBuscarDireccion " + linkBuscarDir);
-                        $("#mensajeErrorCiudad").html("");
-                        $("#mensajeErrorDireccion").html("");
-                        $("#mensajeErrorDireccionT").html("");
-                        autoCCiu=1;
-                        autoCDir=1;    
-
-                    }
-                    else {
-                        alert("El Servicio de Codificación Geográfica ha fallado con el siguiente error: " + status + " Intente una vez mas por favor ");
-                        linkBuscarDir=0;
-                        autoCCiu=0;
-                        autoCDir=0;
-                        alert("else "+ linkBuscarDir)
+                if (status == google.maps.GeocoderStatus.OK) {
+                    $('#direccionMPu').val(results[0].address_components[1].short_name+", "+results[0].address_components[0].short_name);
+                    $('#ciudadMpu').val(results[0].address_components[2].short_name+", "+results[0].address_components[3].short_name);
+                    //alert("entra linkBuscarDireccion " + results.length);
+                    //console.log("latlon "+ JSON.stringify(results));
+                    $("#mensajeErrorCiudad").html("");
+                    $("#mensajeErrorDireccion").html("");
+                    $("#mensajeErrorDireccionT").html("");
+                    miresult=results;
+                    addressD1 = results[0].address_components[1].short_name;//calle
+                    addressD2 = results[0].address_components[2].short_name;//zona
+                    ciudadN1 = results[0].address_components[2].short_name;//zona
+                    ciudadN2 = results[0].address_components[3].short_name;//ciudad
                     
-                    }
-                });                    
+                    addressLat= miresult[0].geometry.location.lat();
+                    addressLon= results[0].geometry.location.lng();
+
+                    linkBuscarDir=1;
+                    autoCCiu=1;
+                    autoCDir=1;
+                    continuarDir=1;    
+                }
+                else {
+                    alert("El Servicio de Codificación Geográfica ha fallado con el siguiente error: " + status + " Intente una vez mas por favor ");
+                    linkBuscarDir=0;
+                    autoCCiu=0;
+                    autoCDir=0;
+                    //alert("else "+ linkBuscarDir)
+                }
+            });                    
             // le asignamos una funcion al eventos dragend del marcado
             google.maps.event.addListener(markerD, 'dragend', function() {
                 geocoderD.geocode({'latLng': markerD.getPosition()}, function(results, status) {
@@ -343,13 +396,28 @@ $(document).ready(function(){
                         //var address=results[0]['formatted_address'];
                         $('#direccionMPu').val(results[0].address_components[1].short_name+", "+results[0].address_components[0].short_name);
                         $('#ciudadMpu').val(results[0].address_components[2].short_name+", "+results[0].address_components[3].short_name);
+                        miresult=results;
+                        addressD1 =results[0].address_components[2].short_name;//calle
+                        addressD2 = results[0].address_components[2].short_name;//zona
+                        ciudadN1 = results[0].address_components[2].short_name;//zona                        
+                        ciudadN2 = results[0].address_components[3].short_name;//ciudad
+
+                        addressLat= miresult[0].geometry.location.lat();
+                        addressLon= results[0].geometry.location.lng();
+                    
+                        linkBuscarDir=1;
+                        autoCCiu=1;
+                        autoCDir=1;
+                        continuarDir=1; 
                         //alert(address);
                         //linkBuscarDir=1;
                     }
                     else {
                         alert("El Servicio de Codificación Geográfica ha fallado con el siguiente error: " + status + " Intente una vez mas por favor ");
-                        //linkBuscarDir=0;
-                    
+                        linkBuscarDir=0;
+                        autoCCiu=0;
+                        autoCDir=0;
+                        //linkBuscarDir=0;                    
                     }
                 });
             });
@@ -447,7 +515,7 @@ function inicioSesion(){
     if($datosLocal!= undefined || $datosLocal!= null ){
         /*$.each($datosLocal, function(key, value){alert(key + ' = ' + value);});*/
         $("#nombreCompleto").html($datosLocal['usrName']);
-        $("#imgPerfilHeader").attr({"src":"http://192.168.1.103/wasiWeb/"+ $datosLocal['usrImg']}); 
+        $("#imgPerfilHeader").attr({"src":"http://192.168.1.105/wasiWeb/"+ $datosLocal['usrImg']}); 
         $("body").css("background","#f2f2f2");
         $("#divInicio").css("display", "none");
         $("#divPrincipal").css("display", "block");
@@ -493,7 +561,7 @@ function iniciarSession(){
     event.preventDefault();
     $.ajax({
         type :'POST',
-        url:'http://192.168.1.103/wasiWeb/php/ingresar.php',
+        url:'http://192.168.1.105/wasiWeb/php/ingresar.php',
         dataType : 'json',        
         data: new FormData($("#formIngreso")[0]),        
         //async: false,
@@ -545,20 +613,73 @@ function activarSwipe(){
   }
 function continuarDireccion(){
     event.preventDefault();
-    /*$("#paginaPrincipal").css("display", "none");
-    $("#paginaListaMapas").css("display", "none"); 
-    $("#paginaPublicar").css("display", "block");*/
+    
     $(".div-custom-principal .divPublicar").css({"padding":"10px","background-color": "#fff"});
     $("#publicarDireccion").css("display","none");
     $("#publicarFotoUbicacion").css("display","block");
     $("#publicarCaracteristicas").css("display","none");
-    $("#publicarPiso").css("display","none");        
-    /*$("#paginaMensaje").css("display", "none");            
-    $("#paginaUsuarioPerfilEditar").css("display", "none");
-    $("#paginaUsuarioPerfilMostrar").css("display", "none");
-    $("#divFooter").css("display", "none");
-   */   
+    $("#publicarPiso").css("display","none");     
     $(".container-custom-principal .progressbar-bar-custom").css("width", "50%");
+
+    $("#mensajePublicar").html($datosLocal['usrEmail']);
+    $("#mensajePublicar1").html($("#ciudadMpu").val());
+    $("#mensajePublicar2").html($("#direccionMPu").val());
+    $("#mensajePublicar3").html(addressLat);
+    $("#mensajePublicar4").html(addressLon);
+    
+    $dirDireccion=addressD1;//dir
+    $dirZona=ciudadN1;//zona
+    $dirCiudad=ciudadN2;//ciudad    
+    $dirLat=addressLat;
+    $dirLon=addressLon;
+    //direccion nueva
+    if (continuarDir==1 ) {
+        //no existe direccion en la base de datos insertar direccion
+        if ($datosLocalDir['publicado']==-1) {
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: 'http://192.168.1.105/wasiWeb/php/insertarDirecion.php',
+                data: {idUsuario:$datosLocal['usrId'],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon},                 
+                crossDomain: true,
+                cache: false,
+                success: function(datosInsDir){
+                    $datosRemotoInsDir=JSON.stringify(datosInsDir);
+                    localStorage.setItem('datosDir', $datosRemotoInsDir);
+                    $datosLocalDir=JSON.parse(localStorage.getItem('datosDir')); 
+                    continuarDir=0;          
+                    console.log("datosLocalDir "+ $datosLocalDir);
+                },
+                error : function(jqXHR, textStatus, errorThrown) {
+                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                }
+            });
+        }
+        //existe direccion en la base de datos actualizar direccion
+        if ($datosLocalDir['publicado']==0) {
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: 'http://192.168.1.105/wasiWeb/php/actualizarDireccion.php',
+                data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon},                 
+                crossDomain: true,
+                cache: false,
+                success: function(datosActDir){
+                    
+                        $datosRemotoActDir=JSON.stringify(datosActDir);
+                        localStorage.setItem('datosDir', $datosRemotoActDir);
+                        $datosLocalDir=JSON.parse(localStorage.getItem('datosDir')); 
+                        continuarDir=0;
+                        console.log("datosLocalActDir "+ $datosLocalDir);
+                    
+                },
+                error : function(jqXHR, textStatus, errorThrown) {
+                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                }
+            });
+        }
+}
+
 }
 function continuarFotoUbi(){
     event.preventDefault();

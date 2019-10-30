@@ -34,12 +34,15 @@ var imagenPublicar="";
 var imgPerfilAnt="";// guarda img anterior para comparar con el actua si es lo mismo    
 var customLabel = {restaurant: {label: 'R'}, bar: {label: 'B'},casa:{label: 'C'}};
 var placeCiu = '';//almacenar direcion ciudad de google places
-var ciudadN1 = '';//almacenar datos obtenidos de placeCiu
-var ciudadN2 = '';//almacenar datos obtenidos de placeCiu
-var placeDir = '';// almacenar direcion de google places
-var addressD1 = '';//alamcenar dircion de placedir
-var addressD2 = '';//alamcenar dircion de placedir
 
+var ciudadN1 = '';//almacenar zona obtenidos de placeCiu
+var ciudadN2 = '';//almacenar ciudad obtenidos de placeCiu
+var placeDir = '';// almacenar direcion de google places
+var addressD1 = '';//alamcenar direccion de placedir
+var addressD2 = '';//alamcenar zona de placedir
+var addressLat='';//almacenar latitud de la direccion
+var addressLon='';//almacenar longitud de la direccion
+var continuarDir='';//no hay direcion guardada
 
 // Success callback for get geo coordinates
 
@@ -76,12 +79,12 @@ function getMap(latitude, longitude) {
      var infoWindow = new google.maps.InfoWindow;
 
           // Change this depending on the name of your PHP or XML file
-          downloadUrl('http://192.168.1.103/wasiWeb/php/marcas.php', function(data) {
+          downloadUrl('http://192.168.1.105/wasiWeb/php/marcas.php', function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName('marker');
             Array.prototype.forEach.call(markers, function(markerElem) {
               var id = markerElem.getAttribute('id_p');
-              var name = markerElem.getAttribute('nombre');
+              var name = markerElem.getAttribute('zona');
               var address = markerElem.getAttribute('dir');
               var type = markerElem.getAttribute('tipo');
               var point = new google.maps.LatLng(
@@ -216,11 +219,11 @@ function autoCompletar() {
 
        //{types: ['(cities)']} {types: ['address']}
        var autocompleteCiu = new google.maps.places.Autocomplete( ciudadPu, {types: ['(cities)'],componentRestrictions: {country: 'es'}} );
-       var autocompleteDir = new google.maps.places.Autocomplete( direccionPu, {types: ['address'], componentRestrictions: {country: 'es'}} );        
+              
 //alert("1 autocompleteCiu "+ autocompleteCiu + " autocompleteDir " +autocompleteDir);
         // Set the data fields to return when the user selects a place.
         autocompleteCiu.setFields(['address_components', 'geometry', 'icon', 'name']);        
-        autocompleteDir.setFields(['address_components', 'geometry', 'icon', 'name']);
+        
 //alert("2 autocompleteCiu "+ autocompleteCiu + " autocompleteDir " +autocompleteDir);
         var infowindow = new google.maps.InfoWindow();
         var infowindowContent = document.getElementById('infowindow-content');
@@ -231,14 +234,16 @@ function autoCompletar() {
           anchorPoint: new google.maps.Point(0, -29)
         });
           ciudadPu.addEventListener('change',noCompletarCiu);
-            function noCompletarCiu(){        
+            function noCompletarCiu(){ 
+            alert("noCompletarCiu");       
                 $("#mensajeErrorCiudad").html("Selecciona una ciudad de la lista. !");
                 autoCCiu=0;
                 ciudadN1 = '';
                 ciudadN2 = '';                
             }
         autocompleteCiu.addListener('place_changed',completarCiu);        
-         function completarCiu() {            
+        function completarCiu() {  
+         //alert("completarCiu");          
             placeCiu = autocompleteCiu.getPlace(); 
             console.log("placeCiu "+  JSON.stringify(placeCiu));
             if (!placeCiu.geometry) {
@@ -252,22 +257,27 @@ function autoCompletar() {
                 ciudadN2 = (placeCiu.address_components[1] && placeCiu.address_components[1].short_name);
                 $("#contenedorMapaDireccion").css("display", "none");
                 $('#direccionMPu').val("");
-                console.log( JSON.stringify("1 "+ciudadN1+"/"+ciudadN2));
+                console.log(("1 "+ciudadN1+"/"+ciudadN2));
+                
                 $("#mensajeErrorCiudad").html("");
                 $("#mensajeErrorDireccionT").html("");
                 linkBuscarDir=1;
                 autoCCiu=1;  
             }
-            console.log( JSON.stringify("2 "+ciudadN1+"/"+ciudadN2));            
+           // console.log( JSON.stringify("2 "+ciudadN1+"/"+ciudadN2));            
         }
+        var autocompleteDir = new google.maps.places.Autocomplete( direccionPu, {types: ['address'], componentRestrictions: {country: 'es'}} ); 
+        autocompleteDir.setFields(['address_components', 'geometry', 'icon', 'name']);
         direccionPu.addEventListener('change',noCompletarDir);
             function noCompletarDir(){        
                 $("#mensajeErrorDireccion").html("Selecciona una direccion de la lista. !");
                 autoCDir=0;
+                autoCCiu=0;                
                 addressD1 = '';
                 addressD2 = '';               
             }        
-        autocompleteDir.addListener('place_changed', function() {
+        autocompleteDir.addListener('place_changed',completarDir);
+         function completarDir() {
             infowindow.close();
             marker.setVisible(false);
             placeDir = autocompleteDir.getPlace();
@@ -291,22 +301,43 @@ function autoCompletar() {
             //var addressD1 = '';
             //var addressD2 = '';
             if (placeDir.address_components) {
-                addressD1 = placeDir.address_components[0].short_name;
-                addressD2 = placeDir.address_components[1].short_name;
+              if (placeDir.address_components.length<=6) {//caso 1 no se ingresa numero de calle
+                addressD1 = placeDir.address_components[0].short_name;//calle
+                addressD2 = placeDir.address_components[1].short_name;//zona
+                ciudadN1 = placeDir.address_components[1].short_name;//zona 
+                ciudadN2 = placeDir.address_components[2].short_name;//ciudad
+                
+                //ubicacionDir =placeDir.geometry["location"];
+                $('#ciudadMpu').val(placeDir.address_components[1].short_name+", "+placeDir.address_components[2].short_name);
+              }
+              else{// caso 2 si se ingresa numero de calle
+                addressD1 = placeDir.address_components[1].short_name+", "+placeDir.address_components[0].short_name;//calle
+                addressD2 = placeDir.address_components[2].short_name;//zona
+                ciudadN1 = placeDir.address_components[2].short_name;//zona
+                ciudadN2 = placeDir.address_components[3].short_name;//ciudad
+                //ubicacionDir =placeDir.geometry["location"];
                 $('#ciudadMpu').val(placeDir.address_components[2].short_name+", "+placeDir.address_components[3].short_name);
-                console.log( JSON.stringify(addressD1+"/"+addressD2));
-                $("#mensajeErrorDireccion").html("");
-                $("#mensajeErrorDireccionT").html("");
-                linkBuscarDir=1;
-                autoCDir=1;
-                //alert("autoCDir "+ autoCDir);
+              }
+              addressLat= placeDir.geometry.location.lat();
+              addressLon= placeDir.geometry.location.lng();
+              console.log((addressD1+"/"+addressD2));
+              console.log(addressLat+"/"+addressLon);
+              $("#mensajeErrorCiudad").html("");
+              $("#mensajeErrorDireccion").html("");
+              $("#mensajeErrorDireccionT").html("");
+              
+              linkBuscarDir=1;
+              autoCDir=1;
+              autoCCiu=1;
+              continuarDir=1;
+               //alert("autoCDir "+ autoCDir); 
             }
             /*infowindowContent.children['place-icon'].src = placeDir.icon;
             infowindowContent.children['place-name'].textContent = placeDir.name;
             infowindowContent.children['place-address'].textContent = placeDir.address;
             infowindow.open(mapDir, marker);*/
 
-        });
+        }
     }//fin autoCompletar
 //callback al hacer clic en el marcador lo que hace es quitar y poner la animacion BOUNCE
 
@@ -370,7 +401,7 @@ function subirImagen(fileURL, vEmail) {
     optionsR.params = miParams;
       
     var ft = new FileTransfer();
-    ft.upload(fileURL, encodeURI("http://192.168.1.103/wasiWeb/php/insertarFotoRegistro.php"), uploadSuccessR, uploadFailR, optionsR);
+    ft.upload(fileURL, encodeURI("http://192.168.1.105/wasiWeb/php/insertarFotoRegistro.php"), uploadSuccessR, uploadFailR, optionsR);
 }
 
 function uploadSuccessR(r) {
@@ -385,7 +416,7 @@ function registrarUsuario(){ //evento activado por onsubmit en validarformulario
   event.preventDefault();    
     $.ajax({
         type : 'POST',
-        url: 'http://192.168.1.103/wasiWeb/php/registrar.php',
+        url: 'http://192.168.1.105/wasiWeb/php/registrar.php',
         data:new FormData($('#formRegistro')[0]),
         dataType: 'json',
         crossDomain: true,
@@ -496,7 +527,7 @@ function subirImagenPerfilEditar(fileURL, fileUrlAnt ,emailP) {
         loadingStatus.increment();
       }
     };
-    ft.upload(fileURL, encodeURI("http://192.168.1.103/wasiWeb/php/insertarFotoEditar.php"), uploadSuccessPE, uploadFailPE, optionsPE);
+    ft.upload(fileURL, encodeURI("http://192.168.1.105/wasiWeb/php/insertarFotoEditar.php"), uploadSuccessPE, uploadFailPE, optionsPE);
 }
 
 function uploadSuccessPE(r) {
@@ -518,13 +549,13 @@ function actualizarPerfil(cPassword)
 {   event.preventDefault(); 
         
     $myFormD=new FormData($("#formPerfil")[0]);
-    $myFormD.append("usrIdP",$datosLocal['usrId']);//id usuario para la consulta
+    $myFormD.append("usrIdP",$datosLocal['usrId']);//id usuario para la 
     $myFormD.append("cambioPasswordNP",cPassword);//si cambio el password
     $myFormD.append("imgPerfilAnt",$datosLocal['usrImg']);  //imagen perfil antiguo
     $myFormD.append("imagenPerfilEditar",imagenPerfilEditar);
     $.ajax({
         type : 'POST',
-        url:'http://192.168.1.103/wasiWeb/php/actualizarPerfil.php',
+        url:'http://192.168.1.105/wasiWeb/php/actualizarPerfil.php',
         data:$myFormD,
         dataType: 'json',
         crossDomain: true,
@@ -557,7 +588,7 @@ function actualizarPerfil(cPassword)
             if(datosP.uReg==1){
                 $('#mPMD').html("");
                 $('#mPMS').html(datosP.msg + " id " + datosP.uPer+" em "+datosP.usrEmail+" imga "+datosP.img +" img "+datosP.usrImg);
-                $("#fotoPerfilM").css({"background": "url(http://192.168.1.103/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center","background-size": "cover"});
+                $("#fotoPerfilM").css({"background": "url(http://192.168.1.105/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center","background-size": "cover"});
                 $('#nombrePM').html($datosLocal.usrName);
                 $('#apellidosPM').html($datosLocal.usrLname);
                 if ($datosLocal.usrSexo==1) {
@@ -719,7 +750,7 @@ function subirImagenPublicar(fileURL,emailPu) {
         loadingStatus.increment();
       }
     };
-    ft.upload(fileURL, encodeURI("http://192.168.1.103/wasiWeb/php/insertarFotoPublicar.php"), uploadSuccessP, uploadFailP, optionsP);
+    ft.upload(fileURL, encodeURI("http://192.168.1.105/wasiWeb/php/insertarFotoPublicar.php"), uploadSuccessP, uploadFailP, optionsP);
 }
 function uploadSuccessP(r) {
    //alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);

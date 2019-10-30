@@ -56,7 +56,7 @@ $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: 'http://192.168.1.103/wasiWeb/php/consultaEmail.php',
+                    url: 'http://192.168.1.105/wasiWeb/php/consultaEmail.php',
                     //data: {email : $('#email').val()},
                     data: "email="+$vEmail,
                     crossDomain: true,
@@ -262,7 +262,7 @@ $("#passwordP").change(function(){ //validar
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: 'http://192.168.1.103/wasiWeb/php/consultaPassword.php',
+                    url: 'http://192.168.1.105/wasiWeb/php/consultaPassword.php',
                     data: {password : $passwordP,idUsuario:$vidUsuario},                 
                     crossDomain: true,
                     cache: false,
@@ -440,7 +440,7 @@ $("#formPerfil").submit(function(){
         }
         if (!autoCCiu) {
             //alert("entra autoCCiu "+ autoCCiu );
-            $("#mensajeErrorCiudad").html("Ingrese una ciudad de la lista ! ");
+            $("#mensajeErrorCiudad").html("Elige una ciudad de la lista ! ");
             return false;
         }
         else{
@@ -448,7 +448,7 @@ $("#formPerfil").submit(function(){
         }
         if (!autoCDir) {
             //alert("entra autoCDir "+ autoCDir );
-            $("#mensajeErrorDireccion").html("Ingrese una direccion de la lista ! ");
+            $("#mensajeErrorDireccion").html("Elige una direccion de la lista ! ");
             return false;
         }
         else{
