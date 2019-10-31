@@ -13,6 +13,7 @@
     });
     $("#fotoPublicarCamara").click(function(){ 
       if ($("#imgPublicar").data("cont") < 5) {
+        alert("entra fotoPublicarCamara");
         fotoPublicarCamara();  
       }
       else{

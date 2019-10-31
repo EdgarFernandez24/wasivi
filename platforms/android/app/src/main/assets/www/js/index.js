@@ -643,7 +643,7 @@ function onSuccessFPC(imageURI) {
   //alert('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
   console.log('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
   //$emailPu=$datosLocal['usrEmail']; 
-  subirImagenPublicar(imageURI,$datosLocal['usrEmail']);   
+  subirImagenPublicar(imageURI,$datosLocalDir["idPublicar"],$datosLocalDir["id"], $datosLocal['usrEmail']);   
 }
 
 
@@ -667,21 +667,22 @@ function onSuccessFPG(results) {
     }*/
     $("#mensajeModalFotoPublicar").html("");
     $('#modalPublicar').modal('hide');
-  $('.divImgPublicarG').css({'display':'none'});
-  $('#divImgPublicarP').css({'display':'flex'});
+  
   alert('onSuccessFPG maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
-  for (var i = 0; i < results.length && i < maxImg; i++) {
-    //alert("Code = " + results[i].responseCode+" Response = " + results[i].response+" Sent = " + results[i].bytesSent);
-    //alert('Image URI: ' + JSON.stringify(results[i]));
-    console.log('Image URI: ' + results[i]);
-    var html = "<div class = 'fotoPublicar' style='background:#141f1f url("+results[i]+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+encodeURI(results[i].substr(results[i].lastIndexOf('/') + 1))+"></span></div>";
-    selDiv.append(html);
-    storedFiles.push(results[i]);
-    contImg++;
-    $("#imgPublicar").data("cont",contImg); 
-  }
+  //if (results.length > 0) {
+    $('.divImgPublicarG').css({'display':'none'});
+    $('#divImgPublicarP').css({'display':'flex'});
+    for (var i = 0; i < results.length && i < maxImg; i++) {
+      //alert("Code = " + results[i].responseCode+" Response = " + results[i].response+" Sent = " + results[i].bytesSent);
+      //alert('Image URI: ' + JSON.stringify(results[i]));
+      console.log('Image URI: ' + results[i]);
+      var html = "<div class = 'fotoPublicar' style='background:#141f1f url("+results[i]+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+encodeURI(results[i].substr(results[i].lastIndexOf('/') + 1))+"></span></div>";
+      selDiv.append(html);
+      storedFiles.push(results[i]);
+      contImg++;
+      $("#imgPublicar").data("cont",contImg); 
+    }
   $('#mensajePublicar1').html("almacen + "+storedFiles.length); 
-
   if ((maxImg=maxImg-results.length)<0) {
     maxImg=0;
     alert('if maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
@@ -692,12 +693,12 @@ function onSuccessFPG(results) {
   
   alert(' else maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
   }  
-  
-}
+  }
+//}
 function onFailFPG(error) {
   console.log('Error: ' + error);
 } 
-
+$("#imgPublicar").on("click", ".removeImgPublicar", removeFile);
 function removeFile(e) {
     var file = $(this).data("file");
     //decodeURI(file) decodifica los espacion y otros ()    
@@ -727,8 +728,8 @@ function removeFile(e) {
     }
     
     alert('removeFile2 contImg '+contImg+' maxImg '+maxImg);
-  }
-function subirImagenPublicar(fileURL,emailPu) {
+}
+function subirImagenPublicar(fileURL,idPu,idUsr,emailPu) {
      //alert("subirImagenPerfilEditar IMG "+fileURL+" IMGA "+fileUrlAnt+" EMAILP "+emailP); 
      console.log("subirImagenPublicar IMG "+fileURL+" EMAILP "+emailPu);       
     var optionsP = new FileUploadOptions();
@@ -738,23 +739,16 @@ function subirImagenPublicar(fileURL,emailPu) {
     //optionsPE.chumkedmode="false";
     //optionsPE.headers = { Connection: "close" }
     var miParams = {};
+      miParams.idPublicacion = idPu;
+      miParams.idUsuario = idUsr;
       miParams.emailPu = emailPu;
-    optionsPE.params = miParams;
-      
-    var ft = new FileTransfer();  
-    ft.onprogress = function(progressEvent) {
-      if (progressEvent.lengthComputable) {
-          loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
-      } 
-      else {
-        loadingStatus.increment();
-      }
-    };
+    optionsP.params = miParams;      
+    var ft = new FileTransfer();   
     ft.upload(fileURL, encodeURI("http://192.168.1.105/wasiWeb/php/insertarFotoPublicar.php"), uploadSuccessP, uploadFailP, optionsP);
 }
 function uploadSuccessP(r) {
    //alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
-    console.log("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
+    console.log("Exito Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
     //$fotoA=JSON.parse(r.response);
     //alert('fotoA '+ $fotoA['fotoActual']);
 

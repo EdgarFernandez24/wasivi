@@ -368,7 +368,7 @@ $(document).ready(function(){
                     $("#mensajeErrorDireccion").html("");
                     $("#mensajeErrorDireccionT").html("");
                     miresult=results;
-                    addressD1 = results[0].address_components[1].short_name;//calle
+                    addressD1 = results[0].address_components[1].short_name+", "+results[0].address_components[0].short_name;//calle
                     addressD2 = results[0].address_components[2].short_name;//zona
                     ciudadN1 = results[0].address_components[2].short_name;//zona
                     ciudadN2 = results[0].address_components[3].short_name;//ciudad
@@ -432,7 +432,7 @@ $(document).ready(function(){
     selDiv = $("#imgPublicar");//para las foto publicadas 
 
 //    $("#filePublicar").on("change", handleFileSelect);     
-    $("#imgPublicar").on("click", ".removeImgPublicar", removeFile);
+   // $("#imgPublicar").on("click", ".removeImgPublicar", removeFile);
 });//fin $(document).ready(function()
 
 function toggleBounce() {
