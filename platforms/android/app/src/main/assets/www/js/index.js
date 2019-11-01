@@ -43,6 +43,7 @@ var addressD2 = '';//alamcenar zona de placedir
 var addressLat='';//almacenar latitud de la direccion
 var addressLon='';//almacenar longitud de la direccion
 var continuarDir='';//no hay direcion guardada
+var btnAtrasFoto=0;//si se presion btn atras foto ubicacion
 
 // Success callback for get geo coordinates
 
@@ -621,7 +622,7 @@ function fotoPublicarCamara(){
     correctOrientation: true
   }
   //alert("hacerFoto");
-  navigator.camera.getPicture(onSuccessFPC, onFail, cameraOptionsFPC);
+  navigator.camera.getPicture(onSuccessFPC, onFailCPC, cameraOptionsFPC);
 }
 function onSuccessFPC(imageURI) {
   console.log('Image URI: ' + imageURI);
@@ -632,20 +633,25 @@ function onSuccessFPC(imageURI) {
   //decodeURI() para decodificar 
   var html = "<div class = 'fotoPublicar' style='background:#141f1f url("+imagenPublicar+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+imageURI.substr(imageURI.lastIndexOf('/') + 1) +"></span></div>";
   selDiv.append(html); 
-  storedFiles.push(imageURI);
-  $('#mensajePublicar1').html("almacen + "+storedFiles.length); 
+  storedFiles.push(imageURI);  
   $('#modalPublicar').modal('hide');
   $('.divImgPublicarG').css({'display':'none'});
   $('#divImgPublicarP').css({'display':'flex'});
+
   contImg++;
   $("#imgPublicar").data("cont",contImg);
+  $('#mensajePublicar1').html("almacen: "+storedFiles.length); 
   maxImg--;
   //alert('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
   console.log('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
   //$emailPu=$datosLocal['usrEmail']; 
   subirImagenPublicar(imageURI,$datosLocalDir["idPublicar"],$datosLocalDir["id"], $datosLocal['usrEmail']);   
 }
-
+function onFailCPC(message) {
+  $("#mensajeModalFotoPublicar").html("");
+  $('#modalPublicar').modal('hide');
+  console.log('Failed because: ' + message);
+}
 
 function fotoPublicarGaleria(){
   var cameraOptionsFPG = {
@@ -665,11 +671,10 @@ function onSuccessFPG(results) {
         //e.preventDefault();
         return;
     }*/
-    $("#mensajeModalFotoPublicar").html("");
-    $('#modalPublicar').modal('hide');
-  
+  $("#mensajeModalFotoPublicar").html("");
+  $('#modalPublicar').modal('hide');
   alert('onSuccessFPG maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
-  //if (results.length > 0) {
+  if (results.length > 0) {
     $('.divImgPublicarG').css({'display':'none'});
     $('#divImgPublicarP').css({'display':'flex'});
     for (var i = 0; i < results.length && i < maxImg; i++) {
@@ -680,54 +685,119 @@ function onSuccessFPG(results) {
       selDiv.append(html);
       storedFiles.push(results[i]);
       contImg++;
-      $("#imgPublicar").data("cont",contImg); 
+      //$("#imgPublicar").data("cont",contImg); 
     }
-  $('#mensajePublicar1').html("almacen + "+storedFiles.length); 
-  if ((maxImg=maxImg-results.length)<0) {
-    maxImg=0;
-    alert('if maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
-  }    
-  else
-  {
-   // maxImg=maxImg-results.length;     
-  
-  alert(' else maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
-  }  
+    $('#mensajePublicar1').html("almacen + "+storedFiles.length);
+    if ((maxImg=maxImg-results.length)<0) {
+      maxImg=0;
+      alert('if maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
+    }    
+    else
+    {
+      // maxImg=maxImg-results.length;     
+      alert(' else maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
+    }  
   }
-//}
+}
 function onFailFPG(error) {
+  alert('Error: ' + error);
   console.log('Error: ' + error);
-} 
+}
+function cargarFotoBD(arrayImgUri){
+console.log("cargarFotoBD "+ JSON.stringify(arrayImgUri));
+  //if (results.length > 0) {
+  $('.divImgPublicarG').css({'display':'none'});
+  $('#divImgPublicarP').css({'display':'flex'});
+  for (var i = 0; i < arrayImgUri['idUsuario'].length; i++) {
+    var html = "<div class = 'fotoPublicar' style='background:#141f1f url(http://192.168.1.105/wasiWeb/"+arrayImgUri['rutaFoto'][i]+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+arrayImgUri['rutaFoto'][i]+"></span></div>";
+    selDiv.append(html);
+    storedFilesDb.push(arrayImgUri['rutaFoto'][i]);
+    //storedFiles.push(arrayImgUri['rutaFoto'][i]);
+    contImg++;
+    maxImg--;    
+  }
+  $("#imgPublicar").data("cont",contImg);
+
+  $('#mensajePublicar1').html("contImg : "+contImg);
+  $('#mensajePublicar2').html("almacen db : "+storedFilesDb.length);  
+  $('#mensajePublicar3').html("almacen : "+storedFiles.length);
+  console.log('storedFilesDb '+ maxImg + ' contImg ' + contImg + ' results '+ arrayImgUri['idUsuario'].length);
+}
+
 $("#imgPublicar").on("click", ".removeImgPublicar", removeFile);
+
 function removeFile(e) {
-    var file = $(this).data("file");
-    //decodeURI(file) decodifica los espacion y otros ()    
-    for(var i=0;i<storedFiles.length;i++) {
-        if(storedFiles[i].substr(storedFiles[i].lastIndexOf('/')+1) === decodeURI(file)) {
-            storedFiles.splice(i,1);     
-            break;
+  alert("entraremoveFile");
+  var file = $(this).data("file");
+  console.log("file :"+ file);
+  console.log("decodeURI(file) :"+decodeURI(file));
+  
+  //decodeURI(file) decodifica los espacion y otros ()    
+  for(var i=0;i<storedFiles.length;i++) { 
+  alert("for storedFiles :"+ storedFiles.length +" i: "+i+" file: "+ decodeURI(file));   
+    if(storedFiles[i].substr(storedFiles[i].lastIndexOf('/')+1) === decodeURI(file)) {
+      alert("for storedFiles");
+      console.log("storedFiles :");
+      storedFiles.splice(i,1);
+      $.ajax({
+        type: "POST",
+        dataType: 'json',
+        url: 'http://192.168.1.105/wasiWeb/php/eliminarFotoPublicado.php',
+        data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar'],imgUri:'fotos/'+$datosLocal['usrEmail']+'/'+decodeURI(file)},                 
+        crossDomain: true,
+        cache: false,
+        success: function(datosEFoto){                        
+            console.log("datosEFoto "+datosEFoto['fotoEliminado']);                      
+        },
+        error : function(jqXHR, textStatus, errorThrown) {
+            alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
         }
+      });
+      break;
     }
-    /*for (var j = 0 ; j < storedFilesDb.length; j++) {
-        if (storedFilesDb[j].nombre_foto === file) {
-            storedFilesDb.splice(j,1);        
-            break;
+  }
+  for (var j = 0 ; j < storedFilesDb.length; j++) {
+    //alert("for storedFilesDb :"+ storedFilesDb.length +" j: "+j+" file: "+ file);
+    console.log("for storedFilesDb :"+ storedFilesDb.length +" j: "+j+" file: "+ file);
+    if (storedFilesDb[j] === file) {
+      //alert("entra storedFilesDb");
+      console.log("storedFilesDb :");
+      storedFilesDb.splice(j,1);
+      $.ajax({
+        type: "POST",
+        dataType: 'json',
+        url: 'http://192.168.1.105/wasiWeb/php/eliminarFotoPublicado.php',
+        data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar'],imgUri:file},                 
+        crossDomain: true,
+        cache: false,
+        success: function(datosEFotoDb){                        
+            console.log("datosEFoto "+datosEFotoDb['fotoEliminado']);                      
+        },
+        error : function(jqXHR, textStatus, errorThrown) {
+            alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
         }
-    } */   
+      });  
+      break;
+    }
+  }    
     $(this).parent().remove();
-    alert('removeFile1 contImg '+contImg+' maxImg '+maxImg);
+    console.log('removeFile1 contImg '+contImg+' maxImg '+maxImg);
+    //alert('removeFile1 contImg '+contImg+' maxImg '+maxImg);
     contImg--;
     maxImg++;
-    $('#mensajePublicar2').html("almacen db - "+storedFilesDb.length);
     $("#imgPublicar").data("cont",contImg);
-    $('#mensajePublicar3').html("almacen - "+storedFiles.length);    
+    
+    $('#mensajePublicar1').html("contImg : "+contImg);
+    $('#mensajePublicar2').html("almacen db: "+storedFilesDb.length);
+    $('#mensajePublicar3').html("almacen: "+storedFiles.length);    
+    
     if (storedFiles.length + storedFilesDb.length == 0) {
         $('.divImgPublicarG').css({'display':'block'});
         $('#divImgPublicarP').css({'display':'none'});
         $("#imgPublicar").data("cont",0); // no hay fotos
     }
-    
-    alert('removeFile2 contImg '+contImg+' maxImg '+maxImg);
+    console.log('removeFile2 contImg '+contImg+' maxImg '+maxImg);
+    //alert('removeFile2 contImg '+contImg+' maxImg '+maxImg);
 }
 function subirImagenPublicar(fileURL,idPu,idUsr,emailPu) {
      //alert("subirImagenPerfilEditar IMG "+fileURL+" IMGA "+fileUrlAnt+" EMAILP "+emailP); 

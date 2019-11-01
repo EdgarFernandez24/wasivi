@@ -613,7 +613,11 @@ function activarSwipe(){
   }
 function continuarDireccion(){
     event.preventDefault();
-    
+    $dirDireccion=addressD1;//dir
+    $dirZona=ciudadN1;//zona
+    $dirCiudad=ciudadN2;//ciudad    
+    $dirLat=addressLat;
+    $dirLon=addressLon;
     $(".div-custom-principal .divPublicar").css({"padding":"10px","background-color": "#fff"});
     $("#publicarDireccion").css("display","none");
     $("#publicarFotoUbicacion").css("display","block");
@@ -621,17 +625,36 @@ function continuarDireccion(){
     $("#publicarPiso").css("display","none");     
     $(".container-custom-principal .progressbar-bar-custom").css("width", "50%");
 
+    
     $("#mensajePublicar").html($datosLocal['usrEmail']);
     $("#mensajePublicar1").html($("#ciudadMpu").val());
     $("#mensajePublicar2").html($("#direccionMPu").val());
     $("#mensajePublicar3").html(addressLat);
     $("#mensajePublicar4").html(addressLon);
     
-    $dirDireccion=addressD1;//dir
-    $dirZona=ciudadN1;//zona
-    $dirCiudad=ciudadN2;//ciudad    
-    $dirLat=addressLat;
-    $dirLon=addressLon;
+    if (btnAtrasFoto==0) {// 0 si se no presiono btnAtrasFoto 1 si se press  
+        // verificar si hay fotos en la base de datos
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url: 'http://192.168.1.105/wasiWeb/php/consultarFotoPublicado.php',
+            data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar']},                 
+            crossDomain: true,
+            cache: false,
+            success: function(datosFoto){
+                if (datosFoto['fotos']>0) {
+                    cargarFotoBD(datosFoto);
+                    console.log("datosFoto "+JSON.stringify(datosFoto));
+                }            
+                console.log("longitud "+ datosFoto['fotos']);
+                btnAtrasFoto=1;                      
+            },
+            error : function(jqXHR, textStatus, errorThrown) {
+                alert("error consultarFotoPublicado: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                btnAtrasFoto=0;
+            }
+        });
+    }
     //direccion nueva
     if (continuarDir==1 ) {
         //no existe direccion en la base de datos insertar direccion
@@ -678,8 +701,7 @@ function continuarDireccion(){
                 }
             });
         }
-}
-
+    }
 }
 function continuarFotoUbi(){
     event.preventDefault();
