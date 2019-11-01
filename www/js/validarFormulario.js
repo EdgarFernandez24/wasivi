@@ -56,7 +56,7 @@ $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: 'http://192.168.1.105/wasiWeb/php/consultaEmail.php',
+                    url: 'http://192.168.1.108/wasiWeb/php/consultaEmail.php',
                     //data: {email : $('#email').val()},
                     data: "email="+$vEmail,
                     crossDomain: true,
@@ -262,7 +262,7 @@ $("#passwordP").change(function(){ //validar
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: 'http://192.168.1.105/wasiWeb/php/consultaPassword.php',
+                    url: 'http://192.168.1.108/wasiWeb/php/consultaPassword.php',
                     data: {password : $passwordP,idUsuario:$vidUsuario},                 
                     crossDomain: true,
                     cache: false,

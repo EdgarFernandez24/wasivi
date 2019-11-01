@@ -101,7 +101,7 @@ $(document).ready(function(){
         
         $.ajax({
             type :'POST',
-            url:'http://192.168.1.105/wasiWeb/php/consultarDireccion.php',
+            url:'http://192.168.1.108/wasiWeb/php/consultarDireccion.php',
             dataType : 'json',                
             data: {idUsuario:$datosLocal['usrId']},                 
             crossDomain: true,
@@ -182,7 +182,7 @@ $(document).ready(function(){
             $("#clistA").css("visibility", "hidden");
             /*datos recuperados de local storage*/
             
-            $("#fotoPerfilE").css({"background": "url(http://192.168.1.105/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -221,7 +221,7 @@ $(document).ready(function(){
             $("#divFooter").css("display", "none");
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilE").css({"background": "url(http://192.168.1.105/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.108/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -249,7 +249,7 @@ $(document).ready(function(){
                                     
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilM").css({"background": "url(http://192.168.1.105/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#fotoPerfilM").css({"background": "url(http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombrePM").html($datosLocal.usrName);
             $("#apellidosPM").html($datosLocal.usrLname);
             if ($datosLocal.usrSexo==1) {
@@ -515,7 +515,7 @@ function inicioSesion(){
     if($datosLocal!= undefined || $datosLocal!= null ){
         /*$.each($datosLocal, function(key, value){alert(key + ' = ' + value);});*/
         $("#nombreCompleto").html($datosLocal['usrName']);
-        $("#imgPerfilHeader").attr({"src":"http://192.168.1.105/wasiWeb/"+ $datosLocal['usrImg']}); 
+        $("#imgPerfilHeader").attr({"src":"http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg']}); 
         $("body").css("background","#f2f2f2");
         $("#divInicio").css("display", "none");
         $("#divPrincipal").css("display", "block");
@@ -561,7 +561,7 @@ function iniciarSession(){
     event.preventDefault();
     $.ajax({
         type :'POST',
-        url:'http://192.168.1.105/wasiWeb/php/ingresar.php',
+        url:'http://192.168.1.108/wasiWeb/php/ingresar.php',
         dataType : 'json',        
         data: new FormData($("#formIngreso")[0]),        
         //async: false,
@@ -637,7 +637,7 @@ function continuarDireccion(){
         $.ajax({
             type: "POST",
             dataType: 'json',
-            url: 'http://192.168.1.105/wasiWeb/php/consultarFotoPublicado.php',
+            url: 'http://192.168.1.108/wasiWeb/php/consultarFotoPublicado.php',
             data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar']},                 
             crossDomain: true,
             cache: false,
@@ -662,7 +662,7 @@ function continuarDireccion(){
             $.ajax({
                 type: "POST",
                 dataType: 'json',
-                url: 'http://192.168.1.105/wasiWeb/php/insertarDirecion.php',
+                url: 'http://192.168.1.108/wasiWeb/php/insertarDirecion.php',
                 data: {idUsuario:$datosLocal['usrId'],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon},                 
                 crossDomain: true,
                 cache: false,
@@ -683,7 +683,7 @@ function continuarDireccion(){
             $.ajax({
                 type: "POST",
                 dataType: 'json',
-                url: 'http://192.168.1.105/wasiWeb/php/actualizarDireccion.php',
+                url: 'http://192.168.1.108/wasiWeb/php/actualizarDireccion.php',
                 data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon},                 
                 crossDomain: true,
                 cache: false,

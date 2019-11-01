@@ -80,7 +80,7 @@ function getMap(latitude, longitude) {
      var infoWindow = new google.maps.InfoWindow;
 
           // Change this depending on the name of your PHP or XML file
-          downloadUrl('http://192.168.1.105/wasiWeb/php/marcas.php', function(data) {
+          downloadUrl('http://192.168.1.108/wasiWeb/php/marcas.php', function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName('marker');
             Array.prototype.forEach.call(markers, function(markerElem) {
@@ -402,7 +402,7 @@ function subirImagen(fileURL, vEmail) {
     optionsR.params = miParams;
       
     var ft = new FileTransfer();
-    ft.upload(fileURL, encodeURI("http://192.168.1.105/wasiWeb/php/insertarFotoRegistro.php"), uploadSuccessR, uploadFailR, optionsR);
+    ft.upload(fileURL, encodeURI("http://192.168.1.108/wasiWeb/php/insertarFotoRegistro.php"), uploadSuccessR, uploadFailR, optionsR);
 }
 
 function uploadSuccessR(r) {
@@ -528,7 +528,7 @@ function subirImagenPerfilEditar(fileURL, fileUrlAnt ,emailP) {
         loadingStatus.increment();
       }
     };
-    ft.upload(fileURL, encodeURI("http://192.168.1.105/wasiWeb/php/insertarFotoEditar.php"), uploadSuccessPE, uploadFailPE, optionsPE);
+    ft.upload(fileURL, encodeURI("http://192.168.1.108/wasiWeb/php/insertarFotoEditar.php"), uploadSuccessPE, uploadFailPE, optionsPE);
 }
 
 function uploadSuccessPE(r) {
@@ -556,7 +556,7 @@ function actualizarPerfil(cPassword)
     $myFormD.append("imagenPerfilEditar",imagenPerfilEditar);
     $.ajax({
         type : 'POST',
-        url:'http://192.168.1.105/wasiWeb/php/actualizarPerfil.php',
+        url:'http://192.168.1.108/wasiWeb/php/actualizarPerfil.php',
         data:$myFormD,
         dataType: 'json',
         crossDomain: true,
@@ -589,7 +589,7 @@ function actualizarPerfil(cPassword)
             if(datosP.uReg==1){
                 $('#mPMD').html("");
                 $('#mPMS').html(datosP.msg + " id " + datosP.uPer+" em "+datosP.usrEmail+" imga "+datosP.img +" img "+datosP.usrImg);
-                $("#fotoPerfilM").css({"background": "url(http://192.168.1.105/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center","background-size": "cover"});
+                $("#fotoPerfilM").css({"background": "url(http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center","background-size": "cover"});
                 $('#nombrePM').html($datosLocal.usrName);
                 $('#apellidosPM').html($datosLocal.usrLname);
                 if ($datosLocal.usrSexo==1) {
@@ -640,7 +640,8 @@ function onSuccessFPC(imageURI) {
 
   contImg++;
   $("#imgPublicar").data("cont",contImg);
-  $('#mensajePublicar1').html("almacen: "+storedFiles.length); 
+  $('#mensajePublicar').html("contImgFPC: "+contImg); 
+  $('#mensajePublicar1').html("almacenFPC: "+storedFiles.length); 
   maxImg--;
   //alert('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
   console.log('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
@@ -661,19 +662,12 @@ function fotoPublicarGaleria(){
   }
   console.log("max "+JSON.stringify(cameraOptionsFPG)); 
   plugins.imagePicker.getPictures(onSuccessFPG, onFailFPG, cameraOptionsFPG);
-}
-  
-function onSuccessFPG(results) {
-   /*var files = results;//$("#filePublicar")[0].files.length
-    if ((($("#filePublicar").files.length)+(storedFiles.length)) > 5 ){//+(storedFilesDb.length)
-        alert("solo puedes elegir maximo 5 fotos");
-        $('#modalPublicar').modal('hide');
-        //e.preventDefault();
-        return;
-    }*/
+}  
+function onSuccessFPG(results) {   
   $("#mensajeModalFotoPublicar").html("");
   $('#modalPublicar').modal('hide');
   alert('onSuccessFPG maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
+
   if (results.length > 0) {
     $('.divImgPublicarG').css({'display':'none'});
     $('#divImgPublicarP').css({'display':'flex'});
@@ -685,17 +679,18 @@ function onSuccessFPG(results) {
       selDiv.append(html);
       storedFiles.push(results[i]);
       contImg++;
-      //$("#imgPublicar").data("cont",contImg); 
+      subirImagenPublicar(results[i],$datosLocalDir["idPublicar"],$datosLocalDir["id"], $datosLocal['usrEmail']);        
     }
-    $('#mensajePublicar1').html("almacen + "+storedFiles.length);
+    $("#imgPublicar").data("cont",contImg);
+    $('#mensajePublicar').html("contImgFPG: "+contImg);
+    $('#mensajePublicar1').html("almacenFPG: "+storedFiles.length);
     if ((maxImg=maxImg-results.length)<0) {
       maxImg=0;
       alert('if maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
     }    
     else
     {
-      // maxImg=maxImg-results.length;     
-      alert(' else maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
+      alert(' else2 maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
     }  
   }
 }
@@ -709,7 +704,7 @@ console.log("cargarFotoBD "+ JSON.stringify(arrayImgUri));
   $('.divImgPublicarG').css({'display':'none'});
   $('#divImgPublicarP').css({'display':'flex'});
   for (var i = 0; i < arrayImgUri['idUsuario'].length; i++) {
-    var html = "<div class = 'fotoPublicar' style='background:#141f1f url(http://192.168.1.105/wasiWeb/"+arrayImgUri['rutaFoto'][i]+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+arrayImgUri['rutaFoto'][i]+"></span></div>";
+    var html = "<div class = 'fotoPublicar' style='background:#141f1f url(http://192.168.1.108/wasiWeb/"+arrayImgUri['rutaFoto'][i]+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+arrayImgUri['rutaFoto'][i]+"></span></div>";
     selDiv.append(html);
     storedFilesDb.push(arrayImgUri['rutaFoto'][i]);
     //storedFiles.push(arrayImgUri['rutaFoto'][i]);
@@ -718,9 +713,9 @@ console.log("cargarFotoBD "+ JSON.stringify(arrayImgUri));
   }
   $("#imgPublicar").data("cont",contImg);
 
-  $('#mensajePublicar1').html("contImg : "+contImg);
-  $('#mensajePublicar2').html("almacen db : "+storedFilesDb.length);  
-  $('#mensajePublicar3').html("almacen : "+storedFiles.length);
+  $('#mensajePublicar1').html("contImgcFBD : "+contImg);
+  $('#mensajePublicar2').html("almacencFBD db : "+storedFilesDb.length);  
+  $('#mensajePublicar3').html("almacencFBD : "+storedFiles.length);
   console.log('storedFilesDb '+ maxImg + ' contImg ' + contImg + ' results '+ arrayImgUri['idUsuario'].length);
 }
 
@@ -742,7 +737,7 @@ function removeFile(e) {
       $.ajax({
         type: "POST",
         dataType: 'json',
-        url: 'http://192.168.1.105/wasiWeb/php/eliminarFotoPublicado.php',
+        url: 'http://192.168.1.108/wasiWeb/php/eliminarFotoPublicado.php',
         data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar'],imgUri:'fotos/'+$datosLocal['usrEmail']+'/'+decodeURI(file)},                 
         crossDomain: true,
         cache: false,
@@ -766,7 +761,7 @@ function removeFile(e) {
       $.ajax({
         type: "POST",
         dataType: 'json',
-        url: 'http://192.168.1.105/wasiWeb/php/eliminarFotoPublicado.php',
+        url: 'http://192.168.1.108/wasiWeb/php/eliminarFotoPublicado.php',
         data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar'],imgUri:file},                 
         crossDomain: true,
         cache: false,
@@ -787,9 +782,9 @@ function removeFile(e) {
     maxImg++;
     $("#imgPublicar").data("cont",contImg);
     
-    $('#mensajePublicar1').html("contImg : "+contImg);
-    $('#mensajePublicar2').html("almacen db: "+storedFilesDb.length);
-    $('#mensajePublicar3').html("almacen: "+storedFiles.length);    
+    $('#mensajePublicar1').html("contImgremoveFil : "+contImg);
+    $('#mensajePublicar2').html("almacenremoveFil db: "+storedFilesDb.length);
+    $('#mensajePublicar3').html("almacenremoveFil: "+storedFiles.length);    
     
     if (storedFiles.length + storedFilesDb.length == 0) {
         $('.divImgPublicarG').css({'display':'block'});
@@ -814,7 +809,7 @@ function subirImagenPublicar(fileURL,idPu,idUsr,emailPu) {
       miParams.emailPu = emailPu;
     optionsP.params = miParams;      
     var ft = new FileTransfer();   
-    ft.upload(fileURL, encodeURI("http://192.168.1.105/wasiWeb/php/insertarFotoPublicar.php"), uploadSuccessP, uploadFailP, optionsP);
+    ft.upload(fileURL, encodeURI("http://192.168.1.108/wasiWeb/php/insertarFotoPublicar.php"), uploadSuccessP, uploadFailP, optionsP);
 }
 function uploadSuccessP(r) {
    //alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
