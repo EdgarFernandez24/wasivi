@@ -221,7 +221,7 @@
   </div><!--fin divInicio-->
   <div class="container container-custom-principal" id="divPrincipal">   
     <div class="div-custom-principal " id="paginaPrincipal">
-      <div class="header navbar-fixed-top" id="btnSalir"><!--span class="glyphicon glyphicon glyphicon-arrow-left"> </span>
+      <div class="header navbar-fixed-top" id="inputBuscar"><!--span class="glyphicon glyphicon glyphicon-arrow-left"> </span>
         <span id="imgP"><img src="" id="imgPerfilHeader" class="img-responsive img-circle" style="display:inline" width="25" height="25"></span-->
         <form role="form" name="formBuscar" id="formBuscar" class="form-principal" enctype="multipart/form-data" >
           <div class="form-group">
@@ -237,7 +237,7 @@
               </div>                      
             </div>
           </div>        
-      </div><!--fin btnSalir-->
+      </div>
       <div id="mensajeCiudad" class="text-center mensajePrincipal" >
         <div id="" > Ciudad para vivir.!</div>                      
       </div> 
@@ -285,7 +285,7 @@
           <strong>barcelona ciudad 1</strong> zona 1
         </div>        
       </div> 
-      <button class="btn btn-primary btn-md btn-block btnPrincipalPublicar " id="btnPublicarPrincipal"><span class="glyphicon glyphicon-upload btnPosIzq"></span>Publicar</button> 
+      <button class="btn btn-primary btn-md btn-block btnPrincipalPublicar " id="btnPublicarPrincipal"><span class="glyphicon glyphicon-upload btnPosDer"></span>Publicar</button> 
     </div> <!--fin paginaPrincipal-->
     <!-- inicio buscar por lista o mapas -->
    <div class="div-custom-principal" id="paginaListaMapas">      
@@ -392,8 +392,8 @@
             <div class="swiper-pagination"></div>
         </div><!--fin contenedor-swiper--> 
         <div id="contenedorMapa" class="contenedorMapa">
-            <div id="map"></div>     
-          </div> 
+          <div id="map"></div>     
+        </div> 
         </div><!--fin buscar lista-->
         <div id="buscarLista" class="tab-pane  buscarLista ">           
         <form role="form" name="formBuscarLista" id="formBuscarLista" class="form-principal" enctype="multipart/form-data">
@@ -454,7 +454,7 @@
         <div class="header navbar-fixed-top headerPublicar">
           <span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" id="btnAtrasDireccion"></span>
           <span class="posHeadCenter"> Ubicación</span> 
-        </div><!--fin btnSalir-->
+        </div>
         <div class="contenedorDireccion">
           <form role="form" name="formPublicarDireccion" id="formPublicarDireccion" class="form-principal-publicar" enctype="multipart/form-data" >
             <fieldset>
@@ -472,6 +472,7 @@
                   <input type="text" name="direccionMPu" id="direccionMPu" placeholder="Direccion" class="form-control" required />
                 </div>
                 <span class="text-danger" id="mensajeErrorDireccion"></span>
+                <span class="text-center-min">No mostraremos la ubicacion exacta a los usuarios que estan buscando, mostraremos una idea de la zona</span>
               </div>            
             </fieldset>          
           </form>
@@ -495,10 +496,11 @@
         </div><!--fin footerbtn--> 
       </div><!--fin publicar Direccion-->
       <div class="div-secundario divPublicar" id="publicarFotoUbicacion"> 
-        <div class="header navbar-fixed-top headerPublicar"><span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" id="btnAtrasfotoUbicacion"></span>
+        <div class="header navbar-fixed-top headerPublicar">
+          <span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" id="btnAtrasfotoUbicacion"></span>
           <span class="posHeadCenter">Fotos</span> 
-        </div><!--fin btnSalir-->   
-        <form role="form" name="formPublicarFotoUbicaion" id="formPublicarFotoUbicaion" class="form-principal-publicar" enctype="multipart/form-data" >
+        </div>   
+        <form role="form" name="formPublicarFotoUbicacion" id="formPublicarFotoUbicacion" class="form-principal-publicar" enctype="multipart/form-data" >
           <fieldset>                 
             <div class="form-group">
               <label class="label-custom-color">Sube fotos para tu anuncio</label>
@@ -520,6 +522,14 @@
               </div>
               
             </div>            
+            <label class="label-custom-color">Titulo para tu Anuncio</label> 
+            <div class="form-group">         
+              <div class="inner-addon left-addon">
+                <i class="glyphicon glyphicon-tags"></i>
+                <input type="text" name="tituloMPu" id="tituloMPu" placeholder="Titulo de tu publicacion" class="form-control" required />
+              </div>
+              <span class="text-danger" id="mensajeErrorTituloPu"></span>
+            </div>
             <label class="label-custom-color">Alquiler Mensual</label>            
             <div class="form-group">         
               <div class="inner-addon left-addon">
@@ -528,12 +538,20 @@
               </div>
               <span class="text-danger" id="mensajeErrorPrecioPu"></span>
             </div>
-            <label class="label-custom-color">Comentarios</label>            
+            <label class="label-custom-color">Fianza</label>            
+            <div class="form-group">         
+              <div class="inner-addon left-addon">
+                <i class="glyphicon glyphicon-euro"></i>
+                <input type="text" name="fianzaMPu" id="fianzaMPu" placeholder="Cantidad Euros" class="form-control" />
+              </div>
+              <span class="text-danger" id="mensajeErrorPrecioPu"></span>
+            </div>
+            <label class="label-custom-color">Algun comentario</label>            
             <div class="form-group">         
               <div class="inner-addon left-addon">
                 <textarea name="comentarioMPu" id="comentarioMPu" cols="3" placeholder="Que te gustaria contar sobre el piso y tus compañeros" class="form-control" required ></textarea>
               </div>
-              <span class="text-danger" id="mensajeErrorNombreP"></span>
+              <span class="text-danger" id="mensajeErrorcomentarioPu"></span>
             </div>     
             <p id="mensajePublicar">a</p>
             <p id="mensajePublicar1">b</p>
@@ -569,13 +587,14 @@
         <div class="progress-bar progress-bar-success progressbar-bar-custom" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" >         
         </div>
       </div>
-      <button form="formPublicarFotoUbicaion" id="btnContinuarFoUb" name="btnContinuarFoUb" class="btn btn-primary btn-md btn-block btnFormularioContinuar" >Continuar</button>
-    </div><!--fin footerbtn--> 
+      <button form="formPublicarFotoUbicacion" id="btnContinuarFoUb" name="btnContinuarFoUb" class="btn btn-primary btn-md btn-block btnFormularioContinuar" >Continuar</button>
+    </div>
   </div><!--fin publicarFotoUbicacion-->
   <div class="div-secundario divPublicar" id="publicarCaracteristicas"> 
-    <div class="header navbar-fixed-top headerPublicar"><span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" id="btnAtrasCaracteristicas"></span>
+    <div class="header navbar-fixed-top headerPublicar">
+      <span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" id="btnAtrasCaracteristicas"></span>
       <span class="posHeadCenter">Caracteristicas</span> 
-      </div><!--fin btnSalir-->   
+    </div>   
       <form role="form" name="formPublicarCarac" id="formPublicarCarac" class="form-principal-publicar" enctype="multipart/form-data" >
         <span id="mensajePF"></span>
         caracterisitcas en obras
@@ -589,9 +608,10 @@
     </div><!--fin footerbtn--> 
   </div><!--fin publicarCaracteristicas-->
     <div class="div-secundario divPublicar" id="publicarPiso"> 
-    <div class="header navbar-fixed-top headerPublicar" ><span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" id="btnAtrasPiso" ></span>
-      <span class="posHeadCenter">Piso</span> 
-      </div><!--fin btnSalir-->   
+      <div class="header navbar-fixed-top headerPublicar" >
+        <span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" id="btnAtrasPiso" ></span>
+        <span class="posHeadCenter">Piso</span> 
+      </div>   
       <form role="form" name="formPublicarPiso" id="formPublicarPiso" class="form-principal-publicar" enctype="multipart/form-data" >
         piso en obras
       </form>          

@@ -56,7 +56,7 @@ $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: 'http://192.168.1.108/wasiWeb/php/consultaEmail.php',
+                    url: 'http://192.168.1.106/wasiWeb/php/consultaEmail.php',
                     //data: {email : $('#email').val()},
                     data: "email="+$vEmail,
                     crossDomain: true,
@@ -262,7 +262,7 @@ $("#passwordP").change(function(){ //validar
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: 'http://192.168.1.108/wasiWeb/php/consultaPassword.php',
+                    url: 'http://192.168.1.106/wasiWeb/php/consultaPassword.php',
                     data: {password : $passwordP,idUsuario:$vidUsuario},                 
                     crossDomain: true,
                     cache: false,
@@ -322,17 +322,67 @@ $("#cpasswordNP").change(function(){
             $("#mensajeErrorCContrasenyaNP").html("");
         }
 });
+$("#tituloMPu").change(function(){ 
+    
+    $tituloPu = $("#tituloMPu").val();
+    
+    if ($tituloPu == '' || $tituloPu == null) {
+        //alert("vacio");
+        $("#mensajeErrorTituloPu").html("Ingresa algun titulo para tu anuncio");
+        tMPu=0;
+        $("#btnContinuarFoUb").css({"background-color":"#808080"});//gris
+    }
+    else{
+        //btnAtrasCarac=0;
+        continuarFUbi=1;
+        $("#mensajeErrorTituloPu").html(" ");
+        tMPu=1;
+    }
+    if (tMPu==1 && pMPu==1 && cMPu==1 && contImg > 0) {
+        //alert("si tituloMPu");
+        $("#btnContinuarFoUb").css({"background-color":"#008080"});//color tema
+    }
+        
+});
 $("#precioMPu").change(function(){ 
     $precioPu = $("#precioMPu").val();
-    if (!/^([0-9])*$/.test($precioPu)){
+    
+    if (!/^([0-9])*$/.test($precioPu || $precioPu=='' || $precioPu==null)){
         $precioErrorPu = "El Precio debe contener solo numeros.";        
-            $("#mensajeErrorPrecioPu").html($precioErrorPu);          
-            return false;
-            //$error = false;
-        } else{
-            //
-            $("#mensajeErrorPrecioPu").html("");
-        }
+        $("#mensajeErrorPrecioPu").html($precioErrorPu);
+        $("#btnContinuarFoUb").css({"background-color":"#808080"});//gris
+        pMPu=0;          
+        return false;            
+    } 
+    else{
+        //btnAtrasCarac=0;
+        continuarFUbi=1;
+        pMPu=1;
+        $("#mensajeErrorPrecioPu").html("");
+    }    
+    if (tMPu==1 && pMPu==1 && cMPu==1 && contImg > 0) {
+        //alert("si precioMPu");
+        $("#btnContinuarFoUb").css({"background-color":"#008080"});//color tema
+    }
+});
+$("#comentarioMPu").change(function(){
+    $comentarioPu = $("#comentarioMPu").val();
+    if ($comentarioPu =='' || $comentarioPu ==null) {
+        $("#mensajeErrorcomentarioPu").html("Escribe algun comentario ");
+        cMPu=0;
+        $("#btnContinuarFoUb").css({"background-color":"#808080"});//gris    
+    }
+    else{
+        $("#mensajeErrorcomentarioPu").html("");
+        cMPu=1;
+        continuarFUbi=1;
+        //btnAtrasCarac=0;
+    }
+    if (tMPu==1 && pMPu==1 && cMPu==1 && contImg > 0) {
+        //alert("si comentarioMPu");
+        $("#btnContinuarFoUb").css({"background-color":"#008080"});//color tema
+    }    
+       
 });
 $("#formPerfil").submit(function(){
         //$error=true;    
@@ -429,53 +479,71 @@ $("#formPerfil").submit(function(){
         
     });*/
     $("#formPublicarDireccion").submit(function(){
-        
+       // $formPD='';
         if (!linkBuscarDir) {
             //alert("entra "+ linkBuscarDir );
             $("#mensajeErrorDireccionT").html("Ingrese una direccion correcta ");
+            //$formPD=0;
             return false;
         }
         else{
             $("#mensajeErrorDireccion").html(" ");
+            //$formPD=1;
         }
         if (!autoCCiu) {
             //alert("entra autoCCiu "+ autoCCiu );
             $("#mensajeErrorCiudad").html("Elige una ciudad de la lista ! ");
+            //$formPD=0;
             return false;
         }
         else{
             $("#mensajeErrorCiudad").html(" ");
+            //$formPD=1;
         }
         if (!autoCDir) {
             //alert("entra autoCDir "+ autoCDir );
             $("#mensajeErrorDireccion").html("Elige una direccion de la lista ! ");
+           // $formPD=0;
             return false;
         }
         else{
             $("#mensajeErrorDireccion").html(" ");
+            //$formPD=1;
         }
-
-       continuarDireccion();        
+        //if ($formPD==1) {}
+        continuarDireccion();   
+               
     });
-    $("#formPublicarFotoUbicaion").submit(function(){
-        //alert("formPublicarFotoUbicaion "+ $("#imgPublicar").data("cont"));
-        console.log("hola " + $("#imgPublicar").data("cont"));
+
+    $("#formPublicarFotoUbicacion").submit(function(){
+        
+        //alert("formPublicarFotoUbicacion "+ $("#imgPublicar").data("cont"));
+       console.log("hola " + $("#imgPublicar").data("cont"));
         //alert("tienes que elegir al menos 1 foto");
-        $precioPu = $("#precioMPu").val();
-        if (!/^([0-9])*$/.test($precioPu)){
-            $precioErrorPu = "El Precio debe contener solo numeros.";        
-            $("#mensajeErrorPrecioPu").html($precioErrorPu);          
-            return false;
-            //$error = false;
-            } else{
-                $("#mensajeErrorPrecioPu").html("");
-        }
-        if ($("#imgPublicar").data("cont")<=0){
+        if ($("#imgPublicar").data("cont")<=0){            
             alert("tienes que elegir al menos 1 foto");           
             $("#mensajeModalFotoPublicar").html("tienes que elegir al menos 1 foto");
             return false;
         }
-       continuarFotoUbi();        
+        else{
+            //alert("else imgPublicar");
+
+            $("#mensajeModalFotoPublicar").html("");
+        }
+
+        $precioPu = $("#precioMPu").val();
+
+        if (!/^([0-9])*$/.test($precioPu)){
+            //alert("precio " +$precioPu);
+            $precioErrorPu = "El Precio debe contener solo numeros.";        
+            $("#mensajeErrorPrecioPu").html($precioErrorPu);          
+            return false;            
+            } 
+        else{
+            //alert("else  " + $precioPu);
+            $("#mensajeErrorPrecioPu").html("");
+        }        
+      continuarFotoUbi();        
     });
     
     $("#formPublicarCarac").submit(function(){

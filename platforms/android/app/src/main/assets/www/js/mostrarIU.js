@@ -62,9 +62,9 @@ $(document).ready(function(){
         //event.preventDefault();
 
         $(".icoFooter .glyphicon-search").css({"color":"#008080"});
-        $(".icoFooter .glyphicon-upload").css({"color":"rgb(128, 128, 128,.8)"});
-        $(".icoFooter .glyphicon-comment").css({"color":"rgb(128, 128, 128,.8)"});
-        $(".icoFooter .glyphicon-user").css({"color":"rgb(128, 128, 128,.8)"});
+        $(".icoFooter .glyphicon-upload").css({"color":"rgba(89, 89, 89, 0.8)"});
+        $(".icoFooter .glyphicon-comment").css({"color":"rgba(89, 89, 89, 0.8)"});
+        $(".icoFooter .glyphicon-user").css({"color":"rgba(89, 89, 89, 0.8)"});
         
         $("#paginaPrincipal").css("display", "block");
         $("#paginaListaMapas").css("display", "none");            
@@ -75,9 +75,9 @@ $(document).ready(function(){
         //$("#paginaUsuarioPerfil").css("display", "none");
         
         $("#icoFMBuscar").css({"color":"#008080"});
-        $("#icoFMPublicar").css({"color":"rgb(128, 128, 128,.8)"});                       
-        $("#icoFMMensaje").css({"color":"rgb(128, 128, 128,.8)"});            
-        $("#icoFMPerfil").css({"color":"rgb(128, 128, 128,.8)"});
+        $("#icoFMPublicar").css({"color":"rgba(89, 89, 89, 0.8)"});                       
+        $("#icoFMMensaje").css({"color":"rgba(89, 89, 89, 0.8)"});            
+        $("#icoFMPerfil").css({"color":"rgba(89, 89, 89, 0.8)"});
         
     });
 /*publicar principal*/
@@ -101,7 +101,7 @@ $(document).ready(function(){
         
         $.ajax({
             type :'POST',
-            url:'http://192.168.1.108/wasiWeb/php/consultarDireccion.php',
+            url:'http://192.168.1.106/wasiWeb/php/consultarDireccion.php',
             dataType : 'json',                
             data: {idUsuario:$datosLocal['usrId']},                 
             crossDomain: true,
@@ -114,6 +114,7 @@ $(document).ready(function(){
                 if ($datosLocalDir['publicado']==0) {
                     $('#ciudadMpu').val($datosLocalDir['ciudad']);
                     $('#direccionMPu').val($datosLocalDir['direccion']);
+                    $("#btnContinuarDireccion").css({"background-color":"#008080"});
                     linkBuscarDir=1;
                     autoCDir=1;
                     autoCCiu=1;
@@ -126,11 +127,6 @@ $(document).ready(function(){
                 alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
             }
         });
-        
-        //if($datosLocalDir!= undefined || $datosLocalDir!= null ){
-                        
-        //}
-
      });
     $("#btnAtrasDireccion").click(function() {
        
@@ -155,12 +151,14 @@ $(document).ready(function(){
         $("#publicarDireccion").css("display","none");
         $("#publicarFotoUbicacion").css("display","block")
         $("#publicarCaracteristicas").css("display", "none"); 
-         $("#publicarPiso").css("display","none");
-        $(".container-custom-principal .progressbar-bar-custom").css("width", "50%");        
+        $("#publicarPiso").css("display","none");
+        $(".container-custom-principal .progressbar-bar-custom").css("width", "50%"); 
+        continuarFUbi=0       
+
     });
     
     $("#btnAtrasPiso").click(function() {
-        alert("hola atras");
+        //alert("hola atras");
         $("#paginaPublicar").css("display", "block");
         $("#publicarDireccion").css("display","none");
         $("#publicarFotoUbicacion").css("display","none")
@@ -182,7 +180,7 @@ $(document).ready(function(){
             $("#clistA").css("visibility", "hidden");
             /*datos recuperados de local storage*/
             
-            $("#fotoPerfilE").css({"background": "url(http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.106/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -221,7 +219,7 @@ $(document).ready(function(){
             $("#divFooter").css("display", "none");
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilE").css({"background": "url(http://192.168.1.108/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
+            $("#fotoPerfilE").css({"background": "url(http://192.168.1.106/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
@@ -237,19 +235,19 @@ $(document).ready(function(){
             $("#paginaUsuarioPerfilEditar").css("display", "none");
             $("#paginaUsuarioPerfilMostrar").css("display", "block");
 
-            $(".icoFooter .glyphicon-search").css({"color":"rgb(128, 128, 128,.8)"});
-            $(".icoFooter .glyphicon-upload").css({"color":"rgb(128, 128, 128,.8)"});
-            $(".icoFooter .glyphicon-comment").css({"color":"rgb(128, 128, 128,.8)"});
+            $(".icoFooter .glyphicon-search").css({"color":"rgba(89, 89, 89, 0.8)"});
+            $(".icoFooter .glyphicon-upload").css({"color":"rgba(89, 89, 89, 0.8)"});
+            $(".icoFooter .glyphicon-comment").css({"color":"rgba(89, 89, 89, 0.8)"});
             $(".icoFooter .glyphicon-user").css({"color":"#008080"});  
 
-            $("#icoFMBuscar").css({"color":"rgb(128, 128, 128,.8)"});  
-            $("#icoFMPublicar").css({"color":"rgb(128, 128, 128,.8)"});                       
-            $("#icoFMMensaje").css({"color":"rgb(128, 128, 128,.8)"});            
+            $("#icoFMBuscar").css({"color":"rgba(89, 89, 89, 0.8)"});  
+            $("#icoFMPublicar").css({"color":"rgba(89, 89, 89, 0.8)"});                       
+            $("#icoFMMensaje").css({"color":"rgba(89, 89, 89, 0.8)"});            
             $("#icoFMPerfil").css({"color":"#008080"});      
                                     
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
-            $("#fotoPerfilM").css({"background": "url(http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#fotoPerfilM").css({"background": "url(http://192.168.1.106/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
             $("#nombrePM").html($datosLocal.usrName);
             $("#apellidosPM").html($datosLocal.usrLname);
             if ($datosLocal.usrSexo==1) {
@@ -362,6 +360,7 @@ $(document).ready(function(){
                 if (status == google.maps.GeocoderStatus.OK) {
                     $('#direccionMPu').val(results[0].address_components[1].short_name+", "+results[0].address_components[0].short_name);
                     $('#ciudadMpu').val(results[0].address_components[2].short_name+", "+results[0].address_components[3].short_name);
+                    $("#btnContinuarDireccion").css({"background-color":"#008080"});
                     //alert("entra linkBuscarDireccion " + results.length);
                     //console.log("latlon "+ JSON.stringify(results));
                     $("#mensajeErrorCiudad").html("");
@@ -383,6 +382,7 @@ $(document).ready(function(){
                 }
                 else {
                     alert("El Servicio de Codificación Geográfica ha fallado con el siguiente error: " + status + " Intente una vez mas por favor ");
+                    $("#btnContinuarDireccion").css({"background-color":"#808080"});
                     linkBuscarDir=0;
                     autoCCiu=0;
                     autoCDir=0;
@@ -433,7 +433,30 @@ $(document).ready(function(){
 
 //    $("#filePublicar").on("change", handleFileSelect);     
    // $("#imgPublicar").on("click", ".removeImgPublicar", removeFile);
+   $prevScrollpos = window.pageYOffset;
+    $(window).scroll(function(){
+        $currentScrollPos = window.pageYOffset;
+
+        //if ($('#navbar').scrollTop()>100) 
+        if($prevScrollpos>$currentScrollPos)
+        {
+            $('#inputBuscar').collapse('show');
+            $('#btnPublicarPrincipal').fadeIn(1000);
+            //$("#btnPublicarPrincipal").animate({bottom: "75px"});       
+           // $('#btnPublicarPrincipal').slideDown();        
+            
+        }
+        else{
+            $('#inputBuscar').collapse('hide');
+            $('#btnPublicarPrincipal').fadeOut(1000);
+            //$("#btnPublicarPrincipal").animate({bottom: "0"}); 
+            //$('#btnPublicarPrincipal').slideUp();
+            
+        }  
+        $prevScrollpos = $currentScrollPos;  
+    });
 });//fin $(document).ready(function()
+
 
 function toggleBounce() {
   if (markerD.getAnimation() !== null) {
@@ -443,79 +466,12 @@ function toggleBounce() {
   }
 }
 
-//funciones para input  type file fotos add remove publicar 
-/*
-function handleFileSelect(e) { 
-//alert("handleFileSelect "+e.target.files.length);  
-//$("#mensajeModalFotoPublicar").html("");  
-    var files = e.target.files;//$("#filePublicar")[0].files.length
-    if ((($("#filePublicar")[0].files.length)+(storedFiles.length)) > 5 ){//+(storedFilesDb.length)
-        alert("solo puedes elegir maximo 5 fotos");
-        $('#modalPublicar').modal('hide');
-        //e.preventDefault();
-        return;
-    }
-    var filesArr = Array.prototype.slice.call(files);
-    filesArr.forEach(function(f) {        
-      if(!f.type.match("image.*")) {
-        alert("no es foto");
-        return;
-      }
-      storedFiles.push(f);      
-      var reader = new FileReader();
-      reader.onload = function (e) {        
-        var html = "<div class = 'fotoPublicar' style='background:#141f1f url("+e.target.result+") no-repeat center center; background-size:contain, cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+ encodeURI(f.name)+"></span></div>";
-        selDiv.append(html);         
-      }
-      reader.readAsDataURL(f);
-    });
-  /*  $('#mensajePublicar1').html("almacen + "+storedFiles.length); 
-    $('#modalPublicar').modal('hide');
-    $('.divImgPublicarG').css({'display':'none'});
-    $('#divImgPublicarP').css({'display':'flex'});
-    //$actualizar++;
-    $publicarFoto=1;*/
-/*
-}
-
-/*
-function removeFile(e) {
-    var file = $(this).data("file");
-    //decodeURI(file) decodifica los espacion y otros ()    
-    for(var i=0;i<storedFiles.length;i++) {
-        if(storedFiles[i].name === decodeURI(file)) {
-            storedFiles.splice(i,1);     
-            break;
-        }
-    }
-    /*for (var j = 0 ; j < storedFilesDb.length; j++) {
-        if (storedFilesDb[j].nombre_foto === file) {
-            storedFilesDb.splice(j,1);        
-            break;
-        }
-    } */ 
-/*      
-    $(this).parent().remove();
-   // $actualizar++;
-    $publicar=1;
-    //$('#mensajePublicar2').html("almacen db - "+storedFilesDb.length);
-    $('#mensajePublicar3').html("almacen - "+storedFiles.length);    
-    if (storedFiles.length + storedFilesDb.length == 0) {
-        $('.divImgPublicarG').css({'display':'block'});
-        $('#divImgPublicarP').css({'display':'none'});
-        //$actualizar=0;
-        $pu = $('#filePublicar');
-        $pu.wrap('<form>').closest('form').get(0).reset();
-        $pu.unwrap();
-    }
-  }
-  */
 function inicioSesion(){
     $datosLocal=JSON.parse(localStorage.getItem('datosInicioSesion'));
     if($datosLocal!= undefined || $datosLocal!= null ){
         /*$.each($datosLocal, function(key, value){alert(key + ' = ' + value);});*/
         $("#nombreCompleto").html($datosLocal['usrName']);
-        $("#imgPerfilHeader").attr({"src":"http://192.168.1.108/wasiWeb/"+ $datosLocal['usrImg']}); 
+        $("#imgPerfilHeader").attr({"src":"http://192.168.1.106/wasiWeb/"+ $datosLocal['usrImg']}); 
         $("body").css("background","#f2f2f2");
         $("#divInicio").css("display", "none");
         $("#divPrincipal").css("display", "block");
@@ -528,32 +484,7 @@ function inicioSesion(){
         //alert($datosLocal['usrEmail'] + " " + $datosLocal['usrId']);
     }
 }
-/*function registrarUsuario(){ //evento activado por onsubmit en validarformulario.js
-	event.preventDefault();    
-    $.ajax({
-       	type : 'POST',
-        url: 'http://192.168.0.21/wasiWeb/php/registrar.php',
-       	data:new FormData($('#formRegistro')[0]),
-       	dataType: 'json',
-        crossDomain: true,
-       	cache: false,
-       	contentType: false,
-       	processData: false,
-       	success: function(datosR)
-       	{  $("#aIngresar").tab('show');
-           	if(datosR.uReg==1){
-                $('#mID').html("");
-               	$('#mIS').html(datosR.msg + " " + datosR.umEmail);}
-               	if(datosR.uReg==0){
-                    $('#mIS').html("");
-                   	$('#mID').html(datosR.msg);}
-                //alert(datosR.uReg);
-       	},
-       	error : function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status +" "+ textStatus+" "+ errorThrown);
-       	}
-    });    
-}*/
+
 function iniciarSession(){
     $('#mIS').html(" ");
     $('#mID').html(" ");
@@ -561,7 +492,7 @@ function iniciarSession(){
     event.preventDefault();
     $.ajax({
         type :'POST',
-        url:'http://192.168.1.108/wasiWeb/php/ingresar.php',
+        url:'http://192.168.1.106/wasiWeb/php/ingresar.php',
         dataType : 'json',        
         data: new FormData($("#formIngreso")[0]),        
         //async: false,
@@ -637,20 +568,41 @@ function continuarDireccion(){
         $.ajax({
             type: "POST",
             dataType: 'json',
-            url: 'http://192.168.1.108/wasiWeb/php/consultarFotoPublicado.php',
+            url: 'http://192.168.1.106/wasiWeb/php/consultarFotoPublicado.php',
             data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar']},                 
             crossDomain: true,
             cache: false,
             success: function(datosFoto){
                 if (datosFoto['fotos']>0) {
+                    $("#tituloMPu").val(datosFoto['tituloArray'][0]);
+                    $("#precioMPu").val(datosFoto['precioArray'][0]);
+                    $("#fianzaMPu").val(datosFoto['fianzaArray'][0]);
+                    $("#comentarioMPu").val(datosFoto['comentarioArray'][0]);                    
+                    tMPu=1;
+                    pMPu=1;
+                    cMPu=1;
                     cargarFotoBD(datosFoto);
-                    console.log("datosFoto "+JSON.stringify(datosFoto));
-                }            
+                    //$("#btnContinuarFoUb").css({"background-color":"#008080"});//color tema
+                }
+                if (datosFoto['fotos']==0) {
+                    $("#tituloMPu").val(datosFoto['titulo']);
+                    $("#precioMPu").val(datosFoto['precio']);
+                    $("#fianzaMPu").val(datosFoto['fianza']);
+                    $("#comentarioMPu").val(datosFoto['comentario']);                                        
+                    tMPu=1;
+                    pMPu=1;
+                    cMPu=1;
+                }           
+                console.log("datosFoto "+JSON.stringify(datosFoto)); 
                 console.log("longitud "+ datosFoto['fotos']);
+
                 btnAtrasFoto=1;                      
             },
             error : function(jqXHR, textStatus, errorThrown) {
                 alert("error consultarFotoPublicado: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                tMPu=0;
+                pMPu=0;
+                cMPu=0;
                 btnAtrasFoto=0;
             }
         });
@@ -662,7 +614,7 @@ function continuarDireccion(){
             $.ajax({
                 type: "POST",
                 dataType: 'json',
-                url: 'http://192.168.1.108/wasiWeb/php/insertarDirecion.php',
+                url: 'http://192.168.1.106/wasiWeb/php/insertarDirecion.php',
                 data: {idUsuario:$datosLocal['usrId'],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon},                 
                 crossDomain: true,
                 cache: false,
@@ -683,7 +635,7 @@ function continuarDireccion(){
             $.ajax({
                 type: "POST",
                 dataType: 'json',
-                url: 'http://192.168.1.108/wasiWeb/php/actualizarDireccion.php',
+                url: 'http://192.168.1.106/wasiWeb/php/actualizarDireccion.php',
                 data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon},                 
                 crossDomain: true,
                 cache: false,
@@ -704,67 +656,37 @@ function continuarDireccion(){
     }
 }
 function continuarFotoUbi(){
+    //alert("continuarFotoUbi");
     event.preventDefault();
-    /*$("#paginaPrincipal").css("display", "none");
-    $("#paginaListaMapas").css("display", "none"); 
-    $("#paginaPublicar").css("display", "block");*/            
-    /*$("#paginaMensaje").css("display", "none");            
-    $("#paginaUsuarioPerfilEditar").css("display", "none");
-    $("#paginaUsuarioPerfilMostrar").css("display", "none");
-    $("#divFooter").css("display", "none");
-    */    
-   /*
-    if($publicarFoto==1){// cambiar 1 de insertar 2 de actualizar que lo manda el btn atras 
-       
-        $formDatos= new FormData($("#formPublicarFotoUbicaion")[0]);
-        $formDatos.append("idCliente", $idCliente);
-        $formDatos.append("emailCliente", $emailCliente);
-        /*$formDatos.append("actualizar",$actualizar);
-        $formDatos.append("datosUsEx",$datosUsEx);*/
-   /*
-        for(var j=0, len=storedFiles.length; j<len; j++) {
-            $formDatos.append('filePublicar[]', storedFiles[j]);//['+ j +'] 
-        }
-    }
-    $.ajax({
-        type : 'POST',
-        url: 'http://192.168.1.102/wasiWeb/php/publicarFotos.php',
-        data: $formDatos,           
-        dataType : 'json',
-        crossDomain: true,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function(datosPF)
-        {   //alert("exito");
-            $("#publicarFotoUbicacion").css("display","none");
-            $("#publicarCaracteristicas").css("display","block");
-            $("#publicarPiso").css("display","none");
-            $(".container-custom-principal .progressbar-bar-custom").css("width", "75%");        
-            $('#mensajePF').html(datosPF.msg);                   
-        },
-        error : function(jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.status +" "+ textStatus+" "+ errorThrown);
-        }
-    });
-}
-    /*if($publicar==1) {    
-        
-        //for (var l = 0; l < storedFilesDb.length; l++) {
-            $formDatos.append('filePublicarDb',JSON.stringify(storedFilesDb));//JSON.stringify() storedFilesDb[0]["nombre_foto"]
-        //}
     
-    $publicar=0;
+    $(".div-custom-principal .divPublicar").css({"background-color": "#fff"});
+    $("#publicarDireccion").css("display","none");
+    $("#publicarFotoUbicacion").css("display","none");
+    $("#publicarCaracteristicas").css("display","block");
+    $("#publicarPiso").css("display","none");     
+    $(".container-custom-principal .progressbar-bar-custom").css("width", "75%");
+
+    if(continuarFUbi==1){ // actualizar datos de foto ubucacion
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url: 'http://192.168.1.106/wasiWeb/php/actualizarDatosFotos.php',
+            data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],titulo:$('#tituloMPu').val(),precio:$('#precioMPu').val(),fianza:$('#fianzaMPu').val(),comentario:$('#comentarioMPu').val()},                 
+            crossDomain: true,
+            cache: false,
+            success: function(datosActFoto){
+                //btnAtrasCarac=1;
+                console.log("datosLocalActDir "+ datosActFoto);
+                continuarFUbi=0;
+            },
+            error : function(jqXHR, textStatus, errorThrown) {
+                btnAtrasCarac=0;
+                alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+            }
+        });
+        
     }
-    else{
-        alert("Ya hiciste una publicaste ");
-        return;
-    */
-    } 
-
-
-
-
+} 
 function continuarCarac(){
     event.preventDefault(); 
     /*$("#paginaPrincipal").css("display", "none");
