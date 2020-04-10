@@ -14,7 +14,7 @@
     $("#fotoPublicarCamara").click(function(){ 
       if ($("#imgPublicar").data("cont") < 5) {
         //alert("entra fotoPublicarCamara");
-        fotoPublicarCamara();  
+        hacerFotoPublicarCamara();  
       }
       else{
       alert("No. Puedes subir mas de 5 fotos");
@@ -24,7 +24,7 @@
     });
     $("#fotoPublicarGaleria").click(function(){  
       if ($("#imgPublicar").data("cont") < 5) {
-        fotoPublicarGaleria();
+        cargarFotoPublicarGaleria();
       }
       else{
       alert("No. Puedes subir mas de 5 fotos"); 

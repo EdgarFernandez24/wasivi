@@ -34,6 +34,10 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <access origin="*://*.googleapis.com/*" subdomains="true" />
+    <access origin="*://*.gstatic.com/*" subdomains="true" />
+    <access origin="*://*.google.com/*" subdomains="true" />
+    <access origin="*://*.googleusercontent.com/*" subdomains="true" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -47,7 +51,7 @@
             </trust-anchors>
         </base-config>
         <domain-config cleartextTrafficPermitted="true">
-            <domain includeSubdomains="true">192.168.0.21</domain>
+            <domain includeSubdomains="true">192.168.0.12</domain>
         </domain-config>
     </network-security-config>
     <icon src="www/img/iconoWasi.png" />
