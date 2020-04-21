@@ -24,7 +24,8 @@
     <link rel="stylesheet" type="text/css" href="./css/index.css">
     
     <link rel="stylesheet" href="./css/swiper.min.css">
-    <link href="./css/datepicker.css" rel="stylesheet">   
+    <link rel="stylesheet" href="./css/datepicker.css">
+    <link rel="stylesheet" href="./css/ripple.css">
     
     <title></title>  
 </head>
@@ -113,131 +114,170 @@
             </a> 
           </div><!--fin myCarousel-->  
         </div><!--fin tap pane div ingreso-->          
-          <div  class="tab-pane fade" id="registrate">
-            <form role="form" name="formRegistro" id="formRegistro" class="form-registro-inicio" enctype="multipart/form-data" >
-              <fieldset>
-                <legend class="label-custom">Registro</legend>
-                <div class="form-group">
-                  <div class="panel foto-collapse-custom">              
-                    <div class="panel-heading right">
-                      <div data-toggle="collapse" data-target="#collapseFoto"> Sube una foto para tu perfil <i class="glyphicon glyphicon-option-vertical"></i>
-                      </div>                                             
-                    </div>
-                    <div id="collapseFoto" class="panel-collapse collapse">
-                      <div class="panel-body">
-                        <div class="fotoMensaje" style="display:inline-flex;" >
-                          <div class="contendorFotoPerfil">
-                          <div data-toggle="modal" data-target="#modalRegistrarPerfil" class="fotoRegistro" id="fotoRegistro" name="fotoRegistro" >
-                            <span class="glyphicon glyphicon-trash" id="clist"></span>                            
-                          </div>
-                          </div>
-                          <!--img id="fotoLocal" src="" width="100px" height="100px"-->  
-                          <div class="alert" id="" style="padding: 2px;">
-                            <span class="text-danger-custom" id="mensajefoto">
-                              <strong>No es una foto.!</strong> 
-                            </span>
-                            <p class="label-custom-gris">Haz clic en la imagen</p>
-                            <p class="label-custom-gris">para una foto o buscar en tus carpetas.</p>                      
-                          </div>
+        <div  class="tab-pane fade" id="registrate">
+          <form role="form" name="formRegistro" id="formRegistro" class="form-registro-inicio" enctype="multipart/form-data" >
+            <fieldset>
+              <legend class="label-custom">Registro</legend>
+              <div class="form-group">
+                <div class="panel foto-collapse-custom">              
+                  <div class="panel-heading right">
+                    <div data-toggle="collapse" data-target="#collapseFoto"> Sube una foto para tu perfil <i class="glyphicon glyphicon-option-vertical"></i>
+                    </div>                                             
+                  </div>
+                  <div id="collapseFoto" class="panel-collapse collapse">
+                    <div class="panel-body">
+                      <div class="fotoMensaje" style="display:inline-flex;" >
+                        <div class="contendorFotoPerfil">
+                        <div data-toggle="modal" data-target="#modalRegistrarPerfil" class="fotoRegistro" id="fotoRegistro" name="fotoRegistro" >
+                          <span class="glyphicon glyphicon-trash" id="clist"></span>                            
                         </div>
-                      </div>                              
-                    </div>
-                  </div>                
-                  <!-- Modal Registrar -->
-                  <div class="modal fade" id="modalRegistrarPerfil" role="dialog">
-                    <div class="modal-dialog">
-                      <!-- Modal content-->
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                          <h4 class="modal-title">Elije una opción</h4>
                         </div>
-                        <div class="modal-body">              
-                          <div class="form-group" id="CamaraRegistroPerfil">
-                            <label for="">Camara</label>
-                          </div>
-                          <div class="form-group" id="CargarRegistroPerfil" >
-                            <label for="">Galeria</label>                          
-                          </div>
-                        </div>            
+                        <!--img id="fotoLocal" src="" width="100px" height="100px"-->  
+                        <div class="alert" id="" style="padding: 2px;">
+                          <span class="text-danger-custom" id="mensajefoto">
+                            <strong>No es una foto.!</strong> 
+                          </span>
+                          <p class="label-custom-gris">Haz clic en la imagen</p>
+                          <p class="label-custom-gris">para una foto o buscar en tus carpetas.</p>                      
+                        </div>
                       </div>
+                    </div>                              
+                  </div>
+                </div>                
+                <!-- Modal Registrar -->
+                <div class="modal fade" id="modalRegistrarPerfil" role="dialog">
+                  <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Elije una opción</h4>
+                      </div>
+                      <div class="modal-body">              
+                        <div class="form-group" id="CamaraRegistroPerfil">
+                          <label for="">Camara</label>
+                        </div>
+                        <div class="form-group" id="CargarRegistroPerfil" >
+                          <label for="">Galeria</label>                          
+                        </div>
+                      </div>            
                     </div>
-                  </div><!--fin modalRegistrarPerfil--> 
-                </div>                     
-                <div class="form-group">
-                </div>
-                <div class="form-group">         
-                  <div class="inner-addon left-addon">
-                    <i class="glyphicon glyphicon-user"></i>
-                    <input type="text" class="form-control" name="nombre" id="nombre" required placeholder="Nombre" value="">
                   </div>
-                  <span class="text-danger-custom" id="mensajeErrorNombre"></span>
+                </div><!--fin modalRegistrarPerfil--> 
+              </div>                     
+              <div class="form-group">
+              </div>
+              <div class="form-group">         
+                <div class="inner-addon left-addon">
+                  <i class="glyphicon glyphicon-user"></i>
+                  <input type="text" class="form-control" name="nombre" id="nombre" required placeholder="Nombre" value="">
                 </div>
-                <div class="form-group">
-                  <div class="inner-addon left-addon">
-                    <i class="glyphicon glyphicon-user"></i>
-                    <input type="text" class="form-control" name="apellidos" id="apellidos" required placeholder="Apellidos">
-                  </div>
-                  <span class="text-danger-custom" id="mensajeErrorApellidos"></span>
+                <span class="text-danger-custom" id="mensajeErrorNombre"></span>
+              </div>
+              <div class="form-group">
+                <div class="inner-addon left-addon">
+                  <i class="glyphicon glyphicon-user"></i>
+                  <input type="text" class="form-control" name="apellidos" id="apellidos" required placeholder="Apellidos">
                 </div>
-                <div class="form-group">
-                  <div class="inner-addon left-addon">
-                    <i class="glyphicon glyphicon-envelope"></i>
-                    <input type="email" class="form-control" name="EmailR" id="EmailR" required placeholder="ejemplo@email.com">
-                  </div>
-                  <span class="text-danger-custom" id="mensajeErrorEmailR"></span>                      
-                </div>                     
-                <div class="form-group">
-                  <div class="inner-addon left-addon">
-                    <i class="glyphicon glyphicon-lock"></i>
-                    <input type="password" class="form-control" name="contrasenya" id="contrasenya" required placeholder="Contraseña">
-                  </div>
-                  <span class="text-danger-custom" id="mensajeErrorContrasenya"></span>
-                </div> 
-                <div class="form-group">
-                  <div class="inner-addon left-addon">
-                    <i class="glyphicon glyphicon-lock"></i>
-                    <input type="password" class="form-control" name="cContrasenya" id="cContrasenya" required placeholder="Repita Contraseña">
-                  </div>                        
-                  <span class="text-danger-custom" id="mensajeErrorCContrasenya" ></span>
-                </div>         
-                <div class="checkbox">
-                  <label class="label-custom">
-                    <input type="checkbox" name="terminosCond" id="terminosCond" required=""> 
-                    <!-- Button trigger modal -->
-                    <input type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ternimosCondiciones" value="Terminos y condiciones"><span class="text-danger"></span>
-                  </label>
-                </div> 
-                <div class="form-group">
-                  <button id="btnRegistrar" name="btnRegistrar" class="btn btn-primary btn-md btn-block btnFormulario" >Registrar</button>
+                <span class="text-danger-custom" id="mensajeErrorApellidos"></span>
+              </div>
+              <div class="form-group">
+                <div class="inner-addon left-addon">
+                  <i class="glyphicon glyphicon-envelope"></i>
+                  <input type="email" class="form-control" name="EmailR" id="EmailR" required placeholder="ejemplo@email.com">
                 </div>
-              </fieldset>
-              <span class="text-success" id="mRS"></span>
-              <span class="text-danger" id="mRD"></span>            
-            </form>
-          </div><!-- fin tab pane div registrar-->    
-        </div><!--fin tab-content-->        
-    </div><!--fin paginaInicio-->    
+                <span class="text-danger-custom" id="mensajeErrorEmailR"></span>                      
+              </div>                     
+              <div class="form-group">
+                <div class="inner-addon left-addon">
+                  <i class="glyphicon glyphicon-lock"></i>
+                  <input type="password" class="form-control" name="contrasenya" id="contrasenya" required placeholder="Contraseña">
+                </div>
+                <span class="text-danger-custom" id="mensajeErrorContrasenya"></span>
+              </div> 
+              <div class="form-group">
+                <div class="inner-addon left-addon">
+                  <i class="glyphicon glyphicon-lock"></i>
+                  <input type="password" class="form-control" name="cContrasenya" id="cContrasenya" required placeholder="Repita Contraseña">
+                </div>                        
+                <span class="text-danger-custom" id="mensajeErrorCContrasenya" ></span>
+              </div>         
+              <div class="checkbox">
+                <label class="label-custom">
+                  <input type="checkbox" name="terminosCond" id="terminosCond" required=""> 
+                  <!-- Button trigger modal -->
+                  <input type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ternimosCondiciones" value="Terminos y condiciones"><span class="text-danger"></span>
+                </label>
+              </div> 
+              <div class="form-group">
+                <button id="btnRegistrar" name="btnRegistrar" class="btn btn-primary btn-md btn-block btnFormulario" >Registrar</button>
+              </div>
+            </fieldset>
+            <span class="text-success" id="mRS"></span>
+            <span class="text-danger" id="mRD"></span>            
+          </form>
+        </div><!-- fin tab pane div registrar-->    
+      </div><!--fin tab-content-->        
+    </div><!--fin paginaInicio-->
+    <!-- Modal -->
+    <div class="modal fade" id="ternimosCondiciones" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">
+            <b>Terminos y Condiciones </b>
+            </h4>
+          </div>
+          <div class="modal-body">
+            Mediante la simple utilización de Softbot.com.bo y al contratar cualquiera de los servicios ofrecidos a través de Softbot.com.bo, el Cliente reconoce haber leído y acepta los términos expuestos en el presente Acuerdo y / o las políticas que formen parte del mismo.
+            <br>
+            <br>
+            <p>
+              <b>Uso de la cuenta de usuario en Softbot.com.bo</b>
+            </p>
+            <p>
+              <ul>
+                <li>El usuario se compromete a proporcionar mediante su registro datos veraces, exactos y completos sobre su identidad. También se compromete a revisar periódicamente la información proporcionada y garantiza la validez y la vigencia de los datos asociados tanto a su cuenta de usuario como a los productos y servicios contratados. El incumplimiento de esta condición podrá motivar la cancelación de la cuenta y la denegación al usuario el acceso a los servicios de Registros.com de forma temporal o permanente.</li>
+                <li>Registros.com se reserva el derecho de solicitar la verificación y / o actualización de la información proporcionada por el Cliente, quien deberá responder satisfactoriamente a la petición de Registros.com en el plazo máximo de 5 días laborables. El Cliente entiende y acepta que el no cumplimiento de este requisito constituye una vulneración del presente Acuerdo y puede dar lugar a la cancelación del servicios </li>
+                <br>
+                <a href="#" class="btn btn-default btn-xs">
+                  <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Descargar PDF
+                </a>
+              </ul>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-md btn-block btnFormulario" data-dismiss="modal">Cerrar</button>
+            <!--button type="button" class="btn btn-primary">Guardar Cambios</button-->
+          </div>
+        </div>
+      </div>
+    </div> <!--fin modal fade-->
   </div><!--fin divInicio-->
   <div class="container container-custom-principal" id="divPrincipal">   
     <div class="div-custom-principal " id="paginaPrincipal">
-      <div class="header navbar-fixed-top" id="inputBuscar">
+      <div class="header navbar-fixed-top" id="inputBuscar" ><!-- -fixed-top-->
         <!--span class="glyphicon glyphicon glyphicon-arrow-left"> </span>
         <span id="imgP">
           <img src="" id="imgPerfilHeader" class="img-responsive img-circle" style="display:inline" width="25" height="25">
         </span-->
-        <form role="form" name="formBuscar" id="formBuscar" class="form-principal" enctype="multipart/form-data" >
-          <div class="form-group">
-            <div class="inner-addon right-addon">
-              <i class="glyphicon glyphicon-search"></i>
-              <input type="text" class="form-control" placeholder="Buscar en WASI" />
+        <div class="contenedorFormBuscar">
+          <form role="form" name="formBuscar" id="formBuscar" class="form-principal" enctype="multipart/form-data" >
+            <div class="form-group">
+              <div class="inner-addon right-addon">
+                <i class="glyphicon glyphicon-search"></i>
+                <input type="text" class="form-control" placeholder="Buscar en WASI" />
+              </div>
             </div>
-          </div>
-          </form> 
+            </form>
+        </div>
+        <div class="contenedorLinkBuscar" id="contenedorLinkBuscar">
           <div class="linkBuscarListaMapa" id="linkBuscarListaMapa">
-            <div class="mensajeListaMapas"><span id="nombreCompleto"></span> quieres ver listas en un mapa ! </div> 
+            <div class="mensajeListaMapas"><span id="nombreCompleto"></span> Ver listas en un mapa Aqui.! </div> 
             <div class="icoListaMapas"></div>           
-          </div>        
+          </div>
+        </div>          
       </div>
       <div  class="text-center mensajePrincipal" id="mensajeCiudad" >
         <div id="" > Ciudad para vivir.!</div>                      
@@ -268,132 +308,70 @@
         <div id="" > Zona para vivir</div>                      
       </div>               
       <div class="contenedorFotosBarrios colorFondo">
-        <div class="text-center fotoB">          
-          <img src="./img/barcelona1.jpg" class="imgZona">      
-          <strong>barcelona ciudad 1</strong> zona 1
-        </div>
+       
         <div class="text-center fotoB"> 
-          <img src="./img/barcelona3.jpg" class="imgZona">      
-          <strong>barcelona ciudad 1</strong> zona 1
+          <img src="./img/barcelona3.jpg" class=" imgZona"> 
+
+          <strong>barcelona ciudad mas visitada 1</strong> zona 1
         </div>
         <div class="text-center fotoB">
-          <img src="./img/madrid1.jpg" class="imgZona">      
-          <strong>barcelona ciudad 1</strong> zona 1
+          <img src="./img/barcelona1.jpg" class="imgZona">
+          <button type="button" class="btn btn-primary btn-circleI " id="" ><i class="glyphicon glyphicon-plus"></i></button>         
+          <strong>barcelona ciudad 2</strong> zona 1
         </div>
         <div class="text-center fotoB">
-          <img src="./img/londres1.jpg" class="imgZona"><!--width="150" height="100"-->
-          <strong>barcelona ciudad 1</strong> zona 1
-        </div>        
-      </div> 
+          <img src="./img/londres1.jpg" class="imgZona">
+          <strong>barcelona ciudad 3</strong> zona 1
+        </div> 
+        <div class="text-center fotoB">
+          <img src="./img/madrid1.jpg" class="imgZona">
+          <strong>barcelona ciudad 3</strong> zona 1
+        </div>
+        <!-- ejemplo con background img 
+        <div class="text-center fotoB">
+          <div class="imgZona"></div>
+          <div class="mensajeZona"><strong>barcelona ciudad 1</strong> zona 1</div>
+        </div>
+        <div class="text-center fotoB">
+          <div class="imgZona"></div>
+          <div class="mensajeZona"><strong>zona barcelona ciudad 2</strong> zona 2</div>
+        </div>
+        <div class="text-center fotoB">
+          <div class="imgZona"></div>
+          <div class="mensajeZona"><strong>zona ciudad 2</strong> zona 3</div>
+        </div>-->
+
+      </div><!--fin contenedorFotosBarrios--> 
       <button class="btn btn-primary btn-md btn-block btnPrincipalPublicar " id="btnPublicarPrincipal">
-        <span class="glyphicon glyphicon-upload btnPosDer"></span>Publicar</button> 
+        <div class="icoBuscarBtnPuPrin btnPosDer"></div>Publicar</button> 
     </div> <!--fin paginaPrincipal-->
 
     <!-- inicio buscar por lista o mapas -->
    <div class="div-custom-principal" id="paginaListaMapas">      
     <div class="header navbar-fixed-top" >        
-        <span class="glyphicon glyphicon glyphicon-arrow-left" id="btnAtras"></span>
-        <!--label>lat <span id="lat"></span></label> 
-        <label>lon <span id="lon"></span></label--> 
-        <span class="posHeadDerecha"><label>
-          <span id="description"></span></label>  
-          <label>T: <span id="temp"></span></label>                
-          <label>H: <span id="humidity"></span></label>
-        </span>              
-        <ul class="nav nav-tabs navtab-custom-principal "> <!---->
-          <li class="active"><a href="#buscarMapa" id="aBuscarMapa"><span class="glyphicon glyphicon-map-marker"></span> Mapa </a></li>
-          <li><a href="#buscarLista" id="aBuscarLista"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>    
-        </ul>
-      </div>    
+      <span class="glyphicon glyphicon glyphicon-arrow-left" id="btnAtras"></span>
+      <!--label>lat <span id="lat"></span></label> 
+      <label>lon <span id="lon"></span></label--> 
+      <span class="posHeadDerecha"><label>
+        <span id="description"></span></label>  
+        <label>T: <span id="temp"></span></label>                
+        <label>H: <span id="humidity"></span></label>
+      </span>              
+      <ul class="nav nav-tabs navtab-custom-principal "> <!---->
+        <li class="active  ripple"><a href="#buscarMapa" id="aBuscarMapa"><span class="glyphicon glyphicon-map-marker"></span> Mapa </a></li>
+        <li class=" ripple"><a href="#buscarLista" id="aBuscarLista"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>    
+      </ul>
+    </div>    
       <div class="tab-content tab-content-custom-principal">
         <div id="buscarMapa" class="tab-pane fade in active buscarMapa ">
           <!--a href="" onclick="activarSwipe()">aqui</a-->
-         <div class="swiper-container" id="swiper-container">
+          <div class="swiper-container" id="swiper-container">
             <div class="swiper-wrapper" id="swiper-wrapper">
-              <div class="swiper-slide" id="p1" >
-                <div class="fotoD">
-                    <img src="./img/barcelona1.jpg"  class="imgD">
-                </div>
-                <div class="fotoD">
-                    <strong>barcelona ciudad 1</strong> zona 1
-                    <strong>nombre 1 de usuario contacto</strong> foto perfil1
-                </div>
-              </div>
-              <div class="swiper-slide" id="p2" >
-                <div class="fotoD">
-                  <img src="./img/barcelona3.jpg"  class="imgD">  
-                </div>    
-                <div class="fotoD">
-                  <strong>barcelona 1</strong> zona 1
-                  <strong>nombre 2 de usuario contacto</strong> foto perfil
-                </div> 
-              </div>
-              <div class="swiper-slide" id="p3" >
-                <div class="fotoD">
-                  <img src="./img/madrid1.jpg"  class="imgD">  
-                </div>    
-                <div class="fotoD">  
-                  <strong>barcelona 1</strong> zona 1
-                  <strong>nombre de 3 usuario contacto</strong> foto perfil
-                </div>                  
-              </div>
-              <div class="swiper-slide" id="p4" >
-                <div class="fotoD">
-                  <img src="./img/barcelona3.jpg"  class="imgD"><!--width="150" height="100"-->
-                </div>
-                <div class="fotoD">
-                  <strong>barcelona 1</strong> zona 1
-                  <strong>nombre de 4 usuario contacto</strong> foto perfil
-                </div>
-              </div>
-              <div class="swiper-slide" id="p5">
-                <div class="fotoD">
-                  <img src="./img/londres1.jpg"  class="imgD"><!--width="150" height="100"-->
-                </div>
-                <div class="fotoD">
-                  <strong>barcelona 1</strong> zona 1
-                  <strong>nombre de 5 usuario contacto</strong> foto perfil
-                </div>
-              </div>      
-              <div class="swiper-slide" id="p6">
-                <div class="fotoD">
-                  <img src="./img/londres1.jpg"  class="imgD"><!--width="150" height="100"-->
-                </div>
-                <div class="fotoD">
-                  <strong>barcelona 1</strong> zona 1
-                  <strong>nombre de 6 usuario contacto</strong> foto perfil
-                </div>
-              </div>
-              <div class="swiper-slide" id="p7">
-                <div class="fotoD">
-                  <img src="./img/madrid1.jpg"  class="imgD">  
-                </div>    
-                <div class="fotoD">  
-                  <strong>barcelona 1</strong> zona 1
-                  <strong>nombre de 3 usuario contacto</strong> foto perfil
-                </div>
-              </div>
-              <div class="swiper-slide" id="p8">
-                <div class="fotoD">
-                  <img src="./img/londres1.jpg"  class="imgD"><!--width="150" height="100"-->
-                </div>
-                <div class="fotoD">
-                  <strong>barcelona 1</strong> zona 1
-                  <strong>nombre de 6 usuario contacto</strong> foto perfil
-                </div>
-              </div>
-              <div class="swiper-slide" id="p9">
-                <div class="fotoD">
-                  <img src="./img/barcelona3.jpg"  class="imgD"><!--width="150" height="100"-->
-                </div>
-                <div class="fotoD">
-                  <strong>barcelona 1</strong> zona 1
-                  <strong>nombre de 4 usuario contacto</strong> foto perfil
-                </div>
-              </div>
-            </div><!--finswiper-wrapper-->
+              <!--aqui esta implementado div de la db con jquery -->
+                
+            </div><!--fin swiper-wrapper-->
           <!-- Add Pagination -->
-            <div class="swiper-pagination"></div>
+            <!--div class="swiper-pagination"></div-->
           </div><!--fin contenedor-swiper--> 
           <div id="contenedorMapa" class="contenedorMapa">
             <div id="map"></div>     
@@ -401,26 +379,25 @@
         </div><!--fin buscar mapa-->
         <div id="buscarLista" class="tab-pane  buscarLista ">           
           <form role="form" name="formBuscarLista" id="formBuscarLista" class="form-principal" enctype="multipart/form-data">
-            <div class="fotosLista colorFondo" id="fotosLista">
-              <div class="fotoL" id="f1">
+            <div class="contenedorFotosLista colorFondo" id="contenedorFotosLista">
+              
+              <!--div class="contenedorLista" id="f1">
+                <div class="fotoL"></div>
+                
                 <div class="">
                   <strong>nombre de usuario contacto</strong> foto perfil
-                </div>
-                <img src="./img/barcelona1.jpg"  class="">      
-                <div class="">
                   <strong>precio 1</strong> dato 2
                 </div>
               </div>
-              <div class="fotoL" id="f2">
+              <div class="contenedorLista" id="f2">
+                <div class="fotoL"></div>
+                     
                 <div class="">
                   <strong>nombre de usuario contacto</strong> foto perfil
-                </div>
-                <img src="./img/barcelona3.jpg"  class="">      
-                <div class="">
                   <strong>precio 1</strong> dato 2
                 </div>
-              </div>
-              <div class="fotoL" id="f3">
+              </div-->
+              <!--div class="fotoL" id="f3">
                 <div class="">
                   <strong>nombre de usuario contacto</strong> foto perfil
                 </div>
@@ -433,7 +410,7 @@
                 <div class="">
                   <strong>nombre de usuario contacto</strong> foto perfil
                 </div>
-                <img src="./img/londres1.jpg"  class=""><!--width="150" height="100"-->
+                <img src="./img/londres1.jpg"  class="">
                 <div class="">
                   <strong>precio 1</strong> dato 2
                 </div>
@@ -442,11 +419,11 @@
                 <div class="">
                   <strong>nombre de usuario contacto</strong> foto perfil
                 </div>
-                <img src="./img/londres1.jpg"  class=""><!--width="150" height="100"-->
+                <img src="./img/londres1.jpg"  class="">
                 <div class="">
                   <strong>precio 1</strong> dato 2
                 </div>
-              </div>
+              </div-->
             </div><!--fotosLista -->
           </form>         
         </div><!--fin buscar lista-->        
@@ -462,8 +439,8 @@
         <div class="contenedorDireccion">
           <form role="form" name="formPublicarDireccion" id="formPublicarDireccion" class="form-principal-publicar" enctype="multipart/form-data" >
             <fieldset>
-              <div class="linkBuscarDireccion" id="linkBuscarDireccion">         
-                <div class="label-custom-color mensajeMapaUbicacion" >Te lo busco por ti </div>
+              <div class="linkBuscarDireccion ripple" id="linkBuscarDireccion">         
+                <div class="label-custom-color mensajeMapaUbicacion" >Te lo busco por ti... CLICK AQUI!</div>
                 <div class="icoMapaUbicacion"></div>
               </div>       
               <div class="form-group">         
@@ -500,7 +477,7 @@
             <div class="progress-bar progress-bar-striped progressbar-bar-custom active" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" >         
             </div>
           </div>
-          <button form="formPublicarDireccion" id="btnContinuarDireccion" name="btnContinuarDireccion" class="btn btn-primary btn-md btn-block btnFormularioContinuar" >Continuar</button>
+          <button form="formPublicarDireccion" id="btnContinuarDireccion" name="btnContinuarDireccion" class="btn btn-primary btn-md btn-block btnFormularioContinuar ripple" >Continuar</button>
         </div><!--fin footerbtn--> 
       </div><!--fin publicar Direccion-->
       <div class="div-secundario divPublicar" id="publicarFotoUbicacion"> 
@@ -514,17 +491,17 @@
               <label class="label-custom-color">Sube algunas fotos para tu anuncio</label>
               <div class="text-center imgPublicar" id="imgPublicar" data-cont="0">
                 <div class="divImgPublicarG"></div>
-                <div data-toggle="modal" data-target="#modalPublicar" id="divImgPublicarG" class="divImgPublicarG">
-                  <span class="text-danger" id="mensajeModalFotoPublicar"></span>            
-                  <img src="./img/photo-camera2.png">
-                  <p class="label-custom-negro">Haz clic en la imagen.</p>
-                  <p class="label-custom-medio">Para buscar en tus carpetas o hacer una foto.</p> 
-                  <p class="label-custom-medio">Sube maximo 5.</p>                  
-                </div>
-                <div data-toggle="modal" data-target="#modalPublicar" id="divImgPublicarP" class="divImgPublicarP fotoPublicar ">
-                  <span class="glyphicon glyphicon-plus" id=""></span>
-                  <img src="./img/photo-camera2.png">            
-                </div>
+                  <div data-toggle="modal" data-target="#modalPublicar" id="divImgPublicarG" class="divImgPublicarG">
+                    <span class="text-danger" id="mensajeModalFotoPublicar"></span>            
+                    <img src="./img/photo-camera2.png">
+                    <p class="label-custom-negro">Haz clic en la imagen.</p>
+                    <p class="label-custom-medio">Para buscar en tus carpetas o hacer una foto.</p> 
+                    <p class="label-custom-medio">Sube maximo 5.</p>                  
+                  </div>
+                  <div data-toggle="modal" data-target="#modalPublicar" id="divImgPublicarP" class="divImgPublicarP">
+                    <span class="glyphicon glyphicon-plus" id=""></span>
+                    <img src="./img/photo-camera2.png">            
+                  </div>
               </div>              
             </div>            
             <label class="label-custom-color">Pon titulo a tu Anuncio</label> 
@@ -545,7 +522,7 @@
             </div>
             <div class="form-group">
               <div class="incluyeGastos" id="incluyeGastos">
-                <input type="checkbox" id="cboxIncluyeGastos" name="cboxIncluyeGastos" checked>
+                <input type="checkbox" id="cboxIncluyeGastos" name="cboxIncluyeGastos" checked value="1">
                 <label class="label-custom-color" for="cboxIncluyeGastos"><span></span> Incluye gastos de servicio </label>
               </div>
             </div>
@@ -564,11 +541,11 @@
               </div>
               <span class="text-danger" id="mensajeErrorcomentarioPu"></span>
             </div>     
-            <p id="mensajePublicar">a</p>
-            <p id="mensajePublicar1">b</p>
-            <p id="mensajePublicar2">c</p>
-            <p id="mensajePublicar3">e</p>
-            <p id="mensajePublicar4">f</p>            
+            <p id="mensajePublicar"></p>
+            <p id="mensajePublicar1"></p>
+            <p id="mensajePublicar2"></p>
+            <p id="mensajePublicar3"></p>
+            <p id="mensajePublicar4"></p>            
           </fieldset>
         </form>         
           <!-- Modal -->
@@ -596,7 +573,7 @@
             <div class="progress-bar progress-bar-striped progressbar-bar-custom active" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" >         
             </div>
           </div>
-          <button form="formPublicarFotoUbicacion" id="btnContinuarFoUb" name="btnContinuarFoUb" class="btn btn-primary btn-md btn-block btnFormularioContinuar" >Continuar</button>
+          <button form="formPublicarFotoUbicacion" id="btnContinuarFoUb" name="btnContinuarFoUb" class="btn btn-primary btn-md btn-block btnFormularioContinuar ripple" >Continuar</button>
         </div>
       </div><!--fin publicarFotoUbicacion-->
       <div class="div-secundario divPublicar" id="publicarVivienda"> 
@@ -620,10 +597,10 @@
           </div> 
           <div class="form-group" >  
             <div class="contendorRadioPu">
-              <div class="imgViSolo" id="imgViSolo" >                            
+              <div class="imgViSolo ripple" id="imgViSolo" >                            
                 <input type="radio" name="radioVivienda" value="1" id="radioViSolo" required>                     
               </div>
-              <div class="imgViComp" id="imgViComp" >
+              <div class="imgViComp ripple" id="imgViComp" >
                 <input type="radio" name="radioVivienda" value="2" id="radioViComp">
               </div>                         
             </div>
@@ -634,21 +611,22 @@
           <div class="form-group">
             <div class="contendorViPu">
               <div class="contenedorViPuHoMu">
+                <div class="contenedorBtnViPu">                  
+                  <div class="btn-circleMM ripple " id="btnHoMas" ><i class="glyphicon glyphicon-plus"></i></div>
+                  <input type="text" name="cantHombres" id="cantHombres" size="1" maxlength="1" value="0" disabled style="text-align: center;">
+                  <div class="btn-circleMM ripple " id="btnHoMenos" ><i class="glyphicon glyphicon-minus"></i></div>
+                </div>
                 <div class="imgViHo" id="imgViHo" >
                 </div>                                
-                <div class="contenedorBtnViPu">                  
-                  <button type="button" class="btn btn-primary btn-circleMM " id="btnHoMas" ><i class="glyphicon glyphicon-plus"></i></button>
-                  <input type="text" name="cantHombres" id="cantHombres" size="1" maxlength="1" value="0" disabled style="text-align: center;">
-                  <button type="button" class="btn btn-primary btn-circleMM " id="btnHoMenos" ><i class="glyphicon glyphicon-minus"></i></button>
-                </div>
+                
               </div>
               <div class="contenedorViPuHoMu">
                 <div class="imgViMu" id="imgViMu" >
                 </div>              
                 <div class="contenedorBtnViPu" >
-                  <button type="button" class="btn btn-primary btn-circleMM " id="btnMuMas" ><i class="glyphicon glyphicon-plus"></i></button>
+                  <div class="btn-circleMM ripple " id="btnMuMas" ><i class="glyphicon glyphicon-plus"></i></div>
                   <input type="text" name="cantMujeres" id="cantMujeres" size="1" maxlength="1" value="0" disabled style="text-align: center;">
-                  <button type="button" class="btn btn-primary btn-circleMM " id="btnMuMenos" ><i class="glyphicon glyphicon-minus"></i></button>
+                  <div class="btn-circleMM ripple " id="btnMuMenos" ><i class="glyphicon glyphicon-minus"></i></div>
                 </div>                
               </div>                                       
             </div>             
@@ -657,8 +635,8 @@
           <label class="label-custom-color">¿Que servicios tienes disponibles?</label>            
           <div class="form-group">         
             <div class="contenedorServicios" id="contenedorServicios">
-              <div class=" serviciosPu" >
-                <button type="button" class="btn btn-primary btn-circleMM " id="btnMasServicios" ><i class="glyphicon glyphicon-plus"></i></button>
+              <div class=" serviciosPuMas" >
+                <div class="btn-circleMM " id="btnMasServicios" ><i class="glyphicon glyphicon-plus"></i></div>
               </div>              
             </div>
             <span class="text-danger" id="mensajeErrorServiciosPu"></span>
@@ -666,13 +644,13 @@
           <label class="label-custom-color">¿Que no esta permitido en tu domicilio?</label>            
           <div class="form-group">  
             <div class="contenedorNoPermitido" id="contenedorNoPermitido">
-              <div class="imgNoPeFumar" id="imgNoPeFumar">
+              <div class="imgNoPeFumar ripple" id="imgNoPeFumar">
                 <input type="checkbox" name="cboxNoFumar" id="cboxNoFumar">                                  
               </div>
-              <div class="imgNoPeMascota" id="imgNoPeMascota">                  
+              <div class="imgNoPeMascota ripple" id="imgNoPeMascota">                  
                 <input type="checkbox" name="cboxNoMascota" id="cboxNoMascota">                                
               </div> 
-              <div class="imgNoPePareja" id="imgNoPePareja">                  
+              <div class="imgNoPePareja ripple" id="imgNoPePareja">                  
                 <input type="checkbox" name="cboxNoPareja" id="cboxNoPareja">                               
               </div>
             </div>           
@@ -685,7 +663,7 @@
             <div class="progress-bar progress-bar-striped progressbar-bar-custom active" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100" >         
             </div>
           </div>
-          <button form="formPublicarVi" id="btnContinuarVi" name="btnContinuarVi" class="btn btn-primary btn-md btn-block btnFormularioContinuar" >Continuar</button>
+          <button form="formPublicarVi" id="btnContinuarVi" name="btnContinuarVi" class="btn btn-primary btn-md btn-block btnFormularioContinuar ripple" >Continuar</button>
         </div><!--fin footerbtn--> 
       </div><!--fin publicarVivienda-->
       <div class="div-secundario divPublicar" id="publicarServicios"> 
@@ -696,74 +674,74 @@
         <form role="form" name="formPublicarSe" id="formPublicarSe" class="form-principal-publicar" enctype="multipart/form-data" >
         <div class="contenedorServiciosLi">          
           <div class="form-group">         
-            <div class="imgSeAscensor" id="imgSeAscensor" >             
+            <div class="imgSeAscensor ripple" id="imgSeAscensor" >             
               <input type="checkbox" name="cboxAscensor" value="0" id="cboxAscensor">
               <label for="cboxAscensor"><span></span> Ascensor</label>
               <span class="text-danger" id="mensajeErrorAscensor"></span>
             </div>           
           </div>
           <div class="form-group">         
-            <div class="imgSeCalefaccion" id="imgSeCalefaccion" >                            
+            <div class="imgSeCalefaccion ripple" id="imgSeCalefaccion" >                            
               <input type="checkbox" name="cboxCalefaccion" value="0" id="cboxCalefaccion">
               <label for="cboxCalefaccion"><span></span> Calefaccion</label>
             </div>           
           </div>
           <div class="form-group">         
-            <div class="imgSeEstacionamiento" id="imgSeEstacionamiento" >
+            <div class="imgSeEstacionamiento ripple" id="imgSeEstacionamiento" >
               <input type="checkbox" name="cboxEstacionamiento" value="0" id="cboxEstacionamiento">                            
               <label for="cboxEstacionamiento"><span></span> Estacionamiento</label>
             </div>           
           </div>
           <div class="form-group">         
-            <div class="imgSeLavadora" id="imgSeLavadora" > 
+            <div class="imgSeLavadora ripple" id="imgSeLavadora" > 
               <input type="checkbox" name="cboxLavadora" value="0" id="cboxLavadora">                           
               <label for="cboxLavadora"><span></span> Lavadora</label>
             </div>           
           </div>
           <div class="form-group">         
-            <div class="imgSeLavaVajilla" id="imgSeLavaVajilla" >
+            <div class="imgSeLavaVajilla ripple" id="imgSeLavaVajilla" >
               <input type="checkbox" name="cboxLavaVajilla" value="0" id="cboxLavaVajilla">                            
               <label for="cboxLavaVajilla"><span></span> LavaVajilla</label>
             </div>           
           </div>
           <div class="form-group">         
-            <div class="imgSeMuebles" id="imgSeMuebles" >
+            <div class="imgSeMuebles ripple" id="imgSeMuebles" >
               <input type="checkbox" name="cboxMuebles" value="0" id="cboxMuebles">                            
               <label for="cboxMuebles"><span></span> Tiene muebles</label>
             </div>           
           </div>
           <div class="form-group">         
-            <div class="imgSePiscina" id="imgSePiscina" >
+            <div class="imgSePiscina ripple" id="imgSePiscina" >
               <input type="checkbox" name="cboxPiscina" value="0" id="cboxPiscina">                            
               <label for="cboxPiscina"><span></span> Piscina</label>
             </div>           
           </div>
           <div class="form-group">         
-            <div class="imgSePortero" id="imgSePortero" >
+            <div class="imgSePortero ripple" id="imgSePortero" >
               <input type="checkbox" name="cboxPortero" value="0" id="cboxPortero">                            
               <label for="cboxPortero"><span></span> Portero</label>
             </div>           
           </div>
           <div class="form-group">         
-            <div class="imgSeRadiador" id="imgSeRadiador" > 
+            <div class="imgSeRadiador ripple" id="imgSeRadiador" > 
               <input type="checkbox" name="cboxRadiador" value="0" id="cboxRadiador">                           
               <label for="cboxRadiador"><span></span> Radiador</label>
             </div>           
           </div>
           <div class="form-group">         
-            <div class="imgSeSecador" id="imgSeSecador" >
+            <div class="imgSeSecador ripple" id="imgSeSecador" >
               <input type="checkbox" name="cboxSecador" value="0" id="cboxSecador">                            
               <label for="cboxSecador"><span></span> Secador</label>
             </div>           
           </div>
           <div class="form-group">         
-            <div class="imgSeTv" id="imgSeTv" >                            
+            <div class="imgSeTv ripple" id="imgSeTv" >                            
               <input type="checkbox" name="cboxTv" value="0" id="cboxTv">
               <label for="cboxTv"><span></span> Tv</label>
             </div>           
           </div>
           <div class="form-group">         
-            <div class="imgSeWifi" id="imgSeWifi" >                            
+            <div class="imgSeWifi ripple" id="imgSeWifi" >                            
               <input type="checkbox" name="cboxWifi" value="0" id="cboxWifi">
               <label for="cboxWifi"><span></span> Wi-Fi</label>
             </div>           
@@ -778,7 +756,7 @@
           <div class="progress-bar progress-bar-striped progressbar-bar-custom active" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100" >         
           </div>
         </div>
-        <button form="formPublicarSe" id="btnContinuarSe" name="btnContinuarSe" class="btn btn-primary btn-md btn-block btnFormularioContinuar" >Guardar</button>
+        <button form="formPublicarSe" id="btnContinuarSe" name="btnContinuarSe" class="btn btn-primary btn-md btn-block btnFormularioContinuar ripple" >Guardar</button>
       </div><!--fin footerbtn-->
     </div><!-- fin de publicar Servicios-->  
        
@@ -794,22 +772,22 @@
         </div>          
         <div class="form-group" >  
           <div class="contendorRadioCa" id="">
-            <div class="imgCaSolo imgCa " id="imgCaSolo" >                            
+            <div class="imgCaSolo imgCa ripple " id="imgCaSolo" >                            
               <input type="radio" name="radioCama" value="1" id="radioCaSolo" required> 
             </div>
-            <div class="imgCaDoble imgCa " id="imgCaDoble" >
+            <div class="imgCaDoble imgCa ripple " id="imgCaDoble" >
               <input type="radio" name="radioCama" value="2" id="radioCaDoble">
             </div>
-            <div class="imgCaSofa imgCa " id="imgCaSofa" >
+            <div class="imgCaSofa imgCa ripple " id="imgCaSofa" >
               <input type="radio" name="radioCama" value="3" id="radioCaSofa">
             </div>
-            <div class="imgCaLitera imgCa " id="imgCaLitera" >
+            <div class="imgCaLitera imgCa ripple " id="imgCaLitera" >
               <input type="radio" name="radioCama" value="4" id="radioCaLitera">
             </div>
-            <div class="imgCaSolos imgCa " id="imgCaSolos" >
+            <div class="imgCaSolos imgCa ripple " id="imgCaSolos" >
               <input type="radio" name="radioCama" value="5" id="radioCaSolos">
             </div>
-            <div class="imgCaNada imgCa " id="imgCaNada" >
+            <div class="imgCaNada imgCa ripple " id="imgCaNada" >
               <input type="radio" name="radioCama" value="6" id="radioCaNada">
             </div>                                      
           </div>
@@ -818,7 +796,7 @@
         <div>           
           <label class="label-custom-color">¿Cuando estara disponoble?</label>
         </div>
-        <div class="contendorDispinible" id="">
+        <div class="contendorDispinible" id="contendorDispinible">
           <div class="form-group">
             <div class="inner-addon left-addon">
               <i class="glyphicon">Desde:</i>
@@ -826,31 +804,23 @@
             </div>
             <span class="text-danger" id="mensajeErrorDisponibleD"></span>    
           </div>
-
-          <div class="contenedorHasta-collapse-custom">              
-            <div class="hasta" id="hasta" > 
-               
-                            
-                  <input type="checkbox" id="cboxfechaFin" name="cboxfechaFin" value="0" class="form-control" disabled="true" >
-                  <label class="label-custom-color" for="cboxfechaFin"><span></span> Hasta:</label><i class="glyphicon glyphicon-option-vertical"></i>
-                
-                
-                                                                          
-            </div>
-            <div class="collapse" id="collapseHasta" >              
+          <div class="contenedorHasta-collapse-custom" id="contenedorHasta">              
+            <label class="containerHasta label-custom-color" id="containerHasta">
+              <input type="checkbox" id="cboxfechaHasta" name="cboxfechaHasta" class="form-control" value="0">Hasta :
+              <span class="checkmark"></span><i class="glyphicon glyphicon-option-vertical"></i>
+            </label>
+            <div class="collapse" id="collapseHasta" >  
                 <div class="form-group">
                   <div class="inner-addon left-addon">
                     <i class="glyphicon">Hasta:</i>
-                    <input type="text" name="fechaHasta" id="fechaHasta" placeholder=" Sin fecha " class="form-control" readonly/>
+                    <input type="text" name="fechaHasta" id="fechaHasta" placeholder=" Sin fecha " class="form-control " readonly/>
                   </div>
                   <span class="text-danger" id="mensajeErrorDisponibleH"></span>    
                 </div>                                           
             </div>
-            
           </div>
           <span class="text-danger" id="mensajeErrorHasta"></span>
         </div>
-
         <div>
           <label class="label-custom-color">¿Cuanto tiempo estara disponible?</label>            
         </div>
@@ -891,30 +861,25 @@
         </div>        
         <div class="form-group">         
           <div class="contenedorRadioHa" id="">
-            <div class="imgHaS imgHabi" id="imgHaS" >                            
+            <div class="imgHaS imgHabi ripple" id="imgHaS" >                            
               <input type="radio" name="radioHa" value="1" id="radioHaS" required>                     
             </div>
-            <div class="imgHaM imgHabi" id="imgHaM" >
+            <div class="imgHaM imgHabi ripple" id="imgHaM" >
               <input type="radio" name="radioHa" value="2" id="radioHaM">
             </div>
-            <div class="imgHaL imgHabi" id="imgHaL" >
+            <div class="imgHaL imgHabi ripple" id="imgHaL" >
               <input type="radio" name="radioHa" value="3" id="radioHaL">
             </div>               
           </div>
           <span class="text-danger" id="mensajeErrorHabitacion"></span>
         </div>
       </form>
-
-     
-      
-
-
       <div class="navbar-fixed-bottom footerbtnConti">
         <div class="progress progress-custom">
           <div class="progress-bar progress-bar-striped progressbar-bar-custom active" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" >         
           </div>
         </div>
-        <button form="formPublicarHabitacion" id="btnContinuarHabitacion" name="btnContinuarHabitacion" class="btn btn-primary btn-md btn-block btnFormularioContinuar" >Publicar</button>
+        <button form="formPublicarHabitacion" id="btnContinuarHabitacion" name="btnContinuarHabitacion" class="btn btn-primary btn-md btn-block btnFormularioContinuar ripple" >Publicar</button>
       </div><!--fin footerbtn--> 
     </div><!--fin publicarPiso-->
   </div><!--fin div Publicar-->
@@ -961,7 +926,7 @@
                         </div>            
                       </div>
                     </div>
-                  </div><!--fin modalRegistrarPerfil-->
+                  </div><!--fin modalEditarPerfil-->
               </div>
               <div class="form-group">         
                 <div class="inner-addon left-addon">
@@ -1058,84 +1023,87 @@
                   </div>
                 </div>            
               </div>
-              <div class="form-group">         
-                <div id="nombrePM">nombre                  
-                </div>
-              </div>
-              <div class="form-group">
-                <div id="apellidosPM">apellidos
-                </div>
-                <span class="text-danger" id=""></span>
-              </div>
-              <div class="form-group" style="display: inline-flex;">
+              <div class="form-group" style="display: inline-flex;">         
                 <div class="divCarac" id="divCarac">
                   <div class="imgCarac" id="imgSexo"></div>
-                </div>              
-              </div>             
-              </fieldset>
+                </div>
+                <div>&nbsp</div>
+                <div id="nombrePM">nombre </div> 
+                <div>&nbsp</div>
+                <div id="apellidosPM">apellidos</div>                
+              </div>
+            </fieldset>
               <span class="text-success" id="mPMS"></span>
               <span class="text-danger" id="mPMD"></span>
             </form>
-          </div>            
+            <form role="form" name="" id="formPubliMo" class="form-principal-perfil" enctype="multipart/form-data">
+              <div class="contendorPublicados" id="contendorPublicados">
+
+              
+                <fieldset>
+                  <legend class="label-custom-color">Publicados</legend>
+                    <div class="form-group" >
+                      <div class="contenedorFotoMensajePublicados" id="contenedorFotoMensajePublicados">
+                        <!--div class='publicadoM' id=''>
+                          <div class="fotoPublicadoM">
+                            <img src="./img/barcelona1.jpg" class="imgPubli">
+                            <button type='button' class='btn btn-primary btn-circlePu' id='' ><i class='glyphicon glyphicon-pencil'></i></button>
+                          </div>                          
+                          <div class='mensajePublicadoM'>
+                            <div class='strPreTiPublicado'>250€/m
+                            </div>
+                            <div class='strPreTiPublicado'>titulo de habitacion linda
+                            </div>
+                            <div class='zonaPublicado'>Zona de Barcelona 
+                            </div>
+                          </div>
+                        </div>
+                        <div class='publicadoM' id=''>
+                          <div class="fotoPublicadoM">
+                            <img src="./img/madrid1.jpg" class="imgPubli">
+                            <button type='button' class='btn btn-primary btn-circlePu' id='' ><i class='glyphicon glyphicon-pencil'></i></button>
+                          </div>
+                          <div class='mensajePublicadoM'>
+                            <div class='strPreTiPublicado'>150€/m
+                            </div>
+                            <div class='strPreTiPublicado'>titulo de habitacion linda
+                            </div>
+                            <div class='zonaPublicado'>Zona de Barcelona 
+                            </div>
+                          </div>
+                        </div-->
+                      </div>            
+                    </div>
+                </fieldset>
+                <span class="text-success" id="mPuMS"></span>
+                <span class="text-danger" id="mPuMD"></span>
+              
+              </div>
+            </form>              
+          </div><!-- fin div secundario de pagina mostrar peril usuario-->             
         </div><!-- fin pagina mostrar peril usuario--> 
       <div class="div-custom-principal" id="divFooter">
         <div class="navbar-fixed-bottom footer">
-          <div class="icoFooter" id="icoBuscar">
-            <!--span class="glyphicon glyphicon-search"></span-->
+          <div class="icoFooter ripple" id="icoBuscar">
             <div class="icoFooterBuscar"></div>
             <div class="icoFooterMensaje" id="icoFMBuscar">Buscar
             </div>
           </div>
-          <div class="icoFooter" id="icoPublicar">
+          <div class="icoFooter ripple" id="icoPublicar">
             <div class="icoFooterPublicar"></div>
             <div class="icoFooterMensaje" id="icoFMPublicar">Publicar</div>
           </div>
-          <div class="icoFooter" id="icoMensaje">            
+          <div class="icoFooter ripple" id="icoMensaje">            
             <div class="icoFooterMensajes"></div>
             <div class="icoFooterMensaje" id="icoFMMensaje">Mensaje</div>
           </div>                
-          <div class="icoFooter" id="icoUsuario">
+          <div class="icoFooter ripple" id="icoUsuario">
             <div class="icoFooterUsuario"></div>
             <div class="icoFooterMensaje" id="icoFMPerfil">Perfil</div>
           </div>              
         </div>
       </div><!--fin divFooter--> 
-    </div>  <!--fin divPrincipal-->
-     <!-- Modal -->
-    <div class="modal fade" id="ternimosCondiciones" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">
-            <b>Terminos y Condiciones </b>
-            </h4>
-          </div>
-          <div class="modal-body">
-            Mediante la simple utilización de Softbot.com.bo y al contratar cualquiera de los servicios ofrecidos a través de Softbot.com.bo, el Cliente reconoce haber leído y acepta los términos expuestos en el presente Acuerdo y / o las políticas que formen parte del mismo.
-            <br>
-            <br>
-            <p>
-              <b>Uso de la cuenta de usuario en Softbot.com.bo</b>
-            </p>
-            <p>
-              <ul>
-                <li>El usuario de Registros.com se compromete a proporcionar mediante su registro datos veraces, exactos y completos sobre su identidad. También se compromete a revisar periódicamente la información proporcionada y garantiza la validez y la vigencia de los datos asociados tanto a su cuenta de usuario como a los productos y servicios contratados. El incumplimiento de esta condición podrá motivar la cancelación de la cuenta y la denegación al usuario el acceso a los servicios de Registros.com de forma temporal o permanente.</li>
-                <li>Registros.com se reserva el derecho de solicitar la verificación y / o actualización de la información proporcionada por el Cliente, quien deberá responder satisfactoriamente a la petición de Registros.com en el plazo máximo de 5 días laborables. El Cliente entiende y acepta que el no cumplimiento de este requisito constituye una vulneración del presente Acuerdo y puede dar lugar a la cancelación de los productos y/o servicios cont...</li>
-                <br>
-                <a href="#" class="btn btn-default btn-xs">
-                  <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Descargar PDF
-                </a>
-              </ul>
-            </p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary btn-md btn-block btnFormulario" data-dismiss="modal">Cerrar</button>
-            <!--button type="button" class="btn btn-primary">Guardar Cambios</button-->
-          </div>
-        </div>
-      </div>
-    </div> <!--fin modal fade-->
+    </div>  <!--fin divPrincipal-->    
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCVnl1VBm-qnyhhi0l8VTXHR6NadW-DNQ&libraries=places"></script>

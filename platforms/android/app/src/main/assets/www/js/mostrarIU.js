@@ -1,12 +1,13 @@
 
 //var storedFiles = [];
 //var storedFilesDb = [];
-var ipConex = '192.168.1.110';
+//var ipConex = '192.168.1.101';
 var marker;          //variable del marcador
 var coords = {};//coordenadas obtenidas con la geolocalización 
 var linkBuscarDir=0;
-var miresult='';
+//var miresult='';
 $datosLocalDir='';
+$datosLocalHabi='';
 $dirZona='';
 $dirCiudad='';
 $dirDireccion='';
@@ -32,10 +33,14 @@ $(document).ready(function(){
     $contHaM=0;//radio dimension m
     $contHaL=0;//radio dimension l
     $contFinFecha=0;// contador fecha final para controlar finFMPu
+    $contInFecha=0;// contador fecha final para controlar inFMPu
     $publicarFoto = 0;//cambiar estado de publicar foto si no se hizo la publicacion
     //$guardarSeAnt = '';//variable guardar valor servicio  
     selDiv = $("#imgPublicar");//para las foto publicadas
-    selDivSe = $("#contenedorServicios");   
+    selDivSe = $("#contenedorServicios");//para las servicios publicadas
+    selDivPu = $("#contenedorFotoMensajePublicados"); //para lo publicado
+    selDivMostrarPubliTodoSwipe = $("#swiper-wrapper"); //mostrar todo lo publicado dentro de swiper contenedor 
+    selDivMostrarPubliTodoLista = $("#contenedorFotosLista");// mostrrar todo lo publicado en fotos listas
     inicioSesion(); //recupera y almacena datos locales 
 	 /* mostrar tabs divInicio inicio sesion y registrar*/            
     $("#aRegistrar").click(function(){
@@ -47,29 +52,222 @@ $(document).ready(function(){
     });
     $("#linkRegistrar").click(function(){
         $("#aRegistrar").tab('show');
-    });
-   
-                
+    });  
            
     $("#linkBuscarListaMapa").click(function(){
         //event.preventDefault(); 
+        //cambioZona=1;
         $("#paginaPrincipal").css("display", "none");
         $("#paginaListaMapas").css("display", "block");
         $("#divFooter").css("display", "none");
-        activarSwipe();
+     //aqui si no cambio de posicion no entra mas si cambio de posision entra  tal vez implementar un limite de mostrar publicados ej.max 100 por zonas
+    // consultamos todo lo publicado dependiendo de la ciudad o la zona para empezar todo 
+        if (cambioZona==1) { // control para que cargue la consulta cada vez que se presione el linkbuscarmapa
+            $.ajax({
+                type :'POST',
+                url:'http://' + ipConex + '/wasiWeb/php/consultarPublicadosTodos.php',
+                dataType : 'json',                
+                data: {idUsuario:$datosLocal['usrId']},                 
+                crossDomain: true,
+                cache: false,
+                success: function(datosConsPubliTodos){
+                    console.log("datosConsPubliTodos "+JSON.stringify(datosConsPubliTodos));
+                   
+                    if (datosConsPubliTodos['publicados']>0) {//0 existen datos y no se completo la publicacion, -1 no existen 
+                        // tal vez no haga falta  datos remoto de publicados todo
+                        $datosRemotoConsultarPubliTodos=JSON.stringify(datosConsPubliTodos);
+                        localStorage.setItem('datosPubliT', $datosRemotoConsultarPubliTodos);
+                        $datosLocalPubliTodo=JSON.parse(localStorage.getItem('datosPubliT'));
+
+
+                        for (var i = 0; i < datosConsPubliTodos['publicados']; i++) {
+                            $contadorServicios=0;
+                            htmlMostrarPubliTodoSwipe+="<div class='swiper-slide' id="+datosConsPubliTodos['idPubliArray'][i]+">";
+                            htmlMostrarPubliTodoSwipe+=" <div class = 'fotoD' style='background:url(http://"+ipConex+"/wasiWeb/"+datosConsPubliTodos['rutaFotoArray'][i] +") no-repeat center center; background-size:cover;' >";
+                            //htmlMostrarPubliTodoSwipe+="     <img src=http://"+ipConex+"/wasiWeb/"+datosConsPubliTodos['rutaFotoArray'][i]+" class='imgD'>";
+                            htmlMostrarPubliTodoSwipe+=" </div>";
+                            htmlMostrarPubliTodoSwipe+=" <div class='mensajeD'>";
+                            htmlMostrarPubliTodoSwipe+="     <div class='mensajeDPrecio'>"+datosConsPubliTodos['precioArray'][i]+" €/m </div>";
+                            htmlMostrarPubliTodoSwipe+="     <div class='mensajeDZona'>"+datosConsPubliTodos['zonaArray'][i]+"</div>";    
+                            htmlMostrarPubliTodoSwipe+="     <div class='contenedorMensajeServiciosPe'>";
+                            htmlMostrarPubliTodoSwipe+="         <div class='mensajePerPu' style='background:url(http://"+ipConex+"/wasiWeb/"+datosConsPubliTodos['fotoPerfilArray'][i] +") no-repeat center center; background-size:cover;'></div>";
+                            if (datosConsPubliTodos['ascensorArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/ascensorN.png) no-repeat center center; background-size:cover;'> </div>";          
+                                $contadorServicios++;
+                            }
+                            if (datosConsPubliTodos['calefaccionArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/calefaccionN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;   
+                            }
+                            if (datosConsPubliTodos['estacionamientoArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/estacionamientoN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;
+                            }
+                            if (datosConsPubliTodos['lavadoraArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/lavadoraN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;
+                            }  
+                            if (datosConsPubliTodos['lavaVajillaArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/lavaVajillasN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;                                
+                            }
+                            if (datosConsPubliTodos['mueblesArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/mueblesN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;    
+                            } 
+                            if (datosConsPubliTodos['piscinaArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/piscinaN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;
+                            }
+                            if (datosConsPubliTodos['porteroArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/porteroN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;    
+                            }
+                            if (datosConsPubliTodos['radiadorArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/radiadorN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;    
+                            }
+                            if (datosConsPubliTodos['secadorArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/secadorN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;    
+                            } 
+                            if (datosConsPubliTodos['tvArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/tvN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;
+                            }
+                            if (datosConsPubliTodos['wifiArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/wifiN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;    
+                            }    
+                            htmlMostrarPubliTodoSwipe+="     </div>";
+                            htmlMostrarPubliTodoSwipe+=" </div>";                        
+                            htmlMostrarPubliTodoSwipe+="</div> ";                         
+                               
+                        }
+                    
+                        selDivMostrarPubliTodoSwipe.append(htmlMostrarPubliTodoSwipe); 
+                        activarSwipe();  
+                        htmlMostrarPubliTodoSwipe=" ";
+                                 
+                    }
+                    if (datosConsPubliTodos['publicados']==0) {
+                        
+                   }        
+                },
+                error : function(jqXHR, textStatus, errorThrown) {
+                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                }
+            });
+        cambioZona=0;
+        }        
+        //activarSwipe();
     });
 
     $('body #swiper-container').on('click', '.swiper-slide', function(){
-      alert($(this).attr('id'));
+      console.log($(this).attr('id'));
+
+
+
+
+
+
+
+      /*
+    aqui implementamos mostrar publicadoSwipe en otro div
+      */
+
+
+
+
     })
 
     $("#btnAtras").click(function() {
         $("#paginaPrincipal").css("display", "block");
         $("#paginaListaMapas").css("display", "none");
-        $("#divFooter").css("display", "block");            
+        $("#divFooter").css("display", "block"); 
+        cambioZona=0;           
         })
     $("#aBuscarLista").click(function(){
-            $("#aBuscarLista").tab('show');
+
+        $("#aBuscarLista").tab('show');
+        console.log("buscar listas "+$datosLocalPubliTodo['publicados']);
+        
+        /* aqui implementamos mostrar publicados en listas  */
+        //selDivMostrarPubliTodoLista.remove(htmlMostrarPubliTodoLista);//para vaciar cada vez que ingresan por el momento que netre solo una vez
+        if (cambioZona==1 || swipeZona==1) {
+           
+        
+        for (var i = 0; i < $datosLocalPubliTodo['publicados']; i++) {
+            $contadorServicios=0;
+            htmlMostrarPubliTodoLista+="<div class='contenedorLista' id="+$datosLocalPubliTodo['idPubliArray'][i]+">";
+            htmlMostrarPubliTodoLista+=" <div class = 'fotoL' style='background:url(http://"+ipConex+"/wasiWeb/"+$datosLocalPubliTodo['rutaFotoArray'][i] +") no-repeat center center; background-size:cover;' >";
+            //htmlMostrarPubliTodoLista+="     <img src=http://"+ipConex+"/wasiWeb/"+$datosLocalPubliTodo['rutaFotoArray'][i]+" class='imgD'>";
+            htmlMostrarPubliTodoLista+=" </div>";
+            htmlMostrarPubliTodoLista+=" <div class='mensajeL'>";
+            htmlMostrarPubliTodoLista+="     <div class='mensajeLPrecio'>"+$datosLocalPubliTodo['precioArray'][i]+" €/m </div>";
+            htmlMostrarPubliTodoLista+="     <div class='mensajeLZona'>"+$datosLocalPubliTodo['zonaArray'][i]+"</div>";    
+            htmlMostrarPubliTodoLista+="     <div class='contenedorMensajeServiciosPe'>";
+            htmlMostrarPubliTodoLista+="         <div class='mensajePerPu' style='background:url(http://"+ipConex+"/wasiWeb/"+$datosLocalPubliTodo['fotoPerfilArray'][i] +") no-repeat center center; background-size:cover;'></div>";
+            if ($datosLocalPubliTodo['ascensorArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/ascensorN.png) no-repeat center center; background-size:cover;'> </div>";          
+                $contadorServicios++;
+            }
+            if ($datosLocalPubliTodo['calefaccionArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/calefaccionN.png) no-repeat center center; background-size:cover;'> </div>";      
+                $contadorServicios++;   
+            }
+            if ($datosLocalPubliTodo['estacionamientoArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/estacionamientoN.png) no-repeat center center; background-size:cover;'> </div>";      
+                $contadorServicios++;
+            }
+            if ($datosLocalPubliTodo['lavadoraArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/lavadoraN.png) no-repeat center center; background-size:cover;'> </div>";      
+                $contadorServicios++;
+            }  
+            if ($datosLocalPubliTodo['lavaVajillaArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/lavaVajillasN.png) no-repeat center center; background-size:cover;'> </div>";      
+                $contadorServicios++;                                
+            }
+            if ($datosLocalPubliTodo['mueblesArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/mueblesN.png) no-repeat center center; background-size:cover;'> </div>";      
+                $contadorServicios++;    
+            } 
+            if ($datosLocalPubliTodo['piscinaArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/piscinaN.png) no-repeat center center; background-size:cover;'> </div>";      
+                $contadorServicios++;
+            }
+            if ($datosLocalPubliTodo['porteroArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/porteroN.png) no-repeat center center; background-size:cover;'> </div>";      
+                $contadorServicios++;    
+            }
+            if ($datosLocalPubliTodo['radiadorArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/radiadorN.png) no-repeat center center; background-size:cover;'> </div>";      
+                $contadorServicios++;    
+            }
+            if ($datosLocalPubliTodo['secadorArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/secadorN.png) no-repeat center center; background-size:cover;'> </div>";      
+                $contadorServicios++;    
+            } 
+            if ($datosLocalPubliTodo['tvArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/tvN.png) no-repeat center center; background-size:cover;'> </div>";      
+                $contadorServicios++;
+            }
+            if ($datosLocalPubliTodo['wifiArray'][i]==1 && $contadorServicios < 7) {
+                htmlMostrarPubliTodoLista+="         <div class='mensajeServiciosPu' style='background:url(./img/wifiN.png) no-repeat center center; background-size:cover;'> </div>";      
+                $contadorServicios++;    
+            }    
+            htmlMostrarPubliTodoLista+="     </div>";
+            htmlMostrarPubliTodoLista+=" </div>";                        
+            htmlMostrarPubliTodoLista+="</div> ";                         
+               
+        }
+    
+        selDivMostrarPubliTodoLista.append(htmlMostrarPubliTodoLista); 
+        //cambioZona=0;
+        htmlMostrarPubliTodoLista=" ";
+        swipeZona=0;
+      }      
+
     });
     $("#aBuscarMapa").click(function(){
        // activarSwipe();
@@ -80,15 +278,17 @@ $(document).ready(function(){
     /*pagina buscar */
     $("#icoBuscar").click(function(){
         //event.preventDefault();
-
-        $(".icoFooter .icoFooterBuscar").css({"background": "url(img/buscarC.png) no-repeat center center","background-size": "30px 30px"});
-        $(".icoFooter .glyphicon-upload").css({"color":"rgba(89, 89, 89, 0.8)"});
-        $(".icoFooter .glyphicon-comment").css({"color":"rgba(89, 89, 89, 0.8)"});
-        $(".icoFooter .icoFooterUsuario").css({"background": "url(img/perfilG.png) no-repeat center center","background-size": "30px 30px"});
+        btnEditarPublicadoM =0;
+        icoUserpublicadosM =0;
+        $(".footer .icoFooterBuscar").css({"background": "url(img/buscarC.png) no-repeat center center","background-size": "30px 30px"});
+        $(".footer .icoFooterPublicar").css({"background": "url(img/publicarG.png) no-repeat center center","background-size": "30px 30px"});
+        $(".footer .icoFooterMensajes").css({"background": "url(img/mensajeG.png) no-repeat center center","background-size": "30px 30px"});
+        $(".footer .icoFooterUsuario").css({"background": "url(img/perfilG.png) no-repeat center center","background-size": "30px 30px"});
         
         $("#paginaPrincipal").css("display", "block");
         $("#paginaListaMapas").css("display", "none");            
-        $("#paginaPublicar").css("display", "none");                        
+        $("#paginaPublicar").css("display", "none");
+
         $("#paginaMensaje").css("display", "none"); 
         $("#paginaUsuarioPerfilEditar").css("display", "none");
         $("#paginaUsuarioPerfilMostrar").css("display", "none");           
@@ -97,11 +297,12 @@ $(document).ready(function(){
         $("#icoFMBuscar").css({"color":"#008080"});
         $("#icoFMPublicar").css({"color":"rgba(89, 89, 89, 0.8)"});                       
         $("#icoFMMensaje").css({"color":"rgba(89, 89, 89, 0.8)"});            
-        $("#icoFMPerfil").css({"color":"rgba(89, 89, 89, 0.8)"});
-        
+        $("#icoFMPerfil").css({"color":"rgba(89, 89, 89, 0.8)"});        
     });
 /*publicar principal*/
-    $("#btnPublicarPrincipal").click(function(){
+    $("#btnPublicarPrincipal, #icoPublicar").click(function(){
+        btnEditarPublicadoM =0;
+        icoUserpublicadosM =0;
         $(".div-custom-principal .divPublicar").css({"padding":"0px","background-color": "#f2f2f2"});
         $("#paginaPrincipal").css("display", "none");
         $("#paginaListaMapas").css("display", "none");
@@ -120,40 +321,146 @@ $(document).ready(function(){
         $("#divFooter").css("display", "none");
         $(".container-custom-principal .progressbar-bar-custom").css("width", "25%");
         
-        $.ajax({
-            type :'POST',
-            url:'http://' + ipConex + '/wasiWeb/php/consultarDireccion.php',
-            dataType : 'json',                
-            data: {idUsuario:$datosLocal['usrId']},                 
-            crossDomain: true,
-            cache: false,
-            success: function(datosConsultaDir){
-                //if (datosConsultaDir['publicado']==0) {
-                $datosRemotoConsultarDir=JSON.stringify(datosConsultaDir);
-                localStorage.setItem('datosDir', $datosRemotoConsultarDir);
-                $datosLocalDir=JSON.parse(localStorage.getItem('datosDir'));        
-                if ($datosLocalDir['publicado']==0) {
-                    $('#ciudadMpu').val($datosLocalDir['ciudad']);
-                    $('#direccionMPu').val($datosLocalDir['direccion']);
-                    $("#btnContinuarDireccion").css({"background-color":"#008080"});
-                    linkBuscarDir=1;
-                    autoCDir=1;
-                    autoCCiu=1;
-                    continuarDir=0;
-                    //console.log("datosLocalDir "+ $datosRemotoDir);
-                    console.log("btnPublicarPrincipal datosLocalDir "+JSON.stringify($datosLocalDir));
+        if (btnAtrasDir==0) {
+
+            $.ajax({
+                type :'POST',
+                url:'http://' + ipConex + '/wasiWeb/php/consultarDireccion.php',
+                dataType : 'json',                
+                data: {idUsuario:$datosLocal['usrId']},                 
+                crossDomain: true,
+                cache: false,
+                success: function(datosConsultaDir){
+                    console.log("btnPublicarPrincipal, icoPublicar datosConsultaDir "+JSON.stringify(datosConsultaDir));
+                    $datosRemotoConsultarDir=JSON.stringify(datosConsultaDir);
+                    localStorage.setItem('datosDir', $datosRemotoConsultarDir);
+                    $datosLocalDir=JSON.parse(localStorage.getItem('datosDir')); 
+                    if (datosConsultaDir['publicado']==0) {//0 existen datos y no se completo la publicacion, -1 no existen 
+                               
+                    
+                        $('#ciudadMpu').val($datosLocalDir['ciudad']);
+                        $('#direccionMPu').val($datosLocalDir['direccion']+", "+$datosLocalDir['zona']);
+                        $("#btnContinuarDireccion").css({"background-color":"#008080"});
+                        linkBuscarDir=1;
+                        autoCDir=1;
+                        autoCCiu=1;
+                        continuarDir=0;
+                        //console.log("datosLocalDir "+ $datosRemotoDir);                    
+                    }
+                    if (datosConsultaDir['publicado']==-1) {
+                        $('#ciudadMpu').val('');
+                        $('#direccionMPu').val('');                                 
+                    }        
+                },
+                error : function(jqXHR, textStatus, errorThrown) {
+                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
                 }
-            },
-            error : function(jqXHR, textStatus, errorThrown) {
-                alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
-            }
-        });
+            });
+            btnAtrasDir=1;    
+        }
+                         
      });
     $("#btnAtrasDireccion").click(function() {
-       
-        $("#paginaPrincipal").css("display", "block");
-        $("#paginaPublicar").css("display", "none");
-        $("#divFooter").css("display", "block");  //tal vez div mensaje tambien           
+        console.log("btnEditarPublicadoM "+btnEditarPublicadoM+" icoUserpublicadosM "+icoUserpublicadosM);
+
+        if (btnEditarPublicadoM == 0 && icoUserpublicadosM == 0) {
+            $("#paginaPrincipal").css("display", "block");
+            $("#paginaPublicar").css("display", "none");
+            $("#divFooter").css("display", "block");  
+            $(".footer .icoFooterBuscar").css({"background": "url(img/buscarC.png) no-repeat center center","background-size": "30px 30px"});                
+        }
+        else{
+
+            $("#paginaPrincipal").css("display", "none");
+            $("#paginaListaMapas").css("display", "none"); 
+            $("#paginaPublicar").css("display", "none");
+            $("#mapDireccionBuscar").css("display", "none"); 
+            $("#divFooter").css("display", "block");         
+            //$("#paginaMensaje").css("display", "none");            
+            $("#paginaUsuarioPerfilEditar").css("display", "none");
+            $("#paginaUsuarioPerfilMostrar").css("display", "block");
+
+            $(".icoFooter .icoFooterBuscar").css({"background": "url(img/buscarG.png) no-repeat center center","background-size": "30px 30px"});
+            $(".icoFooter .glyphicon-upload").css({"color":"rgba(89, 89, 89, 0.8)"});
+            $(".icoFooter .glyphicon-comment").css({"color":"rgba(89, 89, 89, 0.8)"});
+            $(".icoFooter .icoFooterUsuario").css({"background": "url(img/perfilC.png) no-repeat center center","background-size": "30px 30px"});  
+
+            $("#icoFMBuscar").css({"color":"rgba(89, 89, 89, 0.8)"});  
+            $("#icoFMPublicar").css({"color":"rgba(89, 89, 89, 0.8)"});                       
+            $("#icoFMMensaje").css({"color":"rgba(89, 89, 89, 0.8)"});            
+            $("#icoFMPerfil").css({"color":"#008080"});      
+                                    
+            /*datdo recuperados de local storage*/
+            // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
+            $("#fotoPerfilM").css({"background": "url(http://" + ipConex + "/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center ","background-size": "cover"});
+            $("#nombrePM").html($datosLocal.usrName);
+            $("#apellidosPM").html($datosLocal.usrLname);
+            if ($datosLocal.usrSexo==1) {
+                $("#divSexo").css({"border-color":"#999999","box-shadow":""});
+                $("#imgSexo").css({"background": "url(img/hombreG.png) no-repeat center center ","background-size": "25px 30px"});
+            }
+            if ($datosLocal.usrSexo==2) {
+                $("#divSexo").css({"border-color":"#999999","box-shadow":""}); 
+                $("#imgSexo").css({"background": "url(img/mujerG.png) no-repeat center center ","background-size": "25px 30px"});
+                    
+            }                            
+            /*borrar mensajes despues de pasar por otra pagina*/
+            $("#mensajeErrorNombreP").html("");
+            $("#mensajeErrorApellidosP").html("");
+            $("#mensajeErrorContrasenyaP").html("");
+            $("#mensajeErrorContrasenyaNP").html("");
+            $("#mensajeErrorCContrasenyaNP").html(""); 
+
+            if (icoUserpublicadosM==0) {//0 si nunca entro a ico usuario
+                console.log("#btnAtrasDireccion datosLocal "+ JSON.stringify($datosLocal));
+                $.ajax({
+                    type: "POST",
+                    dataType: 'json',
+                    url: 'http://' + ipConex + '/wasiWeb/php/consultarPublicados.php',
+                    data: {idUsuario:$datosLocal['usrId']},                 
+                    crossDomain: true,
+                    cache: false,
+                    success: function(datosPublicados){
+                        if (datosPublicados['publicados']>0) {                    
+                            cargarPublicadosBD(datosPublicados);                        
+                        }
+                        console.log("datosPublicados "+JSON.stringify(datosPublicados)); 
+                        console.log("longitudPublicados "+ datosPublicados['publicados']);      
+                    },
+                    error : function(jqXHR, textStatus, errorThrown) {
+                        alert("error consultarFotoPublicado: " + jqXHR.status + " " + textStatus + " " + errorThrown);                    
+                    }
+                }); 
+                icoUserpublicadosM=1; 
+                 
+            }
+            btnAtrasFoto = 0;//para controlar el acceso a editar publicacion consultar fotos datos 
+            btnAtrasVi = 0;//para controlar acceso editar publicacion consultar vivienda
+            btnAtrasHabi = 0;//para control acceso editar publcaion consultar habitracion
+            //continuarHabi= 1;// para contrtol de  acceso publicar actualizar la publicaion
+
+            /* aqui implementar el reinicio del los forms y las fotos,  al finalizar al publicacion */
+
+            $('#formPublicarDireccion')[0].reset();
+            $('#formPublicarFotoUbicacion')[0].reset();
+            $('#formPublicarVi')[0].reset();
+            $('#formPublicarSe')[0].reset();
+            $('#formPublicarHabitacion')[0].reset();
+            
+            $("#imgPublicar div").remove(".fotoPublicar");  
+            $("#imgPublicar").data("cont",0); 
+            storedFilesDb = [];   //inciar una vez mas 
+            storedFiles=[];// no verficado 
+            $("#contenedorServicios div").remove(".serviciosPu");
+
+            $("#imgNoPeFumar").css({"background": "url(img/noFumarGLe.png) no-repeat center center ","background-size": "58px 68px"});
+            $("#imgNoPeFumar").css({"border-color":"#999999","box-shadow": " "}); 
+            $("#imgNoPeMascota").css({"background": "url(img/noMascotaGLe.png) no-repeat center center ","background-size": "58px 68px"});
+            $("#imgNoPeMascota").css({"border-color":"#999999","box-shadow": " "}); 
+            $("#imgNoPePareja").css({"background": "url(img/noParejaGLe.png) no-repeat center center ","background-size": "58px 68px"});
+            $("#imgNoPePareja").css({"border-color":"#999999","box-shadow": " "});   
+            /****************Fin de reseteo a los forms de publicar ********/
+        }       
     });
     $("#btnAtrasfotoUbicacion").click(function() {
         $(".div-custom-principal .divPublicar").css("padding", "0px");
@@ -256,29 +563,30 @@ $(document).ready(function(){
     });    
     $("#icoUsuario").click(function(){
         //event.preventDefault(); 
-        if ($datosLocal['usrAct']==0) {
-            //$imgPerfilAnt=$datosLocal['usrImg'];
+        if ($datosLocal['usrAct']==0) {//si no entro nunca a perfil 
+            
             $("#paginaPrincipal").css("display", "none");
             $("#paginaListaMapas").css("display", "none"); 
-            $("#paginaPublicar").css("display", "none");        
+            $("#paginaPublicar").css("display", "none");
+            $("#contenedorMapaDireccion").css("display", "none");        
             $("#paginaMensaje").css("display", "none");            
             $("#paginaUsuarioPerfilEditar").css("display", "block");
             $("#paginaUsuarioPerfilMostrar").css("display", "none");
             $("#divFooter").css("display", "none");
             /*datdo recuperados de local storage*/
-            // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
+            
             $("#fotoPerfilE").css({"background": "url(http://" + ipConex + "/wasiWeb/"+$datosLocal['usrImg']+") no-repeat center center ","background-size":"cover"});
             $("#nombreP").val($datosLocal.usrName);
             $("#apellidosP").val($datosLocal.usrLname);
             $("#emailP").val($datosLocal.usrEmail);
             $("#telefonoP").val($datosLocal.usrPhone);             
         }
-        else{
-            //$imgPerfilAnt=$datosLocal['usrImg'];        
-            
+        else{ //despues de actualizar o editar perfil 
+                      
             $("#paginaPrincipal").css("display", "none");
             $("#paginaListaMapas").css("display", "none"); 
-            $("#paginaPublicar").css("display", "none");        
+            $("#paginaPublicar").css("display", "none");
+
             $("#paginaMensaje").css("display", "none");            
             $("#paginaUsuarioPerfilEditar").css("display", "none");
             $("#paginaUsuarioPerfilMostrar").css("display", "block");
@@ -286,6 +594,8 @@ $(document).ready(function(){
             $(".icoFooter .icoFooterBuscar").css({"background": "url(img/buscarG.png) no-repeat center center","background-size": "30px 30px"});
             $(".icoFooter .glyphicon-upload").css({"color":"rgba(89, 89, 89, 0.8)"});
             $(".icoFooter .glyphicon-comment").css({"color":"rgba(89, 89, 89, 0.8)"});
+           /* $(".icoFooter #icoBuscar").css({"border-top": "2px solid #f2f2f2"});*/  
+            //$(".icoFooter #icoUsuario").css({"border-top": "2px solid #008080"});  
             $(".icoFooter .icoFooterUsuario").css({"background": "url(img/perfilC.png) no-repeat center center","background-size": "30px 30px"});  
 
             $("#icoFMBuscar").css({"color":"rgba(89, 89, 89, 0.8)"});  
@@ -300,21 +610,42 @@ $(document).ready(function(){
             $("#apellidosPM").html($datosLocal.usrLname);
             if ($datosLocal.usrSexo==1) {
                 $("#divSexo").css({"border-color":"#999999","box-shadow":""});
-                $("#imgSexo").css({"background": "url(img/hombreG.png) no-repeat center center ","background-size": "20px 20px"});
+                $("#imgSexo").css({"background": "url(img/hombreG.png) no-repeat center center ","background-size": "25px 30px"});
             }
             if ($datosLocal.usrSexo==2) {
                 $("#divSexo").css({"border-color":"#999999","box-shadow":""}); 
-                $("#imgSexo").css({"background": "url(img/mujerG.png) no-repeat center center ","background-size": "20px 20px"});
+                $("#imgSexo").css({"background": "url(img/mujerG.png) no-repeat center center ","background-size": "25px 30px"});
                     
-            }           
-            //if ($datosLocal.usr) {}            
+            }                            
             /*borrar mensajes despues de pasar por otra pagina*/
             $("#mensajeErrorNombreP").html("");
             $("#mensajeErrorApellidosP").html("");
             $("#mensajeErrorContrasenyaP").html("");
             $("#mensajeErrorContrasenyaNP").html("");
-            $("#mensajeErrorCContrasenyaNP").html("");       
-        }
+            $("#mensajeErrorCContrasenyaNP").html(""); 
+            if (icoUserpublicadosM==0) {//0 si nunca entro a ico usuario
+                console.log("datosLocal "+ JSON.stringify($datosLocal));
+                $.ajax({
+                    type: "POST",
+                    dataType: 'json',
+                    url: 'http://' + ipConex + '/wasiWeb/php/consultarPublicados.php',
+                    data: {idUsuario:$datosLocal['usrId']},                 
+                    crossDomain: true,
+                    cache: false,
+                    success: function(datosPublicados){
+                        if (datosPublicados['publicados']>0) {                    
+                            cargarPublicadosBD(datosPublicados);                        
+                        }
+                        console.log("datosPublicados "+JSON.stringify(datosPublicados)); 
+                        console.log("longitudPublicados "+ datosPublicados['publicados']);      
+                    },
+                    error : function(jqXHR, textStatus, errorThrown) {
+                        alert("error consultarFotoPublicado: " + jqXHR.status + " " + textStatus + " " + errorThrown);                    
+                    }
+                }); 
+                icoUserpublicadosM=1;   
+            }         
+        }             
     });
     $("#imgSexoH").click(function(){        
         if ($contH % 2 == 0) {
@@ -449,7 +780,7 @@ $(document).ready(function(){
     });
 
     $("#btnHoMenos").click(function(){
-        //$contHoG='null';
+        continuarVi=1;
         if ($contHombres == 0) {
             $contHombres = 0;
             $contHoG=0;            
@@ -496,7 +827,7 @@ $(document).ready(function(){
         $("#cantMujeres").val($contMujeres);        
     });
     $("#btnMuMenos").click(function(){
-        //$contMuG='null';
+        continuarVi=1;
         if ($contMujeres == 0) {
             $contMujeres = 0;
             $contMuG=0;
@@ -559,7 +890,8 @@ $(document).ready(function(){
             $("#imgNoPePareja").css({"border-color":"#999999","box-shadow":""});             
         }              
     });
-    $("#imgCaSolo").click(function(){        
+    $("#imgCaSolo").click(function(){
+        continuarHabi=1;        
         if ($contHaCaSolo % 2 == 0) {
             $contHaCaSolo++;
             $("#imgCaSolo").css({"background": "url(img/camaSimpleNLe.png) no-repeat center center ","background-size": "60px 70px"});
@@ -584,12 +916,12 @@ $(document).ready(function(){
             camaMPu=1;            
            /* qMPu=1;
             continuarVi=1;*/
-            if ($('#cboxfechaFin').val() == 0) {//chboxfechafin no check
+            if ($('#cboxfechaHasta').val() == 0) {//chboxfechaHasta no check
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
             }
-            else{//cuando cheboxfinfecha esta chek
+            else{//cuando cheboxFechaHasta esta chek
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && finFMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
@@ -603,9 +935,11 @@ $(document).ready(function(){
             $("#radioCaSolo").prop('checked', false); //quitar el check de checkbox
             camaMPu=0;
             $("#btnContinuarHabitacion").css({"background-color":"#808080"});//gris tema 
-        }              
+        }
+
     });
-    $("#imgCaDoble").click(function(){        
+    $("#imgCaDoble").click(function(){
+        continuarHabi=1;        
         if ($contHaCaDoble % 2 == 0) {
             $contHaCaDoble++;
             $("#imgCaDoble").css({"background": "url(img/camaDobleNLe.png) no-repeat center center ","background-size": "60px 70px"});
@@ -629,12 +963,12 @@ $(document).ready(function(){
 
             camaMPu=1;
 
-            if ($('#cboxfechaFin').val() == 0) {//chboxfechafin no check
+            if ($('#cboxfechaHasta').val() == 0) {//cboxfechaHasta no check
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
             }
-            else{//cuando cheboxfinfecha esta chek
+            else{//cuando cheboxFechaHasta esta chek
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && finFMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
@@ -651,7 +985,8 @@ $(document).ready(function(){
             $("#btnContinuarHabitacion").css({"background-color":"#808080"});//gris tema 
         }              
     });
-    $("#imgCaSofa").click(function(){        
+    $("#imgCaSofa").click(function(){  
+        continuarHabi=1;      
         if ($contHaCaSofa % 2 == 0) {
             $contHaCaSofa++;
             $("#imgCaSofa").css({"background": "url(img/camaSofaNLe.png) no-repeat center center ","background-size": "60px 70px"});
@@ -675,12 +1010,12 @@ $(document).ready(function(){
 
             camaMPu=1;
 
-            if ($('#cboxfechaFin').val() == 0) {//chboxfechafin no check
+            if ($('#cboxfechaHasta').val() == 0) {//cboxfechaHasta no check
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
             }
-            else{//cuando cheboxfinfecha esta chek
+            else{//cuando cheboxFechaHasta esta chek
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && finFMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
@@ -696,7 +1031,8 @@ $(document).ready(function(){
             $("#btnContinuarHabitacion").css({"background-color":"#808080"});//gris tema 
         }              
     });
-    $("#imgCaLitera").click(function(){        
+    $("#imgCaLitera").click(function(){
+        continuarHabi=1;        
         if ($contHaCaLitera % 2 == 0) {
             $contHaCaLitera++;
             $("#imgCaLitera").css({"background": "url(img/camaLiteraNLe.png) no-repeat center center ","background-size": "60px 70px"});
@@ -720,12 +1056,12 @@ $(document).ready(function(){
 
             camaMPu=1;
 
-            if ($('#cboxfechaFin').val() == 0) {//chboxfechafin no check
+            if ($('#cboxfechaHasta').val() == 0) {//cboxfechaHasta no check
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
             }
-            else{//cuando cheboxfinfecha esta chek
+            else{//cuando cheboxFechaHasta esta chek
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && finFMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
@@ -741,7 +1077,8 @@ $(document).ready(function(){
             $("#btnContinuarHabitacion").css({"background-color":"#808080"});//gris tema 
         }              
     });
-    $("#imgCaSolos").click(function(){        
+    $("#imgCaSolos").click(function(){ 
+        continuarHabi=1;       
         if ($contHaCaSolos % 2 == 0) {
             $contHaCaSolos++;
             $("#imgCaSolos").css({"background": "url(img/camaSolosNLe.png) no-repeat center center ","background-size": "60px 70px"});
@@ -765,12 +1102,12 @@ $(document).ready(function(){
 
             camaMPu=1;
 
-            if ($('#cboxfechaFin').val() == 0) {//chboxfechafin no check
+            if ($('#cboxfechaHasta').val() == 0) {//chboxfechafin no check
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
             }
-            else{//cuando cheboxfinfecha esta chek
+            else{//cuando cheboxFechaHastacheboxFechaHasta esta chek
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && finFMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
@@ -787,7 +1124,8 @@ $(document).ready(function(){
             $("#btnContinuarHabitacion").css({"background-color":"#808080"});//gris tema 
         }              
     });
-    $("#imgCaNada").click(function(){        
+    $("#imgCaNada").click(function(){  
+        continuarHabi=1;      
         if ($contHaCaNada % 2 == 0) {
             $contHaCaNada++;
             $("#imgCaNada").css({"background": "url(img/camaNadaNLe.png) no-repeat center center ","background-size": "60px 70px"});
@@ -811,12 +1149,12 @@ $(document).ready(function(){
 
             camaMPu=1;
 
-            if ($('#cboxfechaFin').val() == 0) {//chboxfechafin no check
+            if ($('#cboxfechaHasta').val() == 0) {//chboxfechafin no check
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
             }
-            else{//cuando cheboxfinfecha esta chek
+            else{//cuando cheboxFechaHasta esta chek
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && finFMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
@@ -833,98 +1171,101 @@ $(document).ready(function(){
             $("#btnContinuarHabitacion").css({"background-color":"#808080"});//gris tema 
         }              
     });
-
-    var today = new Date();
-    var date = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
-    var time = today.getHours() + ":" + today.getMinutes();
-    var dateTime = date+' '+time;    
-    
-    $("#fechaDesde").val(date);
+   
+        var today = new Date();
+        var date = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+        var time = today.getHours() + ":" + today.getMinutes();
+        var dateTime = date+' '+time;            
+        //$("#fechaDesde").val(date);   
 
     $('#fechaDesde').datepicker({
-        format: 'dd/mm/yyyy',
+        format:'yyyy/m/d',
         startDate: dateTime,
         todayBtn: true,
         autoclose: true,        
     }).on('changeDate', function(ev) {
-        alert("fechaDesde");
-        $("#cboxfechaFin").prop('disabled', false);
-        $("#mensajeErrorHasta").html(" ");
-        var selected = new Date(ev.date); 
-        if (selected.getDate()!=1) {
-            $fechaInErrorPu = "Aconsejamos que elija el 1 de cada mes.";        
-            $("#mensajeErrorDisponibleD").html($fechaInErrorPu);    
-        }
-        else{
-            $("#mensajeErrorDisponibleD").html("");    
-        }
+        
+        console.log("changeDate fechaDesde"+$('#fechaDesde').val());
+        var selected = new Date(ev.date);       
         $("#fechaHasta").datepicker('setStartDate', new Date(selected.setDate(selected.getDate() + 30)));
-            
-        inFMPu=1;
-        if ($('#cboxfechaFin').val() == 0) {//chboxfechafin no check
+        
+        if(datosConHabi ==0 ){ 
+            continuarHabi=1;
+            $("#cboxfechaHasta").prop('disabled', false);           
+            inFMPu=1;
+            $("#mensajeErrorHasta").html(""); 
+        }
+        if (datosConHabi==1) {
+           // $("#cboxfechaHasta").prop('disabled', true);
+           // inFMPu=0;
+            datosConHabi=0;
+        }
+        
+        if ($('#cboxfechaHasta').val() == 0) {//chboxfechafin no check
             if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
                 $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
             }
         }
-        else{//cuando cheboxfinfecha esta chek
+        else{//cuando cheboxFechaHasta esta chek
             if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && finFMPu == 1 && dimMPu == 1) {
                 $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
             }
-        }               
+        } 
     });
+    $("#containerHasta").click(function(){
 
+        if (inFMPu == 0) {
+            $hastaErrorPu = "Antes elige una fecha de inicio.";        
+            $("#mensajeErrorHasta").html($hastaErrorPu);  
+        }
+        //alert("click check");
+    });
+    $("#cboxfechaHasta").click(function(){
+        event.stopPropagation();
+        if ($('#cboxfechaHasta').prop('checked')){
+            $contFinFecha=1;
+            $('#cboxfechaHasta').val('1');              
+            $("#collapseHasta").collapse('show');
+            $(".container-custom-principal .contenedorHasta-collapse-custom").css({"margin-bottom": "0px","border-bottom": "none"});                          
+            if (camaMPu == 1 && inFMPu == 1 && finFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
+                $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
+            }
+            else{
+                $("#btnContinuarHabitacion").css({"background-color":"#808080"});//gris tema     
+            }
+        }
+        else{
+            continuarHabi=1;            
+            $("#collapseHasta").collapse('hide');
+            $('#cboxfechaHasta').val('0');
+            //$("#fechaHasta").val("");
+            $("#mensajeErrorHasta").html("");
+            //finFMPu=0;
+            //$('#cboxfechaHasta').prop('disabled',true);  
+            $(".container-custom-principal .contenedorHasta-collapse-custom").css({"margin-bottom": "10px","border-bottom": "1px solid #008080"});            
+            if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
+                $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
+            }
+        }                    
+    });
     $('#fechaHasta').datepicker({
-        format: 'dd/mm/yyyy',        
+        format: 'yyyy/m/d',        
         autoclose: true,        
     }).on('changeDate',function(e){
-        alert("fechaHasta");
+        console.log("changeDate fechaHasta"+$('#fechaHasta').val());
         if ($contFinFecha>0) {        
-            finFMPu=1;            
+            finFMPu=1;
+            continuarHabi=1;            
         }        
         if (camaMPu == 1 && inFMPu == 1 && finFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
             $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
         } 
         $("#mensajeErrorDisponibleH").html("");   
+        $("#mensajeErrorHasta").html("");
     });    
-
-    $("#hasta").click(function(){
-        //continuarVi=1;
-        if (inFMPu==1) {
-            //$("#cboxfechaFin").prop('disabled', false);
-            if ($('#cboxfechaFin').prop('checked')){
-            
-                $('#cboxfechaFin').val('0');
-                $("#cboxfechaFin").prop('checked', false);
-                $("#collapseHasta").collapse('hide');
-               // $("#fechaHasta").attr({'required':false});            
-                $(".container-custom-principal .contenedorHasta-collapse-custom").css({"margin-bottom": "10px","border-bottom": "1px solid #008080"});            
-                if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
-                    $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
-                } 
-            } 
-            else{
-                $('#cboxfechaFin').val('1');            
-                $("#cboxfechaFin").prop('checked', true);
-                $("#collapseHasta").collapse('show');
-                $(".container-custom-principal .contenedorHasta-collapse-custom").css({"margin-bottom": "0px","border-bottom": "none"});            
-                if (inFMPu==1) {
-                    $contFinFecha=1;    
-                }            
-                if (camaMPu == 1 && inFMPu == 1 && finFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
-                    $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
-                }
-                else{
-                    $("#btnContinuarHabitacion").css({"background-color":"#808080"});//gris tema     
-                }            
-            }
-        }
-        else{
-            $hastaErrorPu = "Antes elige una fecha de inicio.";        
-            $("#mensajeErrorHasta").html($hastaErrorPu);
-        }
-                      
-    });
-    $("#imgHaS").click(function(){        
+    
+    $("#imgHaS").click(function(){
+        continuarHabi=1;        
         if ($contHaS % 2 == 0) {
             $contHaS++;
             $("#imgHaS").css({"background": "url(img/dimensionesSNLe.png) no-repeat center center ","background-size": "60px 70px"});
@@ -941,12 +1282,12 @@ $(document).ready(function(){
                */ 
             dimMPu=1;
 
-            if ($('#cboxfechaFin').val() == 0) {//chboxfechafin no check
+            if ($('#cboxfechaHasta').val() == 0) {//chboxfechafin no check
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
             }
-            else{//cuando cheboxfinfecha esta chek
+            else{//cuando cheboxFechaHasta esta chek
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && finFMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
@@ -962,7 +1303,8 @@ $(document).ready(function(){
             $("#btnContinuarHabitacion").css({"background-color":"#808080"});//gris tema 
         }              
     });
-    $("#imgHaM").click(function(){        
+    $("#imgHaM").click(function(){
+        continuarHabi=1;        
         if ($contHaM % 2 == 0) {
             $contHaM++;
             $("#imgHaM").css({"background": "url(img/dimensionesMNLe.png) no-repeat center center ","background-size": "60px 70px"});
@@ -977,12 +1319,12 @@ $(document).ready(function(){
             
            dimMPu=1;
 
-            if ($('#cboxfechaFin').val() == 0) {//chboxfechafin no check
+            if ($('#cboxfechaHasta').val() == 0) {//cheboxFechaHasta no check
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
             }
-            else{//cuando cheboxfinfecha esta chek
+            else{//cuando cheboxFechaHasta esta chek
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && finFMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
@@ -998,7 +1340,8 @@ $(document).ready(function(){
             $("#btnContinuarHabitacion").css({"background-color":"#808080"});//gris tema 
         }              
     });
-    $("#imgHaL").click(function(){        
+    $("#imgHaL").click(function(){
+        continuarHabi=1;        
         if ($contHaL % 2 == 0) {
             $contHaL++;
             $("#imgHaL").css({"background": "url(img/dimensionesLNLe.png) no-repeat center center ","background-size": "60px 70px"});
@@ -1013,12 +1356,12 @@ $(document).ready(function(){
             
            dimMPu=1;
 
-            if ($('#cboxfechaFin').val() == 0) {//chboxfechafin no check
+            if ($('#cboxfechaHasta').val() == 0) {//cboxfechaHasta no check
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
             }
-            else{//cuando cheboxfinfecha esta chek
+            else{//cuando cheboxFechaHasta esta chek
                 if (camaMPu == 1 && inFMPu == 1 && inMMPu == 1 && finFMPu == 1 && dimMPu == 1) {
                     $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema 
                 }
@@ -1050,7 +1393,7 @@ $(document).ready(function(){
                 mapTypeControl: true,
                 streetViewControl: false,
             });
-            alert("latlon "+Latitude+" "+Longitude);           
+            //alert("latlon "+Latitude+" "+Longitude);           
             // Creamos el marcador
             //Creamos el marcador en el mapa con sus propiedades
             //para nuestro obetivo tenemos que poner el atributo draggable en true
@@ -1058,44 +1401,53 @@ $(document).ready(function(){
             markerD = new google.maps.Marker({
                 map: mapD,
                 position: {lat: Latitude, lng: Longitude},
-                position: new google.maps.LatLng(Latitude,Longitude),
-                draggable: true
+                position: new google.maps.LatLng(Latitude,Longitude)
+                //draggable: true
             });
                       
             //agregamos un evento al marcador junto con la funcion callback al igual que el evento dragend que indica 
             //cuando el usuario a soltado el marcador
-            markerD.addListener('click', toggleBounce);//para animar el marcador      
-            markerD.addListener( 'dragend', function (event){
+           // markerD.addListener('click', toggleBounce);//para animar el marcador      
+            //google.maps.event.addListener(mapD, 'dragend', function(res) { alert('map dragged '+ JSON.stringify()); } );
+
+            /*mapD.addListener( 'dragend', function (){
+                /*console.log(" dragend "+ JSON.stringify(markerD)); 
+                console.log(" dragend "+ JSON.stringify(markerD)); 
             //escribimos las coordenadas de la posicion actual del marcador dentro del input #coords
             //document.getElementById("latlon").innerHTML = this.getPosition().lat()+","+ this.getPosition().lng();
-            });
+            });*/
+
             markerD.setMap(mapD);
             // creamos el objeto geodecoder
+            
             var geocoderD = new google.maps.Geocoder();
             // muestra las ciudad y la direccion 
             geocoderD.geocode({'latLng': markerD.getPosition()}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
-                    $('#direccionMPu').val(results[0].address_components[1].short_name+", "+results[0].address_components[0].short_name);
                     $('#ciudadMpu').val(results[0].address_components[2].short_name+", "+results[0].address_components[3].short_name);
+                    $('#direccionMPu').val(results[0].formatted_address);//(results[0].address_components[1].short_name+", "+results[0].address_components[0].short_name);
+                    //+", "+results[4].address_components[0].short_name zona como maternidad i sant ramon
                     $("#btnContinuarDireccion").css({"background-color":"#008080"});
                     //alert("entra linkBuscarDireccion " + results.length);
-                    //console.log("latlon "+ JSON.stringify(results));
+                    console.log("lat lon "+ JSON.stringify(results));
                     $("#mensajeErrorCiudad").html("");
                     $("#mensajeErrorDireccion").html("");
                     $("#mensajeErrorDireccionT").html("");
-                    miresult=results;
+                    //miresult=results;
                     addressD1 = results[0].address_components[1].short_name+", "+results[0].address_components[0].short_name;//calle
                     addressD2 = results[0].address_components[2].short_name;//zona
                     ciudadN1 = results[0].address_components[2].short_name;//zona
                     ciudadN2 = results[0].address_components[3].short_name;//ciudad
+                    addressPostal = results[0].address_components[6].short_name;//postal
                     
-                    addressLat= miresult[0].geometry.location.lat();
+                    addressLat= results[0].geometry.location.lat();
                     addressLon= results[0].geometry.location.lng();
 
                     linkBuscarDir=1;
                     autoCCiu=1;
                     autoCDir=1;
-                    continuarDir=1;    
+                    continuarDir=1; 
+                    console.log("linkMapaBuscar "+ JSON.stringify(results));   
                 }
                 else {
                     alert("El Servicio de Codificación Geográfica ha fallado con el siguiente error: " + status + " Intente una vez mas por favor ");
@@ -1105,29 +1457,39 @@ $(document).ready(function(){
                     autoCDir=0;
                     //alert("else "+ linkBuscarDir)
                 }
-            });                    
+
+            });   /*
+            mapD.addListener('center_changed', function(){
+                markerD.setPosition(mapD.getCenter());
+                
+                //console.log('center_changed '+ (markerD.position.lat));
+            })   */              
             // le asignamos una funcion al eventos dragend del marcado
-            google.maps.event.addListener(markerD, 'dragend', function() {
-                geocoderD.geocode({'latLng': markerD.getPosition()}, function(results, status) {
+            google.maps.event.addListener(mapD, 'center_changed', function() {
+                markerD.setPosition(mapD.getCenter());
+            });
+            google.maps.event.addListener(mapD, 'dragend', function() {
+                //markerD.setPosition(mapD.getCenter());
+                geocoderD.geocode({'latLng': markerD.getPosition()}, function(miresults, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
                         //var address=results[0]['formatted_address'];
-                        $('#direccionMPu').val(results[0].address_components[1].short_name+", "+results[0].address_components[0].short_name);
-                        $('#ciudadMpu').val(results[0].address_components[2].short_name+", "+results[0].address_components[3].short_name);
-                        miresult=results;
-                        addressD1 =results[0].address_components[2].short_name;//calle
-                        addressD2 = results[0].address_components[2].short_name;//zona
-                        ciudadN1 = results[0].address_components[2].short_name;//zona                        
-                        ciudadN2 = results[0].address_components[3].short_name;//ciudad
+                        $('#direccionMPu').val(miresults[0].formatted_address);
+                        $('#ciudadMpu').val(miresults[0].address_components[2].short_name+", "+miresults[0].address_components[3].short_name);
+                        //miresult=results;
+                        addressD1 =miresults[0].address_components[1].short_name+", "+miresults[0].address_components[0].short_name;//calle
+                        addressD2 = miresults[0].address_components[2].short_name;//zona
+                        ciudadN1 = miresults[0].address_components[2].short_name;//zona                        
+                        ciudadN2 = miresults[0].address_components[3].short_name;//ciudad
+                        addressPostal = miresults[0].address_components[6].short_name;//postal
 
-                        addressLat= miresult[0].geometry.location.lat();
-                        addressLon= results[0].geometry.location.lng();
+                        addressLat= miresults[0].geometry.location.lat();
+                        addressLon= miresults[0].geometry.location.lng();
                     
                         linkBuscarDir=1;
                         autoCCiu=1;
                         autoCDir=1;
                         continuarDir=1; 
-                        //alert(address);
-                        //linkBuscarDir=1;
+                        console.log("dragend "+ JSON.stringify(miresults));
                     }
                     else {
                         alert("El Servicio de Codificación Geográfica ha fallado con el siguiente error: " + status + " Intente una vez mas por favor ");
@@ -1146,10 +1508,20 @@ $(document).ready(function(){
         $("#mapDireccionBuscar").css("display", "block"); 
         $("#mapDireccionLink").css("display", "none");
     });
-    
-//    $("#filePublicar").on("change", handleFileSelect);     
-   // $("#imgPublicar").on("click", ".removeImgPublicar", removeFile);
+/*
+$(window).on("scroll", function(e) {
+    Desplazamiento_Actual = window.pageYOffset;
+    if(ubicacionPrincipal >= Desplazamiento_Actual){
+        document.getElementById('navbar').style.top = '0';
+    }
+    else{
+        document.getElementById('navbar').style.top = '-100px';
+    }
+    ubicacionPrincipal = Desplazamiento_Actual;#mensajeCiudad
+  $l=$("#divFooter").offset().top;
+    console.log("$l "+$l);  
    
+  
    $prevScrollpos = window.pageYOffset;
     $(window).scroll(function(){
         $currentScrollPos = window.pageYOffset;
@@ -1157,30 +1529,46 @@ $(document).ready(function(){
         //if ($('#navbar').scrollTop()>100) 
         if($prevScrollpos>$currentScrollPos)
         {
-            $('#inputBuscar').collapse('show');
+            //$('#inputBuscar').collapse('show');
             $('#btnPublicarPrincipal').fadeIn(1000);
             //$("#btnPublicarPrincipal").animate({bottom: "75px"});       
            // $('#btnPublicarPrincipal').slideDown();        
             
         }
         else{
-            $('#inputBuscar').collapse('hide');
+            //$('#inputBuscar').collapse('hide');
             $('#btnPublicarPrincipal').fadeOut(1000);
             //$("#btnPublicarPrincipal").animate({bottom: "0"}); 
             //$('#btnPublicarPrincipal').slideUp();
             
         }  
         $prevScrollpos = $currentScrollPos;  
-    });  
+    });*/  
+
 });//fin $(document).ready(function()
 
-function toggleBounce() {
+
+ ubicacionPrincipal  = window.pageYOffset;
+   $(window).on("scroll",function(e){
+        DesplazamientoActual = window.pageYOffset;
+        if(ubicacionPrincipal >= DesplazamientoActual){
+            document.getElementById('inputBuscar').style.top = '0';
+            //document.getElementById('btnPublicarPrincipal').style.bottom = '0';
+        }
+        else{
+            document.getElementById('inputBuscar').style.top = '-50px';
+            //document.getElementById('btnPublicarPrincipal').style.bottom = '-70';
+        }
+        ubicacionPrincipal = DesplazamientoActual;
+   });
+
+/*function toggleBounce() {
   if (markerD.getAnimation() !== null) {
     markerD.setAnimation(null);
   } else {
     markerD.setAnimation(google.maps.Animation.BOUNCE);
   }
-}
+}*/
 
 function inicioSesion(){
     $datosLocal=JSON.parse(localStorage.getItem('datosInicioSesion'));
@@ -1240,22 +1628,11 @@ function iniciarSession(){
     });    
 }
 // cPassword =0 no se cambio el password =1 se cambio pasword  
-
-
 function activarSwipe(){
-        //alert("entra");
-        //event.preventDefault();
-       // $("#aBuscarMapa").tab('show'); 
-    var swiper = new Swiper('.swiper-container', {
-      slidesPerView: 'auto',
-      centeredSlides: true,
-      spaceBetween: 10
-      //touchMoveStopPropagation:false
-      //preventClicksPropagation:true
-      /*pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },*/
+    swiper = new Swiper('.swiper-container', {
+        slidesPerView: 'auto',
+        centeredSlides: true,
+        spaceBetween: 10      
     });
   }
 // al continuar direcion insertamos o actualizamos datos de direccion,mostramos foto y datos consultamos si hay datos y fotos en la bse de datos 
@@ -1263,7 +1640,8 @@ function continuarDireccion(){
     event.preventDefault();
     $dirDireccion=addressD1;//dir
     $dirZona=ciudadN1;//zona
-    $dirCiudad=ciudadN2;//ciudad    
+    $dirCiudad=ciudadN2;//ciudad
+    $dirPostal=addressPostal;//postal    
     $dirLat=addressLat;
     $dirLon=addressLon;
     $(".div-custom-principal .divPublicar").css({"padding":"10px","background-color": "#fff"});
@@ -1274,28 +1652,26 @@ function continuarDireccion(){
     $("#publicarHabitacion").css("display","none");     
     $(".container-custom-principal .progressbar-bar-custom").css("width", "50%");
     
-    $("#mensajePublicar").html($datosLocal['usrEmail']);
-    $("#mensajePublicar1").html($("#ciudadMpu").val());
-    $("#mensajePublicar2").html($("#direccionMPu").val());
-    $("#mensajePublicar3").html(addressLat);
-    $("#mensajePublicar4").html(addressLon);    
+    $("#mensajePublicar4").html(addressPostal);    
     //direccion nueva
-    if (continuarDir==1 ){        
+    if (continuarDir==1 ){ 
+        console.log("continuarDir "+continuarDir);       
         //no existe direccion en la base de datos insertar direccion        
-        if ($datosLocalDir['publicado']==-1) {            
+        if ($datosLocalDir['publicado']==-1) { 
+            console.log("insertar direccion $datosLocalDir['publicado'] "+$datosLocalDir['publicado']);           
             $.ajax({
                 type: "POST",
                 dataType: 'json',
                 url: 'http://' + ipConex + '/wasiWeb/php/insertarDirecion.php',
-                data: {idUsuario:$datosLocal['usrId'],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon},                 
+                data: {idUsuario:$datosLocal['usrId'],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon,cPostal:$dirPostal},                 
                 crossDomain: true,
                 cache: false,
                 success: function(datosInsDir){
                     console.log("datosInslDir "+ JSON.stringify(datosInsDir));
                     $datosRemotoInsDir=JSON.stringify(datosInsDir);
-                    localStorage.setItem('datosDir', $datosRemotoInsDir);                    
-                    continuarDir=0; 
-                    $datosLocalDir=JSON.parse(localStorage.getItem('datosDir'));         
+                    localStorage.setItem('datosDir', $datosRemotoInsDir);                      
+                    $datosLocalDir=JSON.parse(localStorage.getItem('datosDir'));
+                    continuarDir=0;         
                     console.log(" continuarDireccion()=-1 datosLocalInsDir "+ JSON.stringify($datosLocalDir));
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
@@ -1303,13 +1679,14 @@ function continuarDireccion(){
                 }
             });
         }
-        //existe direccion en la base de datos, actualizar direccion
-        if ($datosLocalDir['publicado']==0) {
+        //existe direccion en la base de datos, actualizar direccion 0 no termino la publicacion 1 termino la publicacion
+        if ($datosLocalDir['publicado']==0 || $datosLocalDir['publicado']==1) {
+            console.log("actualizar direccion $datosLocalDir['publicado'] "+$datosLocalDir['publicado']);
             $.ajax({
                 type: "POST",
                 dataType: 'json',
                 url: 'http://' + ipConex + '/wasiWeb/php/actualizarDireccion.php',
-                data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon},                 
+                data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon,cPostal:$dirPostal},                 
                 crossDomain: true,
                 cache: false,
                 success: function(datosActDir){
@@ -1329,7 +1706,7 @@ function continuarDireccion(){
     //consultamos si hay datos almacenados en tabla publicaciones y fotopublicaciones
     if (btnAtrasFoto==0) {// 0 si no presiono btnAtrasFoto 1 si se presiono   
         // verificar si hay fotos en la base de datos
-        if ($datosLocalDir['publicado']==0) {
+        if ($datosLocalDir['publicado']==0 || $datosLocalDir['publicado']==1) {// 0 existe datos no publicado , 1 existe datos si publicado
             $.ajax({
                 type: "POST",
                 dataType: 'json',
@@ -1362,6 +1739,7 @@ function continuarDireccion(){
                         $("#tituloMPu").val(datosFoto['titulo']);
                         $("#precioMPu").val(datosFoto['precio']);
                         if (datosFoto['incluye']==1) {
+
                             $("#cboxIncluyeGastos").prop('checked', true);
                             $("#cboxIncluyeGastos").val(datosFoto['incluye']);
                         }
@@ -1423,8 +1801,7 @@ function continuarFotoUbi(){
         });        
     }
     // consultamos si hay datos almacenados en tabala caracteristicas_vi_servicios 
-
-    if (btnAtrasVi==0) {// 
+    if (btnAtrasVi==0){// 
         $.ajax({
             type: "POST",
             dataType: 'json',
@@ -1440,13 +1817,21 @@ function continuarFotoUbi(){
                         $("#imgViSolo").css({"background": "url(img/camaSN.png) no-repeat center center ","background-size": "60px 70px"});
                         $("#imgViSolo").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
                         $("#radioViSolo").prop('checked', true);
+                        $contViSolo++;
                         qMPu=1;
+                        $("#imgViComp").css({"background": "url(img/camaLG.png) no-repeat center center ","background-size": "60px 70px"});
+                        $("#imgViComp").css({"border-color":"#999999","box-shadow": "none "}); 
+                        
                     }
                     if (datosVivienda['quePublicas']==2){//marcamos Hab. compartido
                         $("#imgViComp").css({"background": "url(img/camaLN.png) no-repeat center center ","background-size": "60px 70px"});
                         $("#imgViComp").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
                         $("#radioViComp").prop('checked', true);
+                        $contViComp++;
                         qMPu=1;
+                        $("#imgViSolo").css({"background": "url(img/camaSG.png) no-repeat center center ","background-size": "60px 70px"});
+                        $("#imgViSolo").css({"border-color":"#999999","box-shadow": "none"}); 
+                        
                     }                        
                     if (datosVivienda['cuantosVivenHo']>0) {
                         $("#imgViHo").css({"background": "url(img/hombreNViPu.png) no-repeat center center ","background-size": "85px 85px"});
@@ -1575,18 +1960,21 @@ function continuarFotoUbi(){
                         $("#cboxNoFumar").prop('checked', true);
                         $("#imgNoPeFumar").css({"background": "url(img/noFumarNLe.png) no-repeat center center ","background-size": "58px 68px"});
                         $("#imgNoPeFumar").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"});     
+                        
                     }
                     if (datosVivienda['noMascota']==1) {
                         $('#cboxNoMascota').val('1');
                         $("#cboxNoMascota").prop('checked', true);            
                         $("#imgNoPeMascota").css({"background": "url(img/noMascotaNLe.png) no-repeat center center ","background-size": "58px 68px"});
                         $("#imgNoPeMascota").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
+                  
                     }
                     if (datosVivienda['noPareja']==1) {
                         $('#cboxNoPareja').val('1');
                         $("#cboxNoPareja").prop('checked', true);            
                         $("#imgNoPePareja").css({"background": "url(img/noParejaNLe.png) no-repeat center center ","background-size": "58px 68px"});
                         $("#imgNoPePareja").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
+                    
                     }
                     $("#btnContinuarVi").css({"background-color":"#008080"});//color tema                
                     continuarVi = 0;
@@ -1625,7 +2013,7 @@ function guardarServicios(){
     }
     if (btnAtrasSe == 0) {//no se presiona boton atras servicios 
         if (guardarSe == 0) {// no hay datos insertados en la base de datos
-            alert("insertar"); 
+           // alert("insertar"); 
             $.ajax({
                 type: "POST",
                 dataType: 'json',
@@ -1644,7 +2032,7 @@ function guardarServicios(){
             });
         }
         else{
-            alert("actualizar");
+            //alert("actualizar");
             $.ajax({
                 type: "POST",
                 dataType: 'json',
@@ -1662,32 +2050,18 @@ function guardarServicios(){
         }
         btnAtrasSe=1;
     }
-
 }
- 
-/*    else{//si se presiono btnAtrasServicio guardarSe = -1
-        alert($guardarSeAnt);
-        guardarSe=$guardarSeAnt;        
-    }   
-}*/
+
 function continuarVivienda(){
     event.preventDefault(); 
-    /*$("#paginaPrincipal").css("display", "none");
-    $("#paginaListaMapas").css("display", "none"); 
-    $("#paginaPublicar").css("display", "block");*/
     $("#publicarFotoUbicacion").css("display","none");
     $("#publicarVivienda").css("display","none");
     $("#publicarHabitacion").css("display","block");        
-    /*$("#paginaMensaje").css("display", "none");            
-    $("#paginaUsuarioPerfilEditar").css("display", "none");
-    $("#paginaUsuarioPerfilMostrar").css("display", "none");
-    $("#divFooter").css("display", "none");
-   */   
+       
     $(".container-custom-principal .progressbar-bar-custom").css("width", "100%");
-   //
+   
     if(continuarVi==1){ // insertamos datos  
-         //no existe datos de vivienda  en la base de datos insertar direccion        
-         //if ($datosLocalDir['publicado_vi']==-1) {
+         //no existe datos de vivienda  en la base de datos insertar direccion                 
         $.ajax({
             type: "POST",
             dataType: 'json',
@@ -1696,7 +2070,7 @@ function continuarVivienda(){
             crossDomain: true,
             cache: false,
             success: function(datosInsViSeHa){
-                alert("exitos");
+               // alert("exitos");
                 $datosRemotoInsViSeHa=JSON.stringify(datosInsViSeHa);
                 localStorage.setItem('datosViSeHa', $datosRemotoInsViSeHa);
                 $datosLocalViSeHa=JSON.parse(localStorage.getItem('datosViSeHa')); 
@@ -1711,7 +2085,8 @@ function continuarVivienda(){
     if (btnAtrasHabi==0) {// 0 si no presiono btnAtrasHabi, 1 si se presiono   
         // verificar si hay datos en la base de datos
         
-        if ($datosLocalDir['publicado']==0) {
+        if ($datosLocalDir['publicado']==0 || $datosLocalDir['publicado']==1) {
+            
             $.ajax({
                 type: "POST",
                 dataType: 'json',
@@ -1720,66 +2095,142 @@ function continuarVivienda(){
                 crossDomain: true,
                 cache: false,
                 success: function(datosConHabitacion){
+                    $datosRemotoConHabi=JSON.stringify(datosConHabitacion);
+                    localStorage.setItem('datosHabi', $datosRemotoConHabi);
+                    $datosLocalHabi=JSON.parse(localStorage.getItem('datosHabi')); 
+                    //continuarDir=0; 
+                    console.log("datosConHabitacion "+JSON.stringify(datosConHabitacion));                                                    
+                    
                     if (datosConHabitacion['publicadoHabi']==1) {
+                        datosConHabi=1;//para usar en datepicker despes de cargar los datos si existe 
                         if (datosConHabitacion['cama']==1) {//marcamos cama. solo
                             $("#imgCaSolo").css({"background": "url(img/camaSimpleNLe.png) no-repeat center center ","background-size": "60px 70px"});
                             $("#imgCaSolo").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
                             $("#radioCaSolo").prop('checked', true);
+                            $contHaCaSolo++;
                             camaMPu=1;
+
+                            $("#imgCaDoble").css({"background": "url(img/camaDobleGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaDoble").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaSofa").css({"background": "url(img/camaSofaGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSofa").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaLitera").css({"background": "url(img/camaLiteraGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaLitera").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaSolos").css({"background": "url(img/camaSolosGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSolos").css({"border-color":"#999999","box-shadow": ""}); 
+                            $("#imgCaNada").css({"background": "url(img/camaNadaGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaNada").css({"border-color":"#999999","box-shadow": " "});  
                         }
                         if (datosConHabitacion['cama']==2){//marcamos cama. doble
                             $("#imgCaDoble").css({"background": "url(img/camaDobleNLe.png) no-repeat center center ","background-size": "60px 70px"});
                             $("#imgCaDoble").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
                             $("#radioCaDoble").prop('checked', true);
+                            $contHaCaDoble++;
                             camaMPu=1;
+
+                            $("#imgCaSolo").css({"background": "url(img/camaSimpleGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSolo").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaSofa").css({"background": "url(img/camaSofaGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSofa").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaLitera").css({"background": "url(img/camaLiteraGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaLitera").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaSolos").css({"background": "url(img/camaSolosGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSolos").css({"border-color":"#999999","box-shadow": ""}); 
+                            $("#imgCaNada").css({"background": "url(img/camaNadaGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaNada").css({"border-color":"#999999","box-shadow": " "});
                         }
                         if (datosConHabitacion['cama']==3){//marcamos cama. camasofa
                             $("#imgCaSofa").css({"background": "url(img/camaSofaNLe.png) no-repeat center center ","background-size": "60px 70px"});
                             $("#imgCaSofa").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
                             $("#radioCaSofa").prop('checked', true);
+                            $contHaCaSofa++;
                             camaMPu=1;
+
+                            $("#imgCaSolo").css({"background": "url(img/camaSimpleGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSolo").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaDoble").css({"background": "url(img/camaDobleGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaDoble").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaLitera").css({"background": "url(img/camaLiteraGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaLitera").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaSolos").css({"background": "url(img/camaSolosGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSolos").css({"border-color":"#999999","box-shadow": ""}); 
+                            $("#imgCaNada").css({"background": "url(img/camaNadaGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaNada").css({"border-color":"#999999","box-shadow": " "});
                         }                        
                         if (datosConHabitacion['cama']==4){//marcamos cama. litera
                             $("#imgCaLitera").css({"background": "url(img/camaLiteraNLe.png) no-repeat center center ","background-size": "60px 70px"});
                             $("#imgCaLitera").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
                             $("#radioCaLitera").prop('checked', true);
+                            $contHaCaLitera++;
                             camaMPu=1;
+
+                            $("#imgCaSolo").css({"background": "url(img/camaSimpleGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSolo").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaDoble").css({"background": "url(img/camaDobleGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaDoble").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaSofa").css({"background": "url(img/camaSofaGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSofa").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaSolos").css({"background": "url(img/camaSolosGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSolos").css({"border-color":"#999999","box-shadow": ""}); 
+                            $("#imgCaNada").css({"background": "url(img/camaNadaGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaNada").css({"border-color":"#999999","box-shadow": " "});
                         }
                         if (datosConHabitacion['cama']==5){//marcamos cama. solos 
                             $("#imgCaSolos").css({"background": "url(img/camaSolosNLe.png) no-repeat center center ","background-size": "60px 70px"});
                             $("#imgCaSolos").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
                             $("#radioCaSolos").prop('checked', true);
+                            $contHaCaSolos++;
                             camaMPu=1;
+
+                            $("#imgCaSolo").css({"background": "url(img/camaSimpleGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSolo").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaDoble").css({"background": "url(img/camaDobleGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaDoble").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaSofa").css({"background": "url(img/camaSofaGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSofa").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaLitera").css({"background": "url(img/camaLiteraGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaLitera").css({"border-color":"#999999","box-shadow": ""}); 
+                            $("#imgCaNada").css({"background": "url(img/camaNadaGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaNada").css({"border-color":"#999999","box-shadow": " "});
                         }
                         if (datosConHabitacion['cama']==6){//marcamos cama. nada
                             $("#imgCaNada").css({"background": "url(img/camaNadaNLe.png) no-repeat center center ","background-size": "60px 70px"});
                             $("#imgCaNada").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
                             $("#radioCaNada").prop('checked', true);
+                            $contHaCaNada++;
                             camaMPu=1;
+
+                            $("#imgCaSolo").css({"background": "url(img/camaSimpleGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSolo").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaDoble").css({"background": "url(img/camaDobleGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaDoble").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaSofa").css({"background": "url(img/camaSofaGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSofa").css({"border-color":"#999999","box-shadow": " "}); 
+                            $("#imgCaLitera").css({"background": "url(img/camaLiteraGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaLitera").css({"border-color":"#999999","box-shadow": ""}); 
+                            $("#imgCaSolos").css({"background": "url(img/camaSolosGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgCaSolos").css({"border-color":"#999999","box-shadow": " "});
                         } 
                         $("#fechaDesde").val(datosConHabitacion['fechaDesde']);                        
                         inFMPu=1;
+                        $contInFecha=1;//se cargo la fecha y con update llama a $("#fechaDesde").datepicker()
+                        $("#fechaDesde").datepicker('update',datosConHabitacion['fechaDesde']);//('setDate', null);//('setStartDate', datosConHabitacion['fechaDesde']);
 
                         if (datosConHabitacion['hasta']==1) {
-                            alert("datosConHabitacion['hasta'] " + datosConHabitacion['hasta'] + " fechaHasta " + datosConHabitacion['fechaHasta']);
-                            $("#cboxfechaFin").prop('checked', true);
-                            $("#cboxfechaFin").val(datosConHabitacion['hasta']);
-                            // aqui fecha hasta colapse true
+                            $("#cboxfechaHasta").prop('checked', true);
+                            $("#cboxfechaHasta").val(datosConHabitacion['hasta']);                            
                             $("#collapseHasta").collapse('show');
-                            $(".container-custom-principal .contenedorHasta-collapse-custom").css({"margin-bottom": "0px","border-bottom": "none"});            
-            
+                            $(".container-custom-principal .contenedorHasta-collapse-custom").css({"margin-bottom": "0px","border-bottom": "none"});                        
                             $("#fechaHasta").val(datosConHabitacion['fechaHasta']);
+                            $("#fechaHasta").datepicker('setStartDate', datosConHabitacion['fechaDesde']);
                             finFMPu=1;
                         }
                         else{
-                            alert("datosConHabitacion['hasta'] " + datosConHabitacion['hasta'] + " fechaHasta " + datosConHabitacion['fechaHasta']);
-                            $("#cboxfechaFin").prop('disabled', true);
-                            $("#cboxfechaFin").prop('checked', false);
-                            $("#cboxfechaFin").val(datosConHabitacion['hasta']);
+                            $("#cboxfechaHasta").prop('checked', false);
+                            $("#cboxfechaHasta").val(datosConHabitacion['hasta']);
                             $("#collapseHasta").collapse('hide');
                             $(".container-custom-principal .contenedorHasta-collapse-custom").css({"margin-bottom": "10px","border-bottom": "1px solid #008080"});            
-                            //finFMPu=0;
-                            $("#fechaHasta").val(" ");
+                            finFMPu=0;                            
                         }                        
                         $("#tiempoMin").val(datosConHabitacion['mesMin']);
                         inMMPu=1;
@@ -1789,24 +2240,43 @@ function continuarVivienda(){
                             $("#imgHaS").css({"background": "url(img/dimensionesSNLe.png) no-repeat center center ","background-size": "60px 70px"});
                             $("#imgHaS").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
                             $("#radioHaS").prop('checked', true);
+                            $contHaS++;
                             dimMPu=1;
+                            $("#imgHaM").css({"border-color":"#999999","box-shadow":""});            
+                            $("#imgHaM").css({"background": "url(img/dimensionesMGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgHaL").css({"border-color":"#999999","box-shadow":""});            
+                            $("#imgHaL").css({"background": "url(img/dimensionesLGLe.png) no-repeat center center ","background-size": "60px 70px"});
                         }
                         if (datosConHabitacion['dimHabitacion']==2){//marcamos Habitacion. mediano
                             $("#imgHaM").css({"background": "url(img/dimensionesMNLe.png) no-repeat center center ","background-size": "60px 70px"});
                             $("#imgHaM").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
                             $("#radioHaM").prop('checked', true);
+                            $contHaM++;
                             dimMPu=1;
+                            $("#imgHaS").css({"border-color":"#999999","box-shadow":""});            
+                            $("#imgHaS").css({"background": "url(img/dimensionesSGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgHaL").css({"border-color":"#999999","box-shadow":""});            
+                            $("#imgHaL").css({"background": "url(img/dimensionesLGLe.png) no-repeat center center ","background-size": "60px 70px"});
                         }
                         if (datosConHabitacion['dimHabitacion']==3){//marcamos Habitacion. pequeño
                             $("#imgHaL").css({"background": "url(img/dimensionesLNLe.png) no-repeat center center ","background-size": "60px 70px"});
                             $("#imgHaL").css({"border-color":"#008080","box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}); 
                             $("#radioHaL").prop('checked', true);
+                            $contHaL++;
                             dimMPu=1;
+                            $("#imgHaS").css({"border-color":"#999999","box-shadow":""});            
+                            $("#imgHaS").css({"background": "url(img/dimensionesSGLe.png) no-repeat center center ","background-size": "60px 70px"});
+                            $("#imgHaM").css({"border-color":"#999999","box-shadow":""});            
+                            $("#imgHaM").css({"background": "url(img/dimensionesMGLe.png) no-repeat center center ","background-size": "60px 70px"});
                         }                                           
                          btnAtrasHabi=1;
                         $("#btnContinuarHabitacion").css({"background-color":"#008080"});//color tema
-                    }                           
-                    console.log("datosConHabitacion "+JSON.stringify(datosConHabitacion));                                           
+                    }
+                    else{
+                        datosConHabi=0;//para usar en datepicker despes de cargar los datos si no existe 
+                        $("#cboxfechaHasta").prop('disabled', true);                         
+                    }                                              
+                    //console.log("datosConHabitacion "+JSON.stringify(datosConHabitacion));                                           
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
                     alert("error consultarFotoPublicado: " + jqXHR.status + " " + textStatus + " " + errorThrown);
@@ -1825,27 +2295,96 @@ function continuarVivienda(){
 function publicarCaHabitacion(){
     event.preventDefault();
     //alert("habitacion publicada");
-   $("#paginaPrincipal").css("display", "block");
+    $("#paginaPrincipal").css("display", "block");
     $("#paginaPublicar").css("display", "none");
     $("#divFooter").css("display", "block");  //tal vez div mensaje tambien 
-    $.ajax({
-        type: "POST",
-        dataType: 'json',
-        url: 'http://' + ipConex + '/wasiWeb/php/insertarHabitacion.php',
-        data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],cama:$("input[name='radioCama']:checked").val(),fechaDesde:$("#fechaDesde").val(),hasta:$("#cboxfechaFin").val(),fechaHasta:$("#fechaHasta").val(),mesMin:$("#tiempoMin").val(),mesMax:$("#tiempoMax").val(),dimHabi:$("input[name='radioHa']:checked").val()},                 
-        crossDomain: true,
-        cache: false,
-        success: function(datosInsHabi){
-            $datosRemotoInsHabi=JSON.stringify(datosInsHabi);
-            localStorage.setItem('datosHabi', $datosRemotoInsHabi);
-            $datosLocalHabi=JSON.parse(localStorage.getItem('datosHabi')); 
-            //continuarDir=0;          
-            console.log("datosLocalHabi "+ JSON.stringify($datosLocalHabi));
-        },
-        error : function(jqXHR, textStatus, errorThrown) {
-            alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+    $(".footer .icoFooterBuscar").css({"background": "url(img/buscarC.png) no-repeat center center","background-size": "30px 30px"});
+    $(".footer .icoFooterPublicar").css({"background": "url(img/publicarG.png) no-repeat center center","background-size": "30px 30px"});
+    $(".footer .icoFooterMensajes").css({"background": "url(img/mensajeG.png) no-repeat center center","background-size": "30px 30px"});
+    $(".footer .icoFooterUsuario").css({"background": "url(img/perfilG.png) no-repeat center center","background-size": "30px 30px"});
+    
+    $("#icoFMBuscar").css({"color":"#008080"});
+    $("#icoFMPublicar").css({"color":"rgba(89, 89, 89, 0.8)"});                       
+    $("#icoFMMensaje").css({"color":"rgba(89, 89, 89, 0.8)"});            
+    $("#icoFMPerfil").css({"color":"rgba(89, 89, 89, 0.8)"});    
+
+
+    if (continuarHabi==1) {
+        //aqui entra si es por primera vez solo insertamos 
+        if ($datosLocalDir['publicado']==0) {
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: 'http://' + ipConex + '/wasiWeb/php/insertarHabitacion.php',
+                data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],cama:$("input[name='radioCama']:checked").val(),fechaDesde:$("#fechaDesde").val(),hasta:$("#cboxfechaHasta").val(),fechaHasta:$("#fechaHasta").val(),mesMin:$("#tiempoMin").val(),mesMax:$("#tiempoMax").val(),dimHabi:$("input[name='radioHa']:checked").val()},                 
+                crossDomain: true,
+                cache: false,
+                success: function(datosInsHabi){
+                    $datosRemotoInsHabi=JSON.stringify(datosInsHabi);
+                    localStorage.setItem('datosHabi', $datosRemotoInsHabi);
+                    $datosLocalHabi=JSON.parse(localStorage.getItem('datosHabi')); 
+                    //continuarDir=0;          
+                    console.log("datosLocalHabi "+ JSON.stringify($datosLocalHabi));
+                },
+                error : function(jqXHR, textStatus, errorThrown) {
+                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                }
+            });        
+        }    
+    //aqui entra si viene desde editar publicacion  solo actualizamos los datos de la base de datos 
+        if ($datosLocalDir['publicado']==1) {
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: 'http://' + ipConex + '/wasiWeb/php/actualizarHabitacion.php',
+                data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],cama:$("input[name='radioCama']:checked").val(),fechaDesde:$("#fechaDesde").val(),hasta:$("#cboxfechaHasta").val(),fechaHasta:$("#fechaHasta").val(),mesMin:$("#tiempoMin").val(),mesMax:$("#tiempoMax").val(),dimHabi:$("input[name='radioHa']:checked").val()},                 
+                crossDomain: true,
+                cache: false,
+                success: function(datosActHabi){
+                    $datosRemotoActHabi=JSON.stringify(datosActHabi);
+                    localStorage.setItem('datosHabi', $datosRemotoActHabi);
+                    $datosLocalHabi=JSON.parse(localStorage.getItem('datosHabi')); 
+                    //continuarDir=0;          
+                    console.log("datosLocalHabi "+ JSON.stringify($datosLocalHabi));
+                },
+                error : function(jqXHR, textStatus, errorThrown) {
+                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                }
+            });
         }
-    });
+        continuarHabi=0;   
+
+    }
+    if (btnPublicarTodo == 0 ) {
+/********************** aqui deberia ir reset todo publicar *******************/
+    
+    btnAtrasFoto = 0;//para controlar el acceso a editar publicacion consultar fotos datos 
+    btnAtrasVi = 0;//para controlar acceso editar publicacion consultar vivienda
+    btnAtrasHabi = 0;//para control acceso editar publcaion consultar habitracion
+    //continuarHabi= 1;// para contrtol de  acceso publicar actualizar la publicaion
+
+    /* aqui implementar el reinicio del los forms y las fotos,  al finalizar al publicacion */
+
+    $('#formPublicarDireccion')[0].reset();
+    $('#formPublicarFotoUbicacion')[0].reset();
+    $('#formPublicarVi')[0].reset();
+    $('#formPublicarSe')[0].reset();
+    $('#formPublicarHabitacion')[0].reset();
+    
+    $("#imgPublicar div").remove(".fotoPublicar");  
+    $("#imgPublicar").data("cont",0); 
+    storedFilesDb = [];   //inciar una vez mas 
+    storedFiles=[];// no verficado 
+    $("#contenedorServicios div").remove(".serviciosPu");
+
+    $("#imgNoPeFumar").css({"background": "url(img/noFumarGLe.png) no-repeat center center ","background-size": "58px 68px"});
+    $("#imgNoPeFumar").css({"border-color":"#999999","box-shadow": " "}); 
+    $("#imgNoPeMascota").css({"background": "url(img/noMascotaGLe.png) no-repeat center center ","background-size": "58px 68px"});
+    $("#imgNoPeMascota").css({"border-color":"#999999","box-shadow": " "}); 
+    $("#imgNoPePareja").css({"background": "url(img/noParejaGLe.png) no-repeat center center ","background-size": "58px 68px"});
+    $("#imgNoPePareja").css({"border-color":"#999999","box-shadow": " "});   
+/****************Fin de reseteo a los forms de publicar ********/
+    }
 
 }
 /*
@@ -1895,50 +2434,7 @@ function publicarCaHabitacion(){
         }
     }
     //consultamos si hay datos almacenados en tabla publicaciones y fotopublicaciones
-    if (btnAtrasFoto==0) {// 0 si no presiono btnAtrasFoto 1 si se presiono   
-        // verificar si hay fotos en la base de datos
-        $.ajax({
-            type: "POST",
-            dataType: 'json',
-            url: 'http://' + ipConex + '/wasiWeb/php/consultarFotoPublicado.php',
-            data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar']},                 
-            crossDomain: true,
-            cache: false,
-            success: function(datosFoto){
-                if (datosFoto['fotos']>0) {
-                    $("#tituloMPu").val(datosFoto['tituloArray'][0]);
-                    $("#precioMPu").val(datosFoto['precioArray'][0]);
-                    $("#fianzaMPu").val(datosFoto['fianzaArray'][0]);
-                    $("#comentarioMPu").val(datosFoto['comentarioArray'][0]);                    
-                    tMPu=1;
-                    pMPu=1;
-                    cMPu=1;
-                    cargarFotoBD(datosFoto);
-                    //$("#btnContinuarFoUb").css({"background-color":"#008080"});//color tema
-                }
-                if (datosFoto['fotos']==0) {
-                    $("#tituloMPu").val(datosFoto['titulo']);
-                    $("#precioMPu").val(datosFoto['precio']);
-                    $("#fianzaMPu").val(datosFoto['fianza']);
-                    $("#comentarioMPu").val(datosFoto['comentario']);                                        
-                    tMPu=1;
-                    pMPu=1;
-                    cMPu=1;
-                }           
-                console.log("datosFoto "+JSON.stringify(datosFoto)); 
-                console.log("longitud "+ datosFoto['fotos']);
-
-                btnAtrasFoto=1;                      
-            },
-            error : function(jqXHR, textStatus, errorThrown) {
-                alert("error consultarFotoPublicado: " + jqXHR.status + " " + textStatus + " " + errorThrown);
-                tMPu=0;
-                pMPu=0;
-                cMPu=0;
-                btnAtrasFoto=0;
-            }
-        });
-    }
+    
 
 */
 

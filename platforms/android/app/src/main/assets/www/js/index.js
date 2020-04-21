@@ -16,11 +16,29 @@ var app = {
     }
 };
 app.initialize();
-var ipConex = '192.168.1.110';
+var ipConex = '192.168.1.105';
 var Latitude = undefined;
 var Longitude = undefined;
+var cambioZona =1;//paracontrolar el cambio de zona
+var swipeZona=1;//para controlar el acceso a publicado lista 
+var swiper='';
+var ubicacionPrincipal='';//para esconder menu 
+var DesplazamientoActual='';//para esconder menu '
+
 var selDiv = "";//div para publicar imagen
+var html = "";//para cargar div contenedor fotos publicar
+
 var selDivSe = "";//div para publicar servicios
+var htmlSe = "";//para cargar div contenedor servicos
+
+var selDivPu = "";//div para mostrar lo publicado
+var htmlPu = "";//para cargar div contenedor publicados
+
+var selDivMostrarPubliTodoSwipe ="";//div para mostra lo publicado en swipe mapas
+var htmlMostrarPubliTodoSwipe = "";//para cargar div contenedor publicados en swipe
+
+var selDivMostrarPubliTodoLista ="";//div para mostrar lo publicado en listas
+var htmlMostrarPubliTodoLista ="";//para cargar div contenedor publicar listas
 var autoCDir=0;
 var autoCCiu=0;
 var storedFiles = [];//array de img por foto libreria
@@ -32,39 +50,50 @@ var imagenPerfilRegistro = "";
 var imagenPerfilEditar = "";
 var imagenPublicar="";
 var imgPerfilAnt="";// guarda img anterior para comparar con el actua si es lo mismo    
-var customLabel = {restaurant: {label: 'R'}, bar: {label: 'B'},casa:{label: 'C'}};
-var placeCiu = '';//almacenar direcion ciudad de google places
+var customLabel = {casa: {label: 'C'}, bar: {label: 'B'},piso:{label: 'W'}};
 
-var ciudadN1 = '';//almacenar zona obtenidos de placeCiu
-var ciudadN2 = '';//almacenar ciudad obtenidos de placeCiu
-var placeDir = '';// almacenar direcion de google places
-var addressD1 = '';//alamcenar direccion de placedir
-var addressD2 = '';//alamcenar zona de placedir
+var placeCiu = '';//almacenar direcion ciudad de google places
+var ciudadN1 = '';//almacenar zona obtenidos de placeCiu Direccion
+var ciudadN2 = '';//almacenar ciudad obtenidos de placeCiu Direccion
+var placeDir = '';// almacenar direcion de google places Direccion
+var addressD1 = '';//alamcenar direccion de placedir Direccion
+var addressD2 = '';//alamcenar zona de placedir Direccion
+var addressPostal = ''//almacenar zona de placed direccion codigo postal 
 var addressLat='';//almacenar latitud de la direccion
 var addressLon='';//almacenar longitud de la direccion
-var continuarDir='';//no hay direcion guardada
-var continuarFUbi='';//no hay direcion guardada
-var continuarVi='';//no hay datos de vivienda y servicios guardada
-var guardarSe = 0;//no hay servicios guardados se inserta por primera vez
-var btnAtrasFoto = 0;//si se presion btn atras foto ubicacion
-var btnAtrasVi= 0;//si se presion btn atras vivienda
-var btnAtrasSe = 0;//variable boton atras servicio
-var btnAtrasHabi= 0;//si se presion btn atras Habitacion
+var continuarDir='';//no hay datos guardada de direcion
+var btnAtrasDir=0;//para controlar la consulta de direccion
+//var contCiu=0;//contador para saber si no entro a automletar ciudad
+//var ContPlaceCiu=0;// contador para saber si entro a automletar ciudad
 var tMPu = 0; //titulo para validar de la publicacion en zona fotos
 var pMPu = 0; //precio para validar  de la publicacion en zona fotos
-var cMPu = 0;//comentario para validar de la publicacion en zona fotos
+var cMPu = 0;//comentario para validar de la publicacion en zona fotos 
+var continuarFUbi='';//no hay datos de Fotos y caracteristicas guardadas
+var btnAtrasFoto = 0;//si se presion btn atras foto ubicacion
+
 var sMPu = 0;//superficie para validar de la publicacion en zona vivienda
 var qMPu = 0;//que publicas para validar de la publicacion en zona vivienda
 var cHoMPu = 0;//cuantos hombres comparten  para validar de la publicacion en zona vivienda
 var cMuMPu = 0;//cuantos mujeres comparten  para validar de la publicacion en zona vivienda
 var asMPu = caMPu = esMPu = laMPu = lavMPu = muMPu = pisMPu = poMPu = raMPu = seMPu = tvMPu = wifiMPu = 0;//los ervicios de vivienda
+var continuarVi='';//no hay datos de vivienda y servicios guardada
+var btnAtrasVi= 0;//si se presion btn atras vivienda
+var guardarSe = 0;//no hay servicios guardados se inserta por primera vez
+var btnAtrasSe = 0;//variable boton atras servicio
+
 var camaMPu = 0;//como es la cama para validar de la publicacion zona habitacion
 var inFMPu = 0;//fecha desde  para validar de la publicacion zona habitacion
 var finFMPu = 0;//fecha hasta  para validar de la publicacion zona habitacion
 var inMMPu = 1;//tiempo minimo 1 mes para validar de la publicacion zona habitacion
 var finMMPu = 0;//tiempo maximo mes para validar de la publicacion zona habitacion
 var dimMPu = 0;//dimensiones de la habitacion para validar de la publicacion zona habitacion
+var continuarHabi ='';//no hay datos guardados de habitacion y fin de publicar
+var btnAtrasHabi = 0;//si se presion btn atras Habitacion
+var datosConHabi = -1;//consultamos datos almacenado de habitacion 
+var btnPublicarTodo = 0; //para control la publicacion y reseteo de forms
 
+var icoUserpublicadosM = 0;//para mostrar la consulta de publicados one time
+var btnEditarPublicadoM = 0;//para controlar btn editar publicado
 // Success callback for get geo coordinates
 
 var onMapSuccess = function (position) {
@@ -78,76 +107,92 @@ var onMapSuccess = function (position) {
 }
 // Get map by using coordinates
 function getMap(latitude, longitude) {
-    //alert( "getMap "+latitude+" "+longitude);
-    console.log( "getMap "+latitude+" "+longitude);
-    var mapOptions = {
-        center: new google.maps.LatLng(0, 0),
-        zoom: 1,
-        scrollwheel: false,
-        zoomControl: true,
-        rotateControl : false,
-        mapTypeControl: true,
-        streetViewControl: false,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    var latLong = new google.maps.LatLng(latitude, longitude);
-    var marker = new google.maps.Marker({position: latLong});
-    marker.setMap(map);
-    map.setZoom(15);
-    map.setCenter(marker.getPosition());
+  console.log( "getMap "+latitude+" "+longitude);
+  var mapOptions = {
+    center: new google.maps.LatLng(latitude, longitude),//0,0),//
+    zoom: 15,
+    scrollwheel: false,
+    zoomControl: true,
+    rotateControl : false,
+    mapTypeControl: true,
+    streetViewControl: false,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  
+/*  var latLong = new google.maps.LatLng(latitude, longitude);
+  var marker = new google.maps.Marker({position: latLong});
+  marker.setMap(map);
+  map.setZoom(15);
+  map.setCenter(marker.getPosition());*/
 
-     var infoWindow = new google.maps.InfoWindow;
+  var infoWindow = new google.maps.InfoWindow;
+    // Change this depending on the name of your PHP or XML file
+  downloadUrl('http://'+ipConex+'/wasiWeb/php/marcas.php', function(data) {
+    //var =0;
+    var xml = data.responseXML;
+    var markers = xml.documentElement.getElementsByTagName('marker');
+    console.log("markers"+JSON.stringify(markers));
+    Array.prototype.forEach.call(markers, function(markerElem) {
+      //posPubli++;
+      var id = markerElem.getAttribute('id_p');
+      var costo = markerElem.getAttribute('costo');
+      var name = markerElem.getAttribute('zona');
+      var address = markerElem.getAttribute('dir');
+      var type = markerElem.getAttribute('tipo');
+      var posPubli = markerElem.getAttribute('posPubli');
 
-          // Change this depending on the name of your PHP or XML file
-          downloadUrl('http://'+ipConex+'/wasiWeb/php/marcas.php', function(data) {
-            var xml = data.responseXML;
-            var markers = xml.documentElement.getElementsByTagName('marker');
-            Array.prototype.forEach.call(markers, function(markerElem) {
-              var id = markerElem.getAttribute('id_p');
-              var name = markerElem.getAttribute('zona');
-              var address = markerElem.getAttribute('dir');
-              var type = markerElem.getAttribute('tipo');
-              var point = new google.maps.LatLng(
-                  parseFloat(markerElem.getAttribute('lat')),
-                  parseFloat(markerElem.getAttribute('lng')));
+      var point = new google.maps.LatLng(
+          parseFloat(markerElem.getAttribute('lat')),
+          parseFloat(markerElem.getAttribute('lng')));
 
-              var infowincontent = document.createElement('div');
-              var strong = document.createElement('strong');
-              strong.textContent = name
-              infowincontent.appendChild(strong);
-              infowincontent.appendChild(document.createElement('br'));
+      var infowincontent = document.createElement('div');
+      
+      var strongC = document.createElement('strong');
+      strongC.textContent = costo+" €/m"
+      infowincontent.appendChild(strongC);
+      infowincontent.appendChild(document.createElement('br'));
 
-              var text = document.createElement('text');
-              text.textContent = address
-              infowincontent.appendChild(text);
-              var icon = customLabel[type] || {};
-              var marker = new google.maps.Marker({
-                map: map,
-                position: point,
-                label: icon.label
-              });
-              marker.addListener('click', function() {
-                infoWindow.setContent(infowincontent);
-                infoWindow.open(map, marker);
-              });
-            });
-          });
-        }
-      function downloadUrl(url, callback) {
-        var request = window.ActiveXObject ?
-            new ActiveXObject('Microsoft.XMLHTTP') :
-            new XMLHttpRequest;
+      var strongZ = document.createElement('strong');
+      strongZ.textContent = name
+      infowincontent.appendChild(strongZ);
+      infowincontent.appendChild(document.createElement('br'));
 
-        request.onreadystatechange = function() {
-          if (request.readyState == 4) {
-            request.onreadystatechange = doNothing;
-            callback(request, request.status);
-          }
-        };
+      var text = document.createElement('text');
+      text.textContent = address
+      infowincontent.appendChild(text);
 
-        request.open('GET', url, true);
-        request.send(null);
+      var icon = customLabel[type] || {};
+
+      var marker = new google.maps.Marker({
+        map: map,
+        position: point,
+        label: icon.label
+      });
+
+      marker.addListener('click', function() {
+        infoWindow.setContent(infowincontent);
+        infoWindow.open(map, marker);
+        swiper.slideTo(posPubli, 0); //para mostrar la posicion de la publicacion
+        //console.log( "markers id: "+id+" name: "+name+" address: "+address+" type: "+type+" posPubli: "+posPubli);
+      });
+      console.log( "markers id: "+id+" name: "+name+" address: "+address+" type: "+type+" posPubli: "+posPubli);
+    });
+  });
+}
+function downloadUrl(url, callback) {
+  var request = window.ActiveXObject ?
+    new ActiveXObject('Microsoft.XMLHTTP') :
+    new XMLHttpRequest;
+
+  request.onreadystatechange = function() {
+    if (request.readyState == 4) {
+      request.onreadystatechange = doNothing;
+      callback(request, request.status);
+    }
+  };
+  request.open('GET', url, true);
+  request.send(null);
 }
 // Success callback for watching your changing position
 var onMapWatchSuccess = function (position) {
@@ -155,6 +200,7 @@ var onMapWatchSuccess = function (position) {
     var updatedLatitude = position.coords.latitude;
     var updatedLongitude = position.coords.longitude;
     if (updatedLatitude != Latitude && updatedLongitude != Longitude) {
+      console.log("mapa cambio posicion");
         Latitude = updatedLatitude;
         Longitude = updatedLongitude;
         getMap(updatedLatitude, updatedLongitude);
@@ -173,7 +219,7 @@ function watchMapPosition() {
 var onWeatherSuccess = function (position) {
     Latitude = position.coords.latitude;
     Longitude = position.coords.longitude;
-    alert(" onWeatherSuccess lat"+ Latitude + "lon "+ Longitude);
+    //alert(" onWeatherSuccess lat"+ Latitude + "lon "+ Longitude);
     getWeather(Latitude, Longitude);
 }
 // Get weather by using coordinates
@@ -221,10 +267,7 @@ var onWeatherWatchSuccess = function (position) {
 function doNothing() {}
 
 function autoCompletar() {
-    //alert("autoCompletar");
-      /*  var ciudadN1 = '';
-      var ciudadN2 = '';
-      var placeCiu = '';*/
+    
       var mapDir = new google.maps.Map(document.getElementById('mapDireccionBuscar'),{
         streetViewControl: false,
         zoomControl: true,
@@ -252,15 +295,18 @@ function autoCompletar() {
           map: mapDir,
           anchorPoint: new google.maps.Point(0, -29)
         });
-          ciudadPu.addEventListener('change',noCompletarCiu);
-            function noCompletarCiu(){ 
-            alert("noCompletarCiu");       
+         ciudadPu.addEventListener('change',noCompletarCiu);
+        function noCompletarCiu(){
+        //if (contCiu==ContPlaceCiu) { }
+           // alert("noCompletarCiu");       
                 $("#mensajeErrorCiudad").html("Selecciona una ciudad de la lista. !");
                 $("#btnContinuarDireccion").css({"background-color":"#808080"});
+                $("#contenedorMapaDireccion").css("display", "none");
+                $("#direccionMPu").val("");
                 autoCCiu=0;
                 ciudadN1 = '';
-                ciudadN2 = '';                
-            }
+                ciudadN2 = '';            
+        }
         autocompleteCiu.addListener('place_changed',completarCiu);        
         function completarCiu() {  
          //alert("completarCiu");          
@@ -273,32 +319,43 @@ function autoCompletar() {
                 return;
             }            
             if (placeCiu.address_components) {
+               //alert("placeCiu.address_components true");
                 ciudadN1 = (placeCiu.address_components[0] && placeCiu.address_components[0].short_name);
                 ciudadN2 = (placeCiu.address_components[1] && placeCiu.address_components[1].short_name);
                 $("#contenedorMapaDireccion").css("display", "none");
                 $('#direccionMPu').val("");
-                console.log(("1 "+ciudadN1+"/"+ciudadN2));
+                console.log(("1 placeCiu.address_components "+ciudadN1+"/"+ciudadN2));
                 
                 $("#mensajeErrorCiudad").html("");
                 $("#mensajeErrorDireccionT").html("");
+                
+                //return ciudadN1;
+
                 linkBuscarDir=1;
                 autoCCiu=1;  
             }
+            else{
+              alert("placeCiu.address_components false");
+            }
            // console.log( JSON.stringify("2 "+ciudadN1+"/"+ciudadN2));            
-        }
+        }//types: ['address'] ['geocode']
         var autocompleteDir = new google.maps.places.Autocomplete( direccionPu, {types: ['address'], componentRestrictions: {country: 'es'}} ); 
         autocompleteDir.setFields(['address_components', 'geometry', 'icon', 'name']);
+
         direccionPu.addEventListener('change',noCompletarDir);
             function noCompletarDir(){        
                 $("#mensajeErrorDireccion").html("Selecciona una direccion de la lista. !");
                 $("#btnContinuarDireccion").css({"background-color":"#808080"});
+                $("#contenedorMapaDireccion").css("display", "none");
                 autoCDir=0;
-                autoCCiu=0;                
+                //autoCCiu=0;                
                 addressD1 = '';
                 addressD2 = '';               
             }        
         autocompleteDir.addListener('place_changed',completarDir);
          function completarDir() {
+          //alert("entra completar dir");
+            $("#contenedorMapaDireccion").css("display", "block");
             infowindow.close();
             marker.setVisible(false);
             placeDir = autocompleteDir.getPlace();
@@ -322,12 +379,17 @@ function autoCompletar() {
             //var addressD1 = '';
             //var addressD2 = '';
             if (placeDir.address_components) {
+              console.log(placeDir.address_components.length);
+              addressLat= placeDir.geometry.location.lat();
+              addressLon= placeDir.geometry.location.lng();
+              
+              console.log(addressLat+"/"+addressLon);
               if (placeDir.address_components.length<=6) {//caso 1 no se ingresa numero de calle
                 addressD1 = placeDir.address_components[0].short_name;//calle
                 addressD2 = placeDir.address_components[1].short_name;//zona
                 ciudadN1 = placeDir.address_components[1].short_name;//zona 
                 ciudadN2 = placeDir.address_components[2].short_name;//ciudad
-                
+/************************Aqui implementar obtener codigo postal con lat y lng ************************************************/
                 //ubicacionDir =placeDir.geometry["location"];
                 $('#ciudadMpu').val(placeDir.address_components[1].short_name+", "+placeDir.address_components[2].short_name);
                 $("#btnContinuarDireccion").css({"background-color":"#008080"});
@@ -337,14 +399,14 @@ function autoCompletar() {
                 addressD2 = placeDir.address_components[2].short_name;//zona
                 ciudadN1 = placeDir.address_components[2].short_name;//zona
                 ciudadN2 = placeDir.address_components[3].short_name;//ciudad
+                addressPostal = placeDir.address_components[6].short_name;//postal
                 //ubicacionDir =placeDir.geometry["location"];
                 $('#ciudadMpu').val(placeDir.address_components[2].short_name+", "+placeDir.address_components[3].short_name);
                 $("#btnContinuarDireccion").css({"background-color":"#008080"});
-              }
-              addressLat= placeDir.geometry.location.lat();
-              addressLon= placeDir.geometry.location.lng();
-              console.log((addressD1+"/"+addressD2));
-              console.log(addressLat+"/"+addressLon);
+              }              
+              console.log(addressD1+"/"+addressD2);//+"/"placeDir[4].address_components[0].short_name
+              //console.log( JSON.stringify(placeDir));
+
               $("#mensajeErrorCiudad").html("");
               $("#mensajeErrorDireccion").html("");
               $("#mensajeErrorDireccionT").html("");
@@ -359,17 +421,16 @@ function autoCompletar() {
             infowindowContent.children['place-name'].textContent = placeDir.name;
             infowindowContent.children['place-address'].textContent = placeDir.address;
             infowindow.open(mapDir, marker);*/
-
         }
     }//fin autoCompletar
 //callback al hacer clic en el marcador lo que hace es quitar y poner la animacion BOUNCE
 
-function hacerFoto(){
+function hacerFoto(){ 
   var cameraOptionsHFR = {
     quality: 25,
     destinationType: navigator.camera.DestinationType.FILE_URI,
     sourceType: navigator.camera.PictureSourceType.CAMERA,
-    allowEdit: true,
+    //allowEdit: true,
     correctOrientation: true
   }
   //alert("hacerFoto");
@@ -382,6 +443,7 @@ function onSuccessHFR(imageURI) {
   $("#mensajefoto").css("display", "none");
   imagenPerfilRegistro=imageURI;  
 }
+
 function cargarFoto(){
   //alert("cargarFoto");
   var cameraOptionsCFR = {
@@ -392,6 +454,7 @@ function cargarFoto(){
     correctOrientation: true
   }  
   navigator.camera.getPicture(onSuccessCFR, onFail, cameraOptionsCFR);
+
 }
 function onSuccessCFR(imageURI) { 
   $("#modalRegistrarPerfil").modal("hide");    
@@ -411,7 +474,7 @@ $("#clist").click(function(event){ //click en el icono basurero para ocultar la 
 });
 
 function subirImagen(fileURL, vEmail) {
-    //alert("subirImagen "+fileURL+" "+vEmail ); 
+    
     console.log("subirImagen "+fileURL+" "+vEmail );       
     var optionsR = new FileUploadOptions();
     optionsR.fileKey = "fotoPerfil";
@@ -428,7 +491,7 @@ function subirImagen(fileURL, vEmail) {
 }
 
 function uploadSuccessR(r) {
-   // alert("uploadSuccess Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
+   console.log("uploadSuccess Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
     mfotoR=JSON.parse(r.response);
     $('mISF').html=mfotoR['msg'];
 }
@@ -446,54 +509,51 @@ function registrarUsuario(){ //evento activado por onsubmit en validarformulario
         cache: false,
         contentType: false,
         processData: false,
-        success: function(datosR)
-        {  $("#aIngresar").tab('show');
-            if(datosR.uReg==1){
-              //aqui file uploader 
-                $('#mID').html("");
-                $('#mIS').html(datosR.msg + " " + datosR.umEmail);
-               // alert(" exito registrarUsuario "+imagenPerfilRegistro+" "+datosR.email);
-                if (imagenPerfilRegistro) {                
-                subirImagen(imagenPerfilRegistro, datosR.email);
-                }                
-              }
-                if(datosR.uReg==0){
-                    $('#mIS').html("");
-                    $('#mID').html(datosR.msg);
-                  }
-                //alert(datosR.uReg);
+        success: function(datosR){
+          $("#aIngresar").tab('show');
+          if(datosR.uReg==1){
+            $('#mID').html("");
+            $('#mIS').html(datosR.msg + " " + datosR.umEmail);
+            console.log(" exito registrarUsuario "+imagenPerfilRegistro+" "+datosR.email);
+            if (imagenPerfilRegistro) {                
+              subirImagen(imagenPerfilRegistro, datosR.email);
+            }                
+          }
+          if(datosR.uReg==0){
+            $('#mIS').html("");
+            $('#mID').html(datosR.msg);
+          }
+          console.log(" datosR "+datosR.uReg);
         },
         error : function(jqXHR, textStatus, errorThrown) {
             alert(jqXHR.status +" "+ textStatus+" "+ errorThrown);
         }
     });    
 }
-function hacerFotoEditar(){
-  //alert("hacerFotoEditar ");
+function hacerFotoEditar(){  
   var cameraOptionsHFE = {
     quality: 25,
     destinationType: navigator.camera.DestinationType.FILE_URI,
     sourceType: navigator.camera.PictureSourceType.CAMERA,
-    allowEdit: true,
+    //allowEdit: true,
     correctOrientation: true
-  }
-  //alert("hacerFoto");
+  }  
   navigator.camera.getPicture(onSuccessHFE, onFail, cameraOptionsHFE);
 }
 function onSuccessHFE(imageURI) {
-  //alert("onSuccessHFE "+imageURI);
+  console.log("onSuccessHFE "+imageURI);
   imagenPerfilEditar=imageURI;
-  // $imgPerfilAnt=$datosLocal['usrImg']; 
+   
   subirImagenPerfilEditar(imageURI,$datosLocal['usrImg'], $datosLocal['usrEmail']); 
   
   $("#modalEditarPerfil").modal("hide");
   $("#fotoPerfilE").css({"backgroundImage": "url('" + imageURI + "')","background-size": "cover"});
   $("#clistA").css("visibility", "visible");
   $("#mensajefotoA").css("display", "none");  
-  //$("#aa").html(imageURI);
+  
 }
 function cargarFotoEditar(){
-  //alert("cargarFotoEditar");
+  
   var cameraOptionsCFE = {
     quality: 25,
     encodingType: navigator.camera.EncodingType.JPEG,
@@ -501,11 +561,11 @@ function cargarFotoEditar(){
     sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
     correctOrientation: true
   }
-  //alert("hacerFoto");
+  
   navigator.camera.getPicture(onSuccessCFE, onFail, cameraOptionsCFE);
 }
 function onSuccessCFE(imageURI) { 
-  //alert("onSuccessCFE "+imageURI);  
+  console.log("onSuccessCFE "+imageURI);  
   imagenPerfilEditar=imageURI; 
   subirImagenPerfilEditar(imageURI,$datosLocal['usrImg'],$datosLocal['usrEmail']); 
 
@@ -522,14 +582,12 @@ function onFail(message) {
        subirImagenPerfilEditar(imagenPerfilEditar,'',$datosLocal['usrEmail']);
       $("#fotoPerfilE").css({"background": "url(./img/usuario.jpg) ","background-size": "cover"}); 
       $("#clistA").css("visibility", "hidden");
-      //en este caso mandamos la img capturado por camara o galeria y enviamos vacio imagen perfi anterior 
-     
-      imagenPerfilEditar="";
-      
+      //en este caso mandamos la img capturado por camara o galeria y enviamos vacio imagen perfi anterior      
+      imagenPerfilEditar="";      
   });
 
 function subirImagenPerfilEditar(fileURL, fileUrlAnt ,emailP) {
-     //alert("subirImagenPerfilEditar IMG "+fileURL+" IMGA "+fileUrlAnt+" EMAILP "+emailP);       
+    console.log("subirImagenPerfilEditar IMG "+fileURL+" IMGA "+fileUrlAnt+" EMAILP "+emailP);       
     var optionsPE = new FileUploadOptions();
     optionsPE.fileKey = "fotoPerfilA";
     optionsPE.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
@@ -542,27 +600,19 @@ function subirImagenPerfilEditar(fileURL, fileUrlAnt ,emailP) {
     optionsPE.params = miParams;
       
     var ft = new FileTransfer();  
-    ft.onprogress = function(progressEvent) {
-      if (progressEvent.lengthComputable) {
-          loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
-      } 
-      else {
-        loadingStatus.increment();
-      }
-    };
+    
     ft.upload(fileURL, encodeURI("http://" + ipConex + "/wasiWeb/php/insertarFotoEditar.php"), uploadSuccessPE, uploadFailPE, optionsPE);
 }
-
 function uploadSuccessPE(r) {
-   // alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
+   console.log("uploadSuccessPE(r) Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
     $fotoA=JSON.parse(r.response);
-    //alert('fotoA '+ $fotoA['fotoActual']);
+    console.log('foto actual '+ $fotoA['fotoActual']);
 
     $datosLocal['usrImg']=$fotoA['fotoActual'];
     
 }
 function uploadFailPE(error) {
-    alert("An error has occurred uploadFailPE : Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
+    alert("error al subir foto intente otra vez uploadFailPE : Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
     $("#fotoPerfilE").css({"background": "url(./img/usuario.jpg) ","background-size": "cover"}); 
     $("#clistA").css("visibility", "hidden");
     imagenPerfilEditar="";
@@ -610,17 +660,17 @@ function actualizarPerfil(cPassword)
             $("#icoFMPerfil").css({"color":"#008080"}); 
             if(datosP.uReg==1){
                 $('#mPMD').html("");
-                $('#mPMS').html(datosP.msg + " id " + datosP.uPer+" em "+datosP.usrEmail+" imga "+datosP.img +" img "+datosP.usrImg);
+                //$('#mPMS').html(datosP.msg + " id " + datosP.uPer+" em "+datosP.usrEmail+" imga "+datosP.img +" img "+datosP.usrImg);
                 $("#fotoPerfilM").css({"background": "url(http://" + ipConex + "/wasiWeb/"+ $datosLocal['usrImg'] +") no-repeat center center","background-size": "cover"});
                 $('#nombrePM').html($datosLocal.usrName);
                 $('#apellidosPM').html($datosLocal.usrLname);
                 if ($datosLocal.usrSexo==1) {
                     $("#divSexo").css({"border-color":"#999999","box-shadow":""});
-                    $("#imgSexo").css({"background": "url(img/hombreG.png) no-repeat center center ","background-size": "20px 20px"});
+                    $("#imgSexo").css({"background": "url(img/hombreG.png) no-repeat center center ","background-size": "25px 30px"});
                 }
                 if ($datosLocal.usrSexo==2) {
                     $("#divSexo").css({"border-color":"#999999","box-shadow":""}); 
-                    $("#imgSexo").css({"background": "url(img/mujerG.png) no-repeat center center ","background-size": "20px 20px"});
+                    $("#imgSexo").css({"background": "url(img/mujerG.png) no-repeat center center ","background-size": "25px 30px"});
                 }
             }
             if(datosP.uReg==0){
@@ -653,7 +703,10 @@ function onSuccessFPC(imageURI) {
   $("#mensajeModalFotoPublicar").html("");
   //encodeURI() para codificar reemplazar espasios o caracteres especiales por code utf8
   //decodeURI() para decodificar 
-  var html = "<div class = 'fotoPublicar' style='background:#141f1f url("+imagenPublicar+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+imageURI.substr(imageURI.lastIndexOf('/') + 1) +"></span></div>";
+  //html = "<div class = 'fotoPublicar' style='background:#141f1f url("+imagenPublicar+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+imageURI.substr(imageURI.lastIndexOf('/') + 1) +"></span></div>";
+  html = "<div class = 'fotoPublicar' style='background:#141f1f url("+imagenPublicar+") no-repeat center center; background-size:cover;' >";
+  html +="  <span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+imageURI.substr(imageURI.lastIndexOf('/') + 1) +"></span>";
+  html +="</div>";
   selDiv.append(html); 
   storedFiles.push(imageURI);  
   $('#modalPublicar').modal('hide');
@@ -662,8 +715,10 @@ function onSuccessFPC(imageURI) {
 
   contImg++;
   $("#imgPublicar").data("cont",contImg);
+  /*
   $('#mensajePublicar').html("contImgFPC: "+contImg); 
   $('#mensajePublicar1').html("almacenFPC: "+storedFiles.length); 
+  */
   maxImg--;
   //alert('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
   console.log('onSuccessFPC maxImg '+ maxImg +' contImg '+contImg);
@@ -692,7 +747,8 @@ function cargarFotoPublicarGaleria(){
 function onSuccessFPG(results) {   
   $("#mensajeModalFotoPublicar").html("");
   $('#modalPublicar').modal('hide');
-  alert('onSuccessFPG maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
+  
+  console.log('onSuccessFPG maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
 
   if (results.length > 0) {
     $('.divImgPublicarG').css({'display':'none'});
@@ -701,7 +757,10 @@ function onSuccessFPG(results) {
       //alert("Code = " + results[i].responseCode+" Response = " + results[i].response+" Sent = " + results[i].bytesSent);
       //alert('Image URI: ' + JSON.stringify(results[i]));
       console.log('Image URI: ' + results[i]);
-      var html = "<div class = 'fotoPublicar' style='background:#141f1f url("+results[i]+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+encodeURI(results[i].substr(results[i].lastIndexOf('/') + 1))+"></span></div>";
+      //html = "<div class = 'fotoPublicar' style='background:#141f1f url("+results[i]+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+encodeURI(results[i].substr(results[i].lastIndexOf('/') + 1))+"></span></div>";
+      html ="<div class = 'fotoPublicar' style='background:#141f1f url("+results[i]+") no-repeat center center; background-size:cover;'>";
+      html +="  <span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+encodeURI(results[i].substr(results[i].lastIndexOf('/') + 1))+"></span>";
+      html +="</div>";
       selDiv.append(html);
       storedFiles.push(results[i]);
       contImg++;
@@ -709,24 +768,22 @@ function onSuccessFPG(results) {
     }
     //alert("tMPu "+tMPu+" pMPu "+pMPu+" cMPu "+cMPu+" contImg "+contImg );
   if (tMPu==1 && pMPu==1 && cMPu==1 && contImg > 0) {
-    alert("entra todo verdadFPG");
     $("#btnContinuarFoUb").css({"background-color":"#008080"});//color tema
   }
     $("#imgPublicar").data("cont",contImg);
-    $('#mensajePublicar').html("contImgFPG: "+contImg);
-    $('#mensajePublicar1').html("almacenFPG: "+storedFiles.length);
     if ((maxImg=maxImg-results.length)<0) {
       maxImg=0;
-      alert('if maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
+
+      console.log('if maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
     }    
     else
     {
-      alert(' else2 maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
+      console.log(' else2 maxImg '+ maxImg + ' contImg ' + contImg + ' results '+ results.length);
     }  
   }
 }
 function onFailFPG(error) {
-  alert('Error: ' + error);
+  alert('No se pudo cargar foto intente una vez mas : ' + error);
   console.log('Error: ' + error);
 }
 function cargarFotoBD(arrayImgUri){
@@ -735,10 +792,13 @@ console.log("cargarFotoBD "+ JSON.stringify(arrayImgUri));
   $('.divImgPublicarG').css({'display':'none'});
   $('#divImgPublicarP').css({'display':'flex'});
   for (var i = 0; i < arrayImgUri['rutaFotoArray'].length; i++) {
-    var html = "<div class = 'fotoPublicar' style='background:#141f1f url(http://" + ipConex + "/wasiWeb/"+arrayImgUri['rutaFotoArray'][i]+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+arrayImgUri['rutaFotoArray'][i]+"></span></div>";
+    //html = "<div class = 'fotoPublicar' style='background:#141f1f url(http://" + ipConex + "/wasiWeb/"+arrayImgUri['rutaFotoArray'][i]+") no-repeat center center; background-size:cover;' ><span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+arrayImgUri['rutaFotoArray'][i]+"></span></div>";
+    html = "<div class = 'fotoPublicar' style='background:#141f1f url(http://" + ipConex + "/wasiWeb/"+arrayImgUri['rutaFotoArray'][i]+") no-repeat center center; background-size:cover;' >";
+    html +="  <span class='glyphicon glyphicon-trash removeImgPublicar' data-file="+arrayImgUri['rutaFotoArray'][i]+"></span>";
+    html +="</div>";
     selDiv.append(html);
     storedFilesDb.push(arrayImgUri['rutaFotoArray'][i]);
-    //storedFiles.push(arrayImgUri['rutaFoto'][i]);
+    
     contImg++;
     maxImg--;    
   }
@@ -746,9 +806,11 @@ console.log("cargarFotoBD "+ JSON.stringify(arrayImgUri));
   if (tMPu==1 && pMPu==1 && cMPu==1 && contImg > 0) {
     $("#btnContinuarFoUb").css({"background-color":"#008080"});//color tema
   }
+/*
   $('#mensajePublicar1').html("contImgcFBD : "+contImg);
   $('#mensajePublicar2').html("almacencFBD db : "+storedFilesDb.length);  
   $('#mensajePublicar3').html("almacencFBD : "+storedFiles.length);
+  */
   console.log('storedFilesDb '+ maxImg + ' contImg ' + contImg + ' results '+ arrayImgUri['rutaFotoArray'].length);
 }
 
@@ -758,11 +820,9 @@ function removeFile(e) {
   //alert("entraremoveFile");
   var file = $(this).data("file");
   console.log("file :"+ file);
-  console.log("decodeURI(file) :"+decodeURI(file));
-  
-  //decodeURI(file) decodifica los espacion y otros ()    
+  console.log("decodeURI(file) :"+decodeURI(file));  
+      
   for(var i=0;i<storedFiles.length;i++) { 
-  //alert("for storedFiles :"+ storedFiles.length +" i: "+i+" file: "+ decodeURI(file));   
     if(storedFiles[i].substr(storedFiles[i].lastIndexOf('/')+1) === decodeURI(file)) {
       console.log("for storedFiles :"+ storedFiles.length +" i: "+i+" file: "+ decodeURI(file));   
       console.log("storedFiles :");
@@ -784,11 +844,9 @@ function removeFile(e) {
       break;
     }
   }
-  for (var j = 0 ; j < storedFilesDb.length; j++) {
-    //alert("for storedFilesDb :"+ storedFilesDb.length +" j: "+j+" file: "+ file);
+  for (var j = 0 ; j < storedFilesDb.length; j++) {    
     console.log("for storedFilesDb :"+ storedFilesDb.length +" j: "+j+" file: "+ file);
-    if (storedFilesDb[j] === file) {
-      //alert("entra storedFilesDb");
+    if (storedFilesDb[j] === file) {      
       console.log("storedFilesDb :");
       storedFilesDb.splice(j,1);
       $.ajax({
@@ -809,16 +867,11 @@ function removeFile(e) {
     }
   }    
     $(this).parent().remove();
-    console.log('removeFile1 contImg '+contImg+' maxImg '+maxImg);
-    //alert('removeFile1 contImg '+contImg+' maxImg '+maxImg);
+    console.log('removeFile1 contImg '+contImg+' maxImg '+maxImg);    
     contImg--;
     maxImg++;
     $("#imgPublicar").data("cont",contImg);
-    
-    $('#mensajePublicar1').html("contImgremoveFil : "+contImg);
-    $('#mensajePublicar2').html("almacenremoveFil db: "+storedFilesDb.length);
-    $('#mensajePublicar3').html("almacenremoveFil: "+storedFiles.length);    
-    
+     
     if (storedFiles.length + storedFilesDb.length == 0) {
       $('.divImgPublicarG').css({'display':'block'});
       $('#divImgPublicarP').css({'display':'none'});
@@ -846,16 +899,99 @@ function subirImagenPublicar(fileURL,idPu,idUsr,emailPu) {
     ft.upload(fileURL, encodeURI("http://" + ipConex + "/wasiWeb/php/insertarFotoPublicar.php"), uploadSuccessP, uploadFailP, optionsP);
 }
 function uploadSuccessP(r) {
-   //alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
-    console.log("Exito subirImagenPublicar Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
-    //$fotoA=JSON.parse(r.response);
-    //alert('fotoA '+ $fotoA['fotoActual']);
-
-    //$datosLocal['usrImg']=$fotoA['fotoActual'];
-    
+    console.log("Exito subirImagenPublicar Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);    
 }
 function uploadFailP(error) {
     alert("An error has occurred uploadFailPE : Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
+}
+function cargarPublicadosBD(arrayPubliImgUri){
+  console.log("cargarPublicadosBD "+ JSON.stringify(arrayPubliImgUri));
+  for (var i = 0; i < arrayPubliImgUri['publicados']; i++) {
     
+    htmlPu="<div class='publicadoM' id="+arrayPubliImgUri['idPubliArray'][i] +">";
+    htmlPu+="<div class='fotoPublicadoM'>";
+    htmlPu+=" <img src=http://"+ipConex+"/wasiWeb/"+arrayPubliImgUri['rutaFotoArray'][i]+" class='imgPubli'>";
+    htmlPu+=" <span class='glyphicon glyphicon-pencil editarPublicadoM' data-file="+arrayPubliImgUri['idPubliArray'][i] +"></span>";
+    htmlPu+=" <span class='glyphicon glyphicon-trash removePublicadoM' data-file="+arrayPubliImgUri['idPubliArray'][i] +"></span>";
+    htmlPu+="</div>";
+    htmlPu+="<div class='mensajePublicadoM'>";
+    htmlPu+=" <div class='strPreTiPublicado'>"+arrayPubliImgUri['precioArray'][i]+"€/m</div>";                        
+    htmlPu+=" <div class='strPreTiPublicado'>"+arrayPubliImgUri['tituloArray'][i]+"</div>";                        
+    htmlPu+=" <div class='zonaPublicado'>"+arrayPubliImgUri['zonaArray'][i]+"</div>";                        
+    htmlPu+="</div>";                      
+    selDivPu.append(htmlPu);     
+  }  
+}
+$("#contenedorFotoMensajePublicados").on("click", ".removePublicadoM", removePublicado);  
+function removePublicado(e) {
+  //Ingresamos un mensaje a mostrar
+  var mensaje = confirm("¿Quieres eliminar esta publicacion?");
+  //Detectamos si el usuario acepto el mensaje
+  if (mensaje) {
+  var file = $(this).data("file");
+  console.log("confirm remove:"+ file);
+  $(this).parent().parent().remove();    
+  }
+  //Detectamos si el usuario denegó el mensaje
+  else {
+  console.log("calncel remove:"+ file);
+  }
+  
+  
+}
+$("#contenedorFotoMensajePublicados").on("click", ".editarPublicadoM", editarPublicado);
 
+function editarPublicado(e) {  
+  var idPublicacion = $(this).data("file");
+  console.log("idPublicacion :"+ idPublicacion);
+  $.ajax({
+        type: "POST",
+        dataType: 'json',
+        url: 'http://' + ipConex + '/wasiWeb/php/editarPublicado.php',
+        data: {idUsuario:$datosLocal['usrId'],idPublicacion:idPublicacion},                 
+        crossDomain: true,
+        cache: false,
+        success: function(datosEPubli){ 
+            $datosRemotoConsultarDir=JSON.stringify(datosEPubli);
+            localStorage.setItem('datosDir', $datosRemotoConsultarDir);
+            $datosLocalDir=JSON.parse(localStorage.getItem('datosDir'));                       
+            console.log("datosEPubli "+JSON.stringify(datosEPubli));
+            if ($datosLocalDir['publicado']==1) {//en esta caso ya esta publicado, se pide una solicitud para editar
+              $(".div-custom-principal .divPublicar").css({"padding":"0px","background-color": "#f2f2f2"});
+              $("#paginaPrincipal").css("display", "none");
+              $("#paginaListaMapas").css("display", "none");
+              
+              $("#paginaPublicar").css("display", "block");
+
+              $("#publicarDireccion").css("display","block");
+              $("#contenedorMapaDireccion").css("display", "none");
+              $("#publicarFotoUbicacion").css("display","none");
+              $("#publicarVivienda").css("display","none");
+              $("#publicarServicios").css("display","none");        
+              $("#publicarHabitacion").css("display","none");        
+              //$("#paginaMensaje").css("display", "none");            
+              $("#paginaUsuarioPerfilEditar").css("display", "none");
+              $("#paginaUsuarioPerfilMostrar").css("display", "none");
+
+              $("#divFooter").css("display", "none");
+              $(".container-custom-principal .progressbar-bar-custom").css("width", "25%");
+              
+              $('#ciudadMpu').val($datosLocalDir['ciudad']);
+              $('#direccionMPu').val($datosLocalDir['direccion']+", "+$datosLocalDir['zona']);
+              $("#btnContinuarDireccion").css({"background-color":"#008080"});
+              linkBuscarDir=1;
+              autoCDir=1;
+              autoCCiu=1;
+              btnEditarPublicadoM=1;
+
+              btnAtrasDir = 0;                        
+              continuarDir = 0;
+              
+            }          
+        },
+        error : function(jqXHR, textStatus, errorThrown) {
+            alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+        }
+      });
+  
 }

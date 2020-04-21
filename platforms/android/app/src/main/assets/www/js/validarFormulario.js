@@ -1,7 +1,7 @@
 $emailExiste=0;
 $passwordExiste=0;
 $publicarF=0;
-$ipConex='192.168.1.110';
+//$ipConex='192.168.1.101';
 
 $(document).ready(function(){
     $("#nombre").change(function(){ //validar nombre
@@ -58,7 +58,7 @@ $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: 'http://' + $ipConex + '/wasiWeb/php/consultaEmail.php',
+                    url: 'http://' + ipConex + '/wasiWeb/php/consultaEmail.php',
                     //data: {email : $('#email').val()},
                     data: "email="+$vEmail,
                     crossDomain: true,
@@ -257,7 +257,7 @@ si la contraseña es igual al de la base de datos */
             $.ajax({
                 type: "POST",
                 dataType: 'json',
-                url: 'http://' + $ipConex + '/wasiWeb/php/consultaPassword.php',
+                url: 'http://' + ipConex + '/wasiWeb/php/consultaPassword.php',
                 data: {password : $passwordP,idUsuario:$vidUsuario},                 
                 crossDomain: true,
                 cache: false,
@@ -709,34 +709,14 @@ $("#tiempoMin").change(function(){
         }   
     }
 */
+continuarHabi=1;
+});
+$("#tiempoMax").change(function(){
+   
+continuarHabi=1;
 });
 
-
 /***************************************fin de habitacion ************************************/
-    /*
-    $("#cantHombres").change(function(){ 
-        $nHombre = $("#cantHombres").val();
-        if (!($nHombre > 0)) {
-            $personaErrorPu = "Dime cuantos compañeros hay en la vivienda.";        
-            $("#mensajeErrorPersonasPu").html($personaErrorPu);          
-            return false;
-        }
-        else{
-            $("#mensajeErrorPersonasPu").html("");
-        }
-    });
-    $("#cantMujeres").change(function(){ 
-        $nMujer = $("#cantMujeres").val();
-        if (!($nMujer > 0)) {
-            $personaErrorPu = "Dime cuantos compañeros hay en la vivienda.";        
-            $("#mensajeErrorPersonasPu").html($personaErrorPu);          
-            return false;
-        }
-        else{
-            $("#mensajeErrorPersonasPu").html("");
-        }
-    });
-*/
 
     $("#formPerfil").submit(function(){
         //$error=true;    
@@ -963,8 +943,8 @@ $("#tiempoMin").change(function(){
         else{            
             $("#mensajeErrorDisponibleD").html("");    
         }
-        $cboxfechaFin=$('#cboxfechaFin').val();
-        if ($cboxfechaFin == 1 ) {            
+        $cboxfechaHasta=$('#cboxfechaHasta').val();
+        if ($cboxfechaHasta == 1 ) {            
             if (finFMPu == 0) {
                 $fechaFinErrorPu = "ingrese una fecha.";        
                 $("#mensajeErrorDisponibleH").html($fechaFinErrorPu);          
@@ -973,7 +953,28 @@ $("#tiempoMin").change(function(){
         }
         else{            
             $("#mensajeErrorDisponibleH").html("");
-        }        
+        }
+        $fechaDesde=$("#fechaDesde").val();
+        //alert("$fechaDesde " +$fechaDesde);
+
+        $fechaHasta=$("#fechaHasta").val();
+        //alert("$fechaHasta "+$fechaHasta);
+        if ($('#cboxfechaHasta').val()==1) {
+            if (Date.parse($fechaDesde) >= Date.parse($fechaHasta)){
+            //alert("entra comparar");
+            $fechaFinErrorPu = "La fecha incial es mayor o igual a la fecha final.";        
+                $("#mensajeErrorDisponibleH").html($fechaFinErrorPu); 
+                $("#btnContinuarHabitacion").css({"background-color":"#808080"});//gris tema           
+            return false;
+            }
+            else{
+                $("#mensajeErrorDisponibleH").html("");          
+            }    
+        }
+        else{
+            $("#fechaHasta").val("");
+        }
+        
        publicarCaHabitacion();        
     });
 });

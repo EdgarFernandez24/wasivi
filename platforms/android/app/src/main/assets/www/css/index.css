@@ -168,7 +168,7 @@ width: 100%;
  }
 .contendorFotoPerfil{
   height: 150px; 
- width: 150px;
+  width: 150px;
 }
 .fotoMensaje .fotoRegistro {
  margin: 0;
@@ -230,7 +230,7 @@ text-align: center;
     background-color:#008080; 
     text-decoration:none; 
     color:#f2f2f2; 
-    cursor:pointer;
+    
     outline: none;
 }
 .container-custom-inicio button.btnFormulario:focus {
@@ -238,7 +238,7 @@ text-align: center;
     background-color:#004d4d; 
     text-decoration:none; 
     color:#f2f2f2; 
-    cursor:pointer;
+    /*cursor:pointer; muestra el dedo */
     outline: none
 }
 .container-custom-inicio.text-danger-custom{
@@ -292,11 +292,36 @@ text-align: center;
   background-color: #f2f2f2;  
 }
 .container-custom-principal .header{
-  padding: 5px 10px 0px 10px ;
+  padding: 5px 10px 1px 10px;
   color: #f2f2f2;
-  background-color:#008080;
- 
+  background-color: #008080;
+  transition: top 0.5s;
+  top:0;
+  
 }
+/*
+.container-custom-principal #paginaListaMapas .header{
+  padding: 5px 10px 1px 10px;
+  color: #f2f2f2;
+  background-color: #008080;
+   
+}
+.container-custom-principal #paginaPrincipal .header{
+  
+  color: #f2f2f2;
+  background-color: #fff;
+   
+}
+.container-custom-principal .header .contenedorFormBuscar{
+  padding: 5px 10px 5px 10px;
+  margin: 0;
+  background-color:#008080;
+}
+.container-custom-principal .header .contenedorLinkBuscar{
+  padding: 0px 10px 0px 10px;
+  background-color:#fff;
+}
+*/
 .div-custom-principal .inner-addon {
   position: relative;
 
@@ -348,21 +373,20 @@ text-align: center;
   padding: 5px 0px 5px 0px ;
   margin: 10px 0px 10px 0px ;
   font-size: 16px;
-  color: #f2f2f2;
-  border: 2px solid #f2f2f2;
-  border-radius: 20px;
+  color: #fff;
+  /*border: 2px solid #b3cccc;*/
+  background: #b3cccc80;
+  border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   display: flex;
   text-align:center;
   font-family: 'Ubuntu', sans-serif;
 }
-.container-custom-principal .mensajeListaMapas {
-
-  
+.container-custom-principal .mensajeListaMapas {  
  width: 80%;
 }
 .container-custom-principal .icoListaMapas{
-  background: url(../img/mapa2G.png) no-repeat center center;
+  background: url(../img/mapa2B.png) no-repeat center center;
   height: 25px; 
   width: 20%;
   background-size: 25px 25px;
@@ -380,7 +404,7 @@ background: #fff;
 .container-custom-principal button.btnPrincipalPublicar {
     display:scroll;
     position:fixed;
-    bottom:65px;
+    bottom:70px;
     left: 25%;
     width: 50%;
     height: 40px;
@@ -392,6 +416,8 @@ background: #fff;
     cursor:pointer;
     outline: none;
     border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: top 0.5s;
     /*background-color:#008080; */
 }
 
@@ -434,7 +460,7 @@ margin: 5px 0px 5px 0px;
     height: auto;
 }
 #mensajeCiudad{
- margin-top: 85px; 
+ margin-top: 115px; 
 }
 .container-custom-principal .contenedorFotosBarrios {
   width: 100%;
@@ -449,6 +475,8 @@ margin: 5px 0px 5px 0px;
   border-radius: 2px;
 }
 .container-custom-principal .fotoB{
+  display:inline-block;
+  position:relative;
   /*display: grid;
   grid-template-columns: auto;*/
   display: flex;
@@ -465,7 +493,30 @@ margin: 5px 0px 5px 0px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
   /*border: 1px solid red; */
 }
+.fotoB .btn-circleI{
+position: absolute;
+top: 5px;
+left: 5px;
+width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  padding: 1px 0;
+  line-height: 1.428571429;
+  text-align: center;
+  border:none;
+  background-color:#f2f2f2; 
+  text-decoration:none; 
+  color:#008080;  
+  
+  outline: none;
+  cursor:pointer;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
 .container-custom-principal .imgZona {
+    /*background: url('../img/photo-camera2.png') no-repeat center center;*/
+    background-size: cover;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px; 
     width: 100%;
@@ -518,66 +569,96 @@ right: 5px;
   border-bottom:4px #fff solid; /*transparent;*/
 }
 .container-custom-principal .tab-content-custom-principal {
-  padding-top: 65px;
+  padding-top: 70px;
   background: #e6e6e6;
   height: 100%;
  /* border:3px solid orange;*/
 }
-.container-custom-principal .fotosLista{
-/* border: 1px #000 solid;      */
-display: grid;
-grid-template-columns: auto ;
-}
-.container-custom-principal .fotoL{  
-  margin: 5px 0px 5px 0px;
-  display: flex;
-  flex-direction: column;   
-  border-radius: 3px; 
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);  
-}
+/*
 .container-custom-principal .fotosLista img {
   width:100%;
   height: auto;
 }
-
+*/
 .container-custom-principal .swiper-container {
-      /*padding-top: 20px;*/
+     /* padding-top: 5px;*/
       width: 100%;
-      height: 25%;
+      height: 200px;
       background: #fff;
       /*border: 1px solid red;*/
     }
-.container-custom-principal .swiper-slide {
-       margin:  5px;   
-      text-align: center;
-      font-size: 14px;
+.swiper-container .swiper-slide {
+       /*margin-top:5px;   */
+      
+      /*font-size: 14px;
       background: #fff;
 
-      /* Center slide text vertically */
+      /*text-align: center; 
+      Center slide text vertically */
      /* display: -webkit-box;
       display: -ms-flexbox;
       display: -webkit-flex;*/
-      display: inline-grid;
+     /* display: inline-grid;
       /*-webkit-box-pack: center;
       -ms-flex-pack: center;
       -webkit-justify-content: center;*/
-      justify-content: center;
+      /*justify-content: center;
      /*-webkit-box-align: center;
       -ms-flex-align: center;
       -webkit-align-items: center;*/
-      align-items: center;
-      width: 80%;
+      /*align-items: center;*/
+      width: 70%;
+      height: 100%;
       /*border: 1px solid black;*/
-      border-radius: 3px; 
+      /*border-radius: 3px; */
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
       
     }
-.container-custom-principal .fotoD{   
+.swiper-container .fotoD{   
+   /*background: url(..//img/barcelona1.jpg) no-repeat center center;  */
     width: 100%;
+    height: 60%;
+    background-size:cover;
+
+  
   }
-.container-custom-principal .fotoD .imgD{
+/*.swiper-container .imgD{ 
+    background-size: cover;   
     width: 100%;
+    height: 100%;
+}*/
+.swiper-container .mensajeD{   
+    width: 100%;
+    height: 35%;
+    padding-left: 5px;
+}
+.mensajeD .mensajeDPrecio{
+  font-weight:bold;  
+
+}
+.mensajeD .mensajeDZona{
+  font-weight:bold;  
+
+}
+.swiper-container .contenedorMensajeServiciosPe{
+  display: flex;
+  flex-direction: row;
+}
+  .contenedorMensajeServiciosPe .mensajePerPu{
+    /*background: url(..//img/barcelona.jpeg) no-repeat center center;*/
+    width:30px; 
+    height:30px;
+    /*background-size: cover;*/
+    border-radius: 15px; 
   }
+  .contenedorMensajeServiciosPe .mensajeServiciosPu{
+    width:30px; 
+    height:30px;
+    border:1px solid #000;
+    border-radius: 5px; 
+    margin-left: 5px;
+  }  
+
 .contenedorMapa{
   margin: 10px 2px 2px 2px;
   background: #fff;
@@ -585,8 +666,8 @@ grid-template-columns: auto ;
   border: 1px solid #f2f2f2;
   position: absolute;
   /*bottom:2px;*/
-  width: 98%;
-  height: 65%;
+  width: 100%;
+  height: 61%;
 }
 #map{
   position: relative;  
@@ -594,9 +675,67 @@ grid-template-columns: auto ;
   height: 100%; 
   margin: 0;
   padding: 0; 
-  /*border: 1px solid #000;*/
-    
+  /*border: 1px solid #000;*/    
 }
+
+.container-custom-principal .contenedorFotosLista{
+margin: 5px;
+display: grid;
+grid-template-columns: auto auto;
+}  
+.container-custom-principal .contenedorLista {
+      
+    width: 95%;
+    height: 210px;
+    background: #fff;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;   
+    border-radius: 3px; 
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+    }
+
+.contenedorLista .fotoL{  
+  /*background: url(../img/barcelona.jpeg) no-repeat center center;background-size: cover;*/
+  height: 65%; 
+  width: 100%;
+  border-radius: 3px 3px 0px 0px;
+   
+}
+
+.contenedorLista .mensajeL{   
+    width: 100%;
+   /* height: 30%;*/
+    padding-left: 5px;
+}
+.mensajeL .mensajeLPrecio{
+  font-weight:bold;  
+
+}
+.mensajeL .mensajeLZona{
+  font-weight:bold;  
+
+}
+.contenedorLista .contenedorMensajeServiciosPe{
+  display: grid;/*flex; flex-direction: row;*/
+  grid-template-columns: auto auto auto auto auto auto;
+}
+.contenedorLista .contenedorMensajeServiciosPe .mensajePerPu{
+    /*background: url(..//img/barcelona.jpeg) no-repeat center center;*/
+    width:25px; 
+    height:25px;
+    /*background-size: cover;*/
+    border-radius: 12px; 
+  }
+.contenedorLista .contenedorMensajeServiciosPe .mensajeServiciosPu{
+    width:25px; 
+    height:25px;
+    border:1px solid #000;
+    border-radius: 3px; 
+    margin: 0px 0px 2px 2px;
+  }
+
+
 /**********************fin buscarListaMapa***********************/
 /**********************div publicar general ******************/
 .container-custom-principal .posHeadCenter{
@@ -609,14 +748,26 @@ position: absolute;
 left: 5px;
 top: 14px; 
 }
+.container-custom-principal .icoBuscarBtnPuPrin{
+  background: url(../img/publicarB.png) no-repeat center center;
+  height: 25px; 
+  width: 25px;
+  background-size: 25px 25px;
+
+}
 .container-custom-principal .btnPosDer{
 position: absolute;
 right: 10px;
-top: 14px; 
+top: 8px; 
 }
 .container-custom-principal .headerPublicar {
+  padding: 5px 10px 0px 10px ;
+  color: #008080;
+  background-color:#f2f2f2;
+  border-bottom: 3px solid #b3cccc;
   font-size: 17px;  
 }
+
 /****************************fin div general **********************************/
 
 /****************************div publicar general***************************/
@@ -690,7 +841,7 @@ top: 14px;
 .div-custom-principal .contenedorDireccion{
   /*position: absolute;*/
   /*border: 1px solid red;  */
-  padding: 10px 10px 10px 10px;
+  padding: 10px 10px 1px 10px;
   width: 100%;
   margin: 0px;
   /*padding: 10px;*/
@@ -701,7 +852,7 @@ top: 14px;
   border-bottom:1px solid #008080;
 }
 .div-custom-principal .mensajeMapaUbicacion{
-  width: 50%;
+  width: 90%;
 }
 .div-custom-principal .icoMapaUbicacion{
   width: 50%;
@@ -719,15 +870,15 @@ top: 14px;
   background: #fff;
   border: 1px solid #f2f2f2;
   position: absolute; 
-  width: 98%;
-  height: 75%;
+  width: 100%;
+  height: 81%;
   display: none;
 }
 .div-custom-principal #mapDireccionBuscar{
   position: relative;
   /*display: none;*/
   width: 100%;
-  height: 100%; 
+  height: 81%; 
   margin: 0;
   padding: 0; 
   /*border: 1px solid #000;*/
@@ -737,46 +888,17 @@ top: 14px;
   position: relative;
   /*display: none;*/
   width: 100%;
-  height: 100%; 
+  height: 81%; 
   margin: 0;
   padding: 0; 
   /*border: 1px solid #000;*/    
 }
 /*************** fin paso 1 direccion  *********************/
 
+
+
 /************************2 foto ubucacion*********************************/
-#divImgPublicarP{
-  /*background: url('../img/photo-camera2.png') no-repeat center center;*/
-  width: 200px;
-  height:190px;
-  padding: 5px;
-  background-size: cover;
-  display: none;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
- /* border:1px solid #008080; */
 
-}
-
-.divImgPublicarP img{
-  margin:0 auto;
-  /*display:block;*/
-  width: 100%;
-  height:80%;
-/*border:1px solid #008080;  */
-}
-.container-custom-principal .fotoPublicar{
-  width:200px;
-  height:190px;
-  margin: 0;
-  margin: 5px;
-  /*padding: 5px;*/
-  display: flex;
-  flex-direction: column;      
-  border-radius: 5px; 
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
-  /*background-color: #000;*/
-}
 
 /***************************fin de 2 foto ubicacion**************************************/
 #paginaUsuarioPerfilEditar{
@@ -819,6 +941,39 @@ top: 14px;
   height: 40%;
  /* border:1px solid #008080;  */
 }
+#divImgPublicarP{
+  /*background: url('../img/photo-camera2.png') no-repeat center center;*/
+  width: 200px;
+  height:190px;
+  margin: 0;
+  padding: 5px;
+  background-size: cover;
+  display: none;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+ /* border:1px solid #008080; */
+
+}
+
+#divImgPublicarP img{
+  margin:0 auto;
+  /*display:block;*/
+  width: 80%;
+  height:95%;
+/*border:1px solid #008080;  */
+}
+.container-custom-principal .fotoPublicar{
+  width:200px;
+  height:190px;
+  margin: 0;
+  margin: 5px;
+  /*padding: 5px;*/
+  display: flex;
+  flex-direction: column;      
+  border-radius: 5px; 
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+  /*background-color: #000;*/
+}
 .removeImgPublicar {
 
 padding: 8px;
@@ -857,6 +1012,7 @@ font-size: 14px;
 .container-custom-principal button.btn-circle {
   display:scroll;
   position:relative;
+  opacity: 0.7;
   top:5px;
   left: 5px;
   width: 30px;
@@ -865,13 +1021,13 @@ font-size: 14px;
   padding: 6px 0;
   line-height: 1.428571429;
   text-align: center;
-  border:none;
+  border:1px solid #008080;/*none;*/
   background-color:#f2f2f2; 
   text-decoration:none; 
   color:#008080;  
   cursor:pointer;
   outline: none;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);     
+  /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);     */
 }
 .container-custom-principal button.btn-circle:focus {    
   width: 30px;
@@ -947,9 +1103,7 @@ font-size: 14px;
  height: 70px; 
  width: 60px;
  background-size: 60px 70px;
- border-radius: 5px;
- /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
- /*opacity: 0.8;*/
+ border-radius: 5px; 
  border: 1px solid #000;
 }
 .contendorRadioPu .imgViComp {
@@ -959,10 +1113,7 @@ font-size: 14px;
   width: 60px;
   background-size: 60px 70px;
   border-radius: 5px;
-  border: 1px solid #000;
- /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
- /*opacity: 0.8;*/
- /*border: 1px solid #000;*/
+  border: 1px solid #000; 
 }
 .form-principal-publicar input[type="radio"] { 
   opacity: 0; 
@@ -1010,24 +1161,23 @@ font-size: 14px;
  /*opacity: 0.8;*/
  /*border: 1px solid #000;*/
 }
-.container-custom-principal button.btn-circleMM {
+.container-custom-principal .btn-circleMM {
   display:scroll;
   position:relative;
   top:1px;
   width: 30px;
   height: 30px;
   border-radius: 15px;
-  padding: 1px 0;
+  padding: 5px 0;
   line-height: 1.428571429;
   text-align: center;
   border:none;
   background-color:#f2f2f2; 
   text-decoration:none; 
-  color:#008080;  
-  
+  color:#008080;    
   outline: none;
   cursor:pointer;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);     
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);     
   
 }
 .container-custom-principal .contenedorServicios{
@@ -1037,6 +1187,13 @@ font-size: 14px;
   flex-wrap: wrap; 
   /*border: 1px solid pink;*/
   padding: 5px;
+}
+.contenedorServicios .serviciosPuMas{
+  margin: 5px;
+  height: 70px;
+  width: 60px;
+
+  border-radius: 5px;   
 }
 .contenedorServicios .serviciosPu{  
   margin: 5px;
@@ -1110,15 +1267,19 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/ascensorG.png);
   background-size: cover;
   cursor: pointer;
+  border:none;
+  
 }
 .contenedorServiciosLi .imgSeAscensor input[type="checkbox"]:checked + label span {
   background: url(../img/ascensorN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px; 
 }
 
 .contenedorServiciosLi .imgSeCalefaccion input[type="checkbox"] {
@@ -1128,15 +1289,18 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/calefaccionG.png);
   background-size: cover;
   cursor: pointer;
+  border:none;
 }
 .contenedorServiciosLi .imgSeCalefaccion input[type="checkbox"]:checked + label span {
   background: url(../img/calefaccionN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px;
 }
 
 .contenedorServiciosLi .imgSeEstacionamiento input[type="checkbox"] {
@@ -1146,7 +1310,7 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/estacionamientoG.png);
   background-size: cover;
@@ -1155,6 +1319,8 @@ font-size: 14px;
 .contenedorServiciosLi .imgSeEstacionamiento input[type="checkbox"]:checked + label span {
   background: url(../img/estacionamientoN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px;
 }
 
 .contenedorServiciosLi .imgSeLavadora input[type="checkbox"] {
@@ -1164,7 +1330,7 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/lavadoraG.png);
   background-size: cover;
@@ -1173,6 +1339,8 @@ font-size: 14px;
 .contenedorServiciosLi .imgSeLavadora input[type="checkbox"]:checked + label span {
   background: url(../img/lavadoraN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px;
 }
 
 .contenedorServiciosLi .imgSeLavaVajilla input[type="checkbox"] {
@@ -1182,7 +1350,7 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/lavaVajillasG.png);
   background-size: cover;
@@ -1191,6 +1359,8 @@ font-size: 14px;
 .contenedorServiciosLi .imgSeLavaVajilla input[type="checkbox"]:checked + label span {
   background: url(../img/lavaVajillasN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px;
 }
 
 .contenedorServiciosLi .imgSeMuebles input[type="checkbox"] {
@@ -1200,7 +1370,7 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/mueblesG.png);
   background-size: cover;
@@ -1209,6 +1379,8 @@ font-size: 14px;
 .contenedorServiciosLi .imgSeMuebles input[type="checkbox"]:checked + label span {
   background: url(../img/mueblesN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px;
 }
 
 .contenedorServiciosLi .imgSePiscina input[type="checkbox"] {
@@ -1218,7 +1390,7 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/piscinaG.png);
   background-size: cover;
@@ -1227,6 +1399,8 @@ font-size: 14px;
 .contenedorServiciosLi .imgSePiscina input[type="checkbox"]:checked + label span {
   background: url(../img/piscinaN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px;
 }
 
 .contenedorServiciosLi .imgSePortero input[type="checkbox"] {
@@ -1236,7 +1410,7 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/porteroG.png);
   background-size: cover;
@@ -1245,6 +1419,8 @@ font-size: 14px;
 .contenedorServiciosLi .imgSePortero input[type="checkbox"]:checked + label span {
   background: url(../img/porteroN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px;
 }
 .contenedorServiciosLi .imgSeRadiador input[type="checkbox"] {
   display: none;
@@ -1253,15 +1429,18 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/radiadorG.png);
   background-size: cover;
   cursor: pointer;
+  border:none;
 }
 .contenedorServiciosLi .imgSeRadiador input[type="checkbox"]:checked + label span {
   background: url(../img/radiadorN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px;
 }
 
 .contenedorServiciosLi .imgSeSecador input[type="checkbox"] {
@@ -1271,15 +1450,18 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/secadorG.png);
   background-size: cover;
   cursor: pointer;
+  border:none;
 }
 .contenedorServiciosLi .imgSeSecador input[type="checkbox"]:checked + label span {
   background: url(../img/secadorN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px;
 }
 
 .contenedorServiciosLi .imgSeTv input[type="checkbox"] {
@@ -1289,15 +1471,18 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/tvG.png);
   background-size: cover;
   cursor: pointer;
+  border:none;
 }
 .contenedorServiciosLi .imgSeTv input[type="checkbox"]:checked + label span {
   background: url(../img/tvN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px;
 }
 
 .contenedorServiciosLi .imgSeWifi input[type="checkbox"] {
@@ -1307,15 +1492,18 @@ font-size: 14px;
   display: inline-block;
   width: 35px;
   height: 35px;
-  margin: -1px 4px 0 0;
+  /*margin: -1px 4px 0 0;*/
   vertical-align: middle;
   background: url(../img/wifiG.png);
   background-size: cover;
   cursor: pointer;
+  border:none;
 }
 .contenedorServiciosLi .imgSeWifi input[type="checkbox"]:checked + label span {
   background: url(../img/wifiN.png);
   background-size: cover;
+  border:1px solid #008080;
+  border-radius: 5px;
 }
 
 /*************************fin servicios*****************************************/
@@ -1360,23 +1548,102 @@ font-size: 14px;
   background: url(../img/camaNadaGLe.png) no-repeat center center;  
   background-size: 60px 70px;
 }
+/* The container */
+.contenedorHasta-collapse-custom .containerHasta {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 1px;
+  user-select: none;/*el usuario no puede marcar haciendo doble chic*/
+ 
+ /* font-size: 22px;border:1px solid blue;
+   cursor: pointer;
+   -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;  
+  */
+}
 
-.hasta input[type="checkbox"] {
+/* Hide the browser's default checkbox */
+.contenedorHasta-collapse-custom .containerHasta input {
+  position: absolute;
+  opacity: 0;  
+  height: 18px;
+  width: 18px;
+  /* cursor: pointer;  */ 
+}
+/* Create a custom checkbox */
+.contenedorHasta-collapse-custom .checkmark {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  border:2px solid #008080;
+  border-radius: 2px;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.contenedorHasta-collapse-custom .checkmark:after {
+  content: "";
+  position: absolute;
   display: none;
 }
+/* Show the checkmark when checked */
+.contenedorHasta-collapse-custom .containerHasta input:checked ~ .checkmark:after {
+  display: block;
+}
+/* Style the checkmark/indicator */
+.contenedorHasta-collapse-custom .containerHasta .checkmark:after {
+  left:4px;
+  top: 0px;
+  width: 6px;
+  height: 10px;
+  border: solid #008080;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.contenedorHasta-collapse-custom .containerHasta .glyphicon {
+  position: absolute;
+  padding: 2px;
+  pointer-events: none;
+  color:#008080;    
+  right: 10px;
+  /*border: 1px solid #000;*/
+}
+
+
+
+
+/*
+
+.hasta input[type="checkbox"] {
+  margin: 0 auto;  
+  display: inline-flex;
+  opacity: 0.8;
+  width: 15px;
+  height: 15px;
+  border:3px solid #000;
+  /*display: none;*/
+/*
+}
 .hasta input[type="checkbox"] + label span {
-  
-  display: inline-block;
+  /*pointer-events: none;
+  border:2px solid red;*/
+/*  display: inline-block;
   width: 15px;
   height: 15px;  
   background: url(../img/uncheck.png);
   background-size: cover;  
 }
 .hasta input[type="checkbox"]:checked + label span {
-  background: url(../img/check.png);
+  /*border:2px solid pink;*/
+/*  background: url(../img/check.png);
   background-size: cover;
 }
-
+*/
 .container-custom-principal .contenedorHasta-collapse-custom {
   color:#f2f2f2;
   padding: 0px;
@@ -1384,21 +1651,7 @@ font-size: 14px;
   border-bottom:1px solid #008080; 
   border-radius: 0;
 }
-/*
-.container-custom-principal .hasta-collapse-custom :focus{
-   color:#b3cccc;
-  /* border:1px solid red; */
-/*
-}
-.container-custom-principal .form-group .hasta-collapse-custom{
-  /*background:transparent;*/
-/*  border-bottom: 1px solid #008080;
-  /*border:1px solid pink; */
-  /*color: #f2f2f2;*/
-  /*border-radius: 0;*/
-/*
-}
-*/
+
 .container-custom-principal .hasta{ 
     position: relative;
     margin: 0px;
@@ -1547,8 +1800,26 @@ dos bordes con color y que giramos con transform: rotate(-45deg);
     cursor:pointer;
     outline: none;
     border-radius: 0;
+    height: 50px;
 }
-.container-custom-inicio button.btnFormularioContinuar:focus {
+.container-custom-principal button.btnFormularioContinuar:focus {
+    border:none;
+    background-color:#004d4d; 
+    text-decoration:none; 
+    color:#f2f2f2; 
+    cursor:pointer;
+    outline: none
+}
+
+.container-custom-principal button.btnFormularioContinuar:active:focus {
+    border:none;
+    background-color:#004d4d; /*!important;*/
+    text-decoration:none; 
+    color:#f2f2f2; 
+    cursor:pointer;
+    outline: none
+}
+.container-custom-principal button.btnFormularioContinuar:active:hover {
     border:none;
     background-color:#004d4d; 
     text-decoration:none; 
@@ -1570,7 +1841,7 @@ dos bordes con color y que giramos con transform: rotate(-45deg);
   background-color:#008080;
   /* border: 1px solid blue;*/
 }
-
+/********************Perfil ***********************************/
 .form-principal-perfil input[type="text"],
 .form-principal-perfil input[type="email"],
 .form-principal-perfil input[type="date"],
@@ -1602,13 +1873,12 @@ dos bordes con color y que giramos con transform: rotate(-45deg);
 }
 /*icono basurero */
 #clistA {
-margin: 2px;
-padding: 2px;
+padding: 5px;
 background: #f2f2f2;
-width: 17px;
-height: 17px;
+width: 24px;
+height: 24px;
 visibility: hidden;
-border-radius: 2px;
+border-radius: 12px;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 color:#008080; 
 }
@@ -1670,29 +1940,115 @@ border:1px solid #999999;
  /*opacity: 0.8;*/
  /*border: 1px solid #000;*/
 }
+
 .divCarac{
-text-align: center;
+/*text-align: center;
 color: #999999;
-font-size: 6px;
+font-size: 6px;*/
 margin-left: 10px;
-padding: 6px; 
+/*padding: 6px; */
 border-radius: 5px;
 border:1px solid #999999;   
 }
 .divCarac #imgSexo {
  
- margin-bottom: 10px; 
+ /*margin-bottom: 10px; */
  background: url(../img/mujerG.png) no-repeat center center;
- height: 20px; 
- width: 20px;
- background-size: 20px 20px;
- border-radius: 2px;
+ 
+ width: 25px;
+ height: 30px; 
+ background-size: 25px 30px;
+ /*border-radius: 2px;*/
 }
-.form-principal-perfil input[type="file"] { 
-width: 100%; 
-height: 100%; 
-opacity: 0; 
-/*cursor:  pointer;*/
+
+
+.container-custom-principal .contenedorFotoMensajePublicados {
+  width: 100%;
+  margin-bottom: 90px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  /*display: grid;
+  grid-template-columns: auto auto;*/
+ /* background-color: #fff;*/
+  border-radius: 2px;
+}
+.contenedorFotoMensajePublicados .publicadoM{
+  display:inline-block;
+  position:relative;
+  display: flex;
+  /*grid-template-columns: auto auto;*/
+  /*display: flex;
+  flex-direction: column;*/
+  width: 95%;  
+  margin:10px;  
+  padding:0;
+  background-color: #fff;
+  border-radius: 5px; 
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+  /*border: 1px solid red; */
+}
+.publicadoM .imgPubli {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px; 
+  width: 100%;
+  height: 150px;    
+}
+
+.publicadoM .fotoPublicadoM{
+  padding: 0;
+  width:60%;  
+}
+.publicadoM .mensajePublicadoM{
+  width: 40%;
+  padding: 5px;  
+}
+.mensajePublicadoM .strPreTiPublicado{  
+  font-size: 14px;
+  font-weight:bold;
+}
+/*.mensajePublicadoM .zonaPublicado{
+
+}*/
+/* boton editar en img publicado despues de click en icoUsuario*/
+.publicadoM .editarPublicadoM{
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  padding: 8px;
+  opacity: 0.7;
+  /*line-height: 1.428571429;interlineado */
+  /*text-align: center;*/
+  border:1px solid #008080;/*none;*/
+  background-color:#f2f2f2; 
+  text-decoration:none; 
+  color:#008080;  
+  
+  outline: none;
+  cursor:pointer;
+  /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+}
+/* boton eliminar en img publicado despues de click en icoUsuario*/
+.publicadoM .removePublicadoM{
+  position: absolute;
+  top: 45px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  padding: 7px;
+  opacity: 0.7;
+  border:1px solid #008080;/*none;*/
+  background-color:#f2f2f2; 
+  text-decoration:none; 
+  color:#008080;  
+  
+  outline: none;
+  cursor:pointer;
+  /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
 }
 /****************fin de perfil*************************/
 /****************iconos footer*************************/
@@ -1717,11 +2073,17 @@ opacity: 0;
   padding: 5px;
   
 }
+#icoBuscar{
+  /*border-top: 2px solid #008080;    */
+}
+/*.footer #icoUsuario{
+  border-top: 2px solid #f2f2f2;    
+}*/
 .footer .icoFooterBuscar{
   background: url(../img/buscarC.png) no-repeat center center;
   height: 30px; 
   /*width: 25px;*/
-  background-size: 30px 30px;  
+  background-size: 30px 30px;
   
 }
 .footer .icoFooterPublicar{
@@ -1770,18 +2132,21 @@ opacity: 0;
     border-radius: 5px; 
 }
 .removeImgPublicar {
+    margin: 7px;
     padding: 7px;
-    width: 28px;
-    height: 28px;
-    border-radius: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
     background-color:#f2f2f2;
-    /*color:#008080; */
+    
     color: #008080; 
-    font-size: 14px;
+    font-size: 25px;
   }  
 .container-custom-principal .fotoB{
+  
   height: 350px;
   }
+
 }
 @media screen and (max-width: 900px) {
   .contendorFotoPerfilM {    
@@ -1800,18 +2165,19 @@ opacity: 0;
   }
    .container-custom-principal .fotoPublicar{
     width:200px;
-    height:170px;  
+    height:190px;  
     margin: 3px;
     border-radius: 3px; 
   }   
 .removeImgPublicar {
-    padding: 4px;
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
+  margin: 5px;
+    padding: 5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
     background-color:#f2f2f2;    
     color: #008080; 
-    font-size: 12px;
+    font-size: 19px;
 }   
   .container-custom-principal .fotoB{
   height: 150px;
@@ -1839,14 +2205,15 @@ opacity: 0;
     border-radius: 2px; 
   }
   .removeImgPublicar {
-    padding: 3px;
-    width: 16px;
-    height: 16px;
-    border-radius: 8px;
+    margin: 4px;
+    padding: 6px;
+    width: 26px;
+    height: 26px;
+    border-radius: 13px;
     background-color:#f2f2f2;
-    /*color:#008080; */
+    
     color: #008080; 
-    font-size: 10px;
+    font-size: 15px;
   }
   .container-custom-principal .fotoB{
   height: 150px;
