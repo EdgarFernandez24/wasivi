@@ -4,7 +4,7 @@ var app = {
     },
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
-        navigator.geolocation.getCurrentPosition(onMapSuccess, onMapError, { enableHighAccuracy: true, timeout: 3000,maximumAge: 50000 }); 
+        navigator.geolocation.getCurrentPosition(onMapSuccess, onMapError, { enableHighAccuracy: true, timeout: 10000,maximumAge: 0 }); 
         //watchMapPosition();
         //navigator.camera.PictureSourceType.PHOTOLIBRARY;
         //watchWeatherPosition(); reinicia varias veces 
@@ -16,15 +16,19 @@ var app = {
     }
 };
 app.initialize();
-var ipConex = '192.168.1.105';
+var ipConex = '192.168.1.109';
 var Latitude = undefined;
 var Longitude = undefined;
 var cambioZona =1;//paracontrolar el cambio de zona
 var swipeZona=1;//para controlar el acceso a publicado lista 
-var swiper='';
+var swiperMapa='';//para mostrar swiper en mapa
+var entroTabLista=0;//par control de accesos a si entro a tab lista
+var posPubliDespues=0;//posicion para publicado en swiper
+var swiperMoPuTo=0;//para control de accese a swiper.destroy
 var ubicacionPrincipal='';//para esconder menu 
 var DesplazamientoActual='';//para esconder menu '
-
+//var swiperMapa='';
+var swiperFoPu='';//para mostra swiper en anuncio
 var selDiv = "";//div para publicar imagen
 var html = "";//para cargar div contenedor fotos publicar
 
@@ -35,10 +39,16 @@ var selDivPu = "";//div para mostrar lo publicado
 var htmlPu = "";//para cargar div contenedor publicados
 
 var selDivMostrarPubliTodoSwipe ="";//div para mostra lo publicado en swipe mapas
-var htmlMostrarPubliTodoSwipe = "";//para cargar div contenedor publicados en swipe
+var htmlMostrarPubliTodoSwipe = " ";//para cargar div contenedor publicados en swipe
+
+var selDivMostrarFotosSwipe="";//div para mostrar fotos publicadas por id publicado
+var htmlMostrarFotosSwipe = "";//para cargar div contenedor publicados en swipe
 
 var selDivMostrarPubliTodoLista ="";//div para mostrar lo publicado en listas
 var htmlMostrarPubliTodoLista ="";//para cargar div contenedor publicar listas
+
+var selDivMostrarDatosPu="";//para mosrtar lo publicado cuantos ho mu, servicios, no permitido
+var htmlMostrarDatosPu="";//para cargar div mostrar publicado cuantos ho mu, servicios, no permitido
 var autoCDir=0;
 var autoCCiu=0;
 var storedFiles = [];//array de img por foto libreria
@@ -115,8 +125,13 @@ function getMap(latitude, longitude) {
     zoomControl: true,
     rotateControl : false,
     mapTypeControl: true,
+
     streetViewControl: false,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+    panControl: false,
+    fullScreenControl: false,
+    enableCloseButton: false,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    mapTypeControlOptions:{position: google.maps.ControlPosition.BOTTOM_CENTER}
   };
   map = new google.maps.Map(document.getElementById("map"), mapOptions);
   
@@ -173,8 +188,9 @@ function getMap(latitude, longitude) {
       marker.addListener('click', function() {
         infoWindow.setContent(infowincontent);
         infoWindow.open(map, marker);
-        swiper.slideTo(posPubli, 0); //para mostrar la posicion de la publicacion
-        //console.log( "markers id: "+id+" name: "+name+" address: "+address+" type: "+type+" posPubli: "+posPubli);
+        swiperMapa.slideTo(posPubli, 0); //para mostrar la posicion de la publicacion
+        posPubliDespues=posPubli;
+        console.log( "markers id: "+id+" name: "+name+" address: "+address+" type: "+type+" posPubli: "+posPubli);
       });
       console.log( "markers id: "+id+" name: "+name+" address: "+address+" type: "+type+" posPubli: "+posPubli);
     });
@@ -233,7 +249,7 @@ function getWeather(latitude, longitude) {
         if (results.weather.length) {
           $.getJSON(queryString, function (results) {
             if (results.weather.length) {
-              $('#description').text(results.name);
+              //$('#description').text(results.name);
               $('#temp').text(((results.main.temp-32)/1.8).toFixed(1) +'º');              
               $('#humidity').text(results.main.humidity + '%');           
             }
@@ -509,6 +525,11 @@ function registrarUsuario(){ //evento activado por onsubmit en validarformulario
         cache: false,
         contentType: false,
         processData: false,
+        beforeSend: function(){
+           //Agregamos la clase loading al body
+          $('body').addClass('loading');                    
+          console.log("entro a la crga del gif");
+        },
         success: function(datosR){
           $("#aIngresar").tab('show');
           if(datosR.uReg==1){
@@ -526,7 +547,12 @@ function registrarUsuario(){ //evento activado por onsubmit en validarformulario
           console.log(" datosR "+datosR.uReg);
         },
         error : function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status +" "+ textStatus+" "+ errorThrown);
+            $('body').removeClass('loading'); //Removemos la clase loading
+            alert("Problemas con la conexion. No se pudo registrar al usuario: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+        },
+        complete: function(){
+           //$('body').addClass('loading'); 
+          $('body').removeClass('loading'); //Removemos la clase loading
         }
     });    
 }
@@ -635,6 +661,11 @@ function actualizarPerfil(cPassword)
         cache: false,
         contentType: false,
         processData: false,
+        beforeSend: function(){
+           //Agregamos la clase loading al body
+          $('body').addClass('loading');                    
+          console.log("entro a la crga del gif");
+        },
         success: function(datosP)
         {   //alert("exito actualizarPerfil");            
             console.log(JSON.stringify(datosP));
@@ -680,7 +711,12 @@ function actualizarPerfil(cPassword)
             //DatosLocalUpDate(datosP.uPer);    
         },
         error : function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status +" "+ textStatus+" "+ errorThrown);
+            $('body').removeClass('loading'); //Removemos la clase loading
+            alert("Problemas con la conexion. No se pudo actualizar al usuario: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+        },
+        complete: function(){
+           //$('body').addClass('loading'); 
+          $('body').removeClass('loading'); //Removemos la clase loading
         }
     });   
 }
@@ -834,11 +870,21 @@ function removeFile(e) {
         data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar'],imgUri:'fotos/'+$datosLocal['usrEmail']+'/'+decodeURI(file)},                 
         crossDomain: true,
         cache: false,
+        beforeSend: function(){
+           //Agregamos la clase loading al body
+          $('body').addClass('loading');                    
+          console.log("entro a la crga del gif");
+        },
         success: function(datosEFoto){                        
             console.log("datosEFoto "+datosEFoto['fotoEliminado']);                      
         },
         error : function(jqXHR, textStatus, errorThrown) {
-            alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+            $('body').removeClass('loading'); //Removemos la clase loading
+            alert("Problemas con la conexion. No se pude hacer la consulta: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+        },
+        complete: function(){
+           //$('body').addClass('loading'); 
+          $('body').removeClass('loading'); //Removemos la clase loading
         }
       });
       break;
@@ -856,11 +902,21 @@ function removeFile(e) {
         data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar'],imgUri:file},                 
         crossDomain: true,
         cache: false,
+        beforeSend: function(){
+           //Agregamos la clase loading al body
+          $('body').addClass('loading');                    
+          console.log("entro a la crga del gif");
+        },
         success: function(datosEFotoDb){                        
             console.log("datosEFoto "+datosEFotoDb['fotoEliminado']);                      
         },
         error : function(jqXHR, textStatus, errorThrown) {
-            alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+            $('body').removeClass('loading'); //Removemos la clase loading
+            alert("Problemas con la conexion. No se pude hacer la consulta: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+        },
+        complete: function(){
+           //$('body').addClass('loading'); 
+          $('body').removeClass('loading'); //Removemos la clase loading
         }
       });  
       break;
@@ -951,6 +1007,11 @@ function editarPublicado(e) {
         data: {idUsuario:$datosLocal['usrId'],idPublicacion:idPublicacion},                 
         crossDomain: true,
         cache: false,
+        beforeSend: function(){
+           //Agregamos la clase loading al body
+          $('body').addClass('loading');                    
+          console.log("entro a la crga del gif");
+        },
         success: function(datosEPubli){ 
             $datosRemotoConsultarDir=JSON.stringify(datosEPubli);
             localStorage.setItem('datosDir', $datosRemotoConsultarDir);
@@ -983,14 +1044,17 @@ function editarPublicado(e) {
               autoCDir=1;
               autoCCiu=1;
               btnEditarPublicadoM=1;
-
               btnAtrasDir = 0;                        
-              continuarDir = 0;
-              
+              continuarDir = 0;              
             }          
         },
         error : function(jqXHR, textStatus, errorThrown) {
-            alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+            $('body').removeClass('loading'); //Removemos la clase loading
+            alert("Problemas con la conexion. No se pude hacer la consulta: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+        },
+        complete: function(){
+           //$('body').addClass('loading'); 
+          $('body').removeClass('loading'); //Removemos la clase loading
         }
       });
   

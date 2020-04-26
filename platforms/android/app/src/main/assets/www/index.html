@@ -23,13 +23,13 @@
     <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="./css/index.css">
     
-    <link rel="stylesheet" href="./css/swiper.min.css">
+    <link rel="stylesheet" href="./css/swiper537.min.css">
     <link rel="stylesheet" href="./css/datepicker.css">
     <link rel="stylesheet" href="./css/ripple.css">
     
     <title></title>  
 </head>
-<body>
+<body >
   <div class="container container-custom-inicio " id="divInicio">
     <div class="div-custom-inicio" id="paginaInicio">
       <ul class="nav nav-tabs navtab-custom-inicio">
@@ -48,13 +48,21 @@
                 </div>
                 <span class="text-danger-custom" id="mensajeErrorEmailI"></span>
               </div>
-              <div class="form-group">
+              <!--div class="form-group">
                 <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-lock"></i>
-                  <input type="password" class="form-control" name="inPassword" id="inPassword"  placeholder="Contraseña" required >
+                  <i class="glyphicon glyphicon-lock"></i>                  
+                  <input type="password" class="form-control" name="inPassword" id="inPassword"  placeholder="Contraseña" required >                   
                 </div>
                 <span class="text-danger-custom" id="mensajeErrorPasswordI"></span>
-              </div>           
+              </div--> 
+              <div class="form-group">
+                <div class="input-group"> 
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                  <input type="password" class="form-control" name="inPassword" id="inPassword"  placeholder="Contraseña" required >
+                  <span class="input-group-addon " id="mostrarPassIn"><i class="glyphicon glyphicon-eye-close"></i></span>
+                </div>
+              </div> 
+                     
               <div class="form-group">          
                 <button name="btnIngresar" onclick="" id ="btnIngresar" class="btn btn-primary btn-md btn-block btnFormulario" value="1" >Iniciar Sesion</button>
                 <input type="reset" value="Limpiar" class="btn btn-default btn-md btn-block btnReset" id="limpiar">
@@ -187,21 +195,33 @@
                   <input type="email" class="form-control" name="EmailR" id="EmailR" required placeholder="ejemplo@email.com">
                 </div>
                 <span class="text-danger-custom" id="mensajeErrorEmailR"></span>                      
-              </div>                     
-              <div class="form-group">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-lock"></i>
-                  <input type="password" class="form-control" name="contrasenya" id="contrasenya" required placeholder="Contraseña">
-                </div>
-                <span class="text-danger-custom" id="mensajeErrorContrasenya"></span>
               </div> 
               <div class="form-group">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-lock"></i>
+                <div class="input-group"> 
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                  <input type="password" class="form-control" name="contrasenya" id="contrasenya" required placeholder="Contraseña">
+                  <span class="input-group-addon " id="mostrarPassRe"><i class="glyphicon glyphicon-eye-close"></i></span>
+                </div>
+                <span class="text-danger-custom" id="mensajeErrorContrasenya"></span>
+              </div>
+              <div class="form-group">
+                <div class="input-group"> 
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                   <input type="password" class="form-control" name="cContrasenya" id="cContrasenya" required placeholder="Repita Contraseña">
-                </div>                        
+                  <span class="input-group-addon " id="cMostrarPassRe"><i class="glyphicon glyphicon-eye-close"></i></span>
+                </div>
                 <span class="text-danger-custom" id="mensajeErrorCContrasenya" ></span>
-              </div>         
+              </div>
+              <!--div class="form-group">
+                <div class="inner-addon left-addon">
+                  <i class="glyphicon glyphicon-lock"></i>                  
+                </div>                
+              </div--> 
+              <!--div class="form-group">
+                <div class="inner-addon left-addon">
+                  <i class="glyphicon glyphicon-lock"></i>                  
+                </div>                                        
+              </div-->         
               <div class="checkbox">
                 <label class="label-custom">
                   <input type="checkbox" name="terminosCond" id="terminosCond" required=""> 
@@ -255,6 +275,7 @@
       </div>
     </div> <!--fin modal fade-->
   </div><!--fin divInicio-->
+  <div class="modalLoading"></div>
   <div class="container container-custom-principal" id="divPrincipal">   
     <div class="div-custom-principal " id="paginaPrincipal">
       <div class="header navbar-fixed-top" id="inputBuscar" ><!-- -fixed-top-->
@@ -327,19 +348,7 @@
           <img src="./img/madrid1.jpg" class="imgZona">
           <strong>barcelona ciudad 3</strong> zona 1
         </div>
-        <!-- ejemplo con background img 
-        <div class="text-center fotoB">
-          <div class="imgZona"></div>
-          <div class="mensajeZona"><strong>barcelona ciudad 1</strong> zona 1</div>
-        </div>
-        <div class="text-center fotoB">
-          <div class="imgZona"></div>
-          <div class="mensajeZona"><strong>zona barcelona ciudad 2</strong> zona 2</div>
-        </div>
-        <div class="text-center fotoB">
-          <div class="imgZona"></div>
-          <div class="mensajeZona"><strong>zona ciudad 2</strong> zona 3</div>
-        </div>-->
+        
 
       </div><!--fin contenedorFotosBarrios--> 
       <button class="btn btn-primary btn-md btn-block btnPrincipalPublicar " id="btnPublicarPrincipal">
@@ -348,84 +357,50 @@
 
     <!-- inicio buscar por lista o mapas -->
    <div class="div-custom-principal" id="paginaListaMapas">      
-    <div class="header navbar-fixed-top" >        
-      <span class="glyphicon glyphicon glyphicon-arrow-left" id="btnAtras"></span>
+    <div class="header navbar-fixed-top" > 
+      <div class="btnAtrasListaMapa" id="btnAtras">
+        <span class="glyphicon glyphicon glyphicon-arrow-left"></span>        
+            
+      <!--span class="glyphicon glyphicon glyphicon-arrow-left" id=""></span-->
       <!--label>lat <span id="lat"></span></label> 
       <label>lon <span id="lon"></span></label--> 
-      <span class="posHeadDerecha"><label>
-        <span id="description"></span></label>  
+      <div class="posHeadDerecha">
+        <!--label><span id="description"></span></label-->  
         <label>T: <span id="temp"></span></label>                
         <label>H: <span id="humidity"></span></label>
-      </span>              
+      </div>
+       </div>
+      <div>              
       <ul class="nav nav-tabs navtab-custom-principal "> <!---->
+
         <li class="active  ripple"><a href="#buscarMapa" id="aBuscarMapa"><span class="glyphicon glyphicon-map-marker"></span> Mapa </a></li>
         <li class=" ripple"><a href="#buscarLista" id="aBuscarLista"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>    
       </ul>
+      </div>
+
     </div>    
       <div class="tab-content tab-content-custom-principal">
-        <div id="buscarMapa" class="tab-pane fade in active buscarMapa ">
+        <div id="buscarMapa" class="tab-pane fade in buscarMapa ">
           <!--a href="" onclick="activarSwipe()">aqui</a-->
           <div class="swiper-container" id="swiper-container">
             <div class="swiper-wrapper" id="swiper-wrapper">
               <!--aqui esta implementado div de la db con jquery -->
                 
             </div><!--fin swiper-wrapper-->
-          <!-- Add Pagination -->
+            <!-- Add Pagination -->
             <!--div class="swiper-pagination"></div-->
           </div><!--fin contenedor-swiper--> 
           <div id="contenedorMapa" class="contenedorMapa">
             <div id="map"></div>     
           </div> 
         </div><!--fin buscar mapa-->
-        <div id="buscarLista" class="tab-pane  buscarLista ">           
-          <form role="form" name="formBuscarLista" id="formBuscarLista" class="form-principal" enctype="multipart/form-data">
+        <div id="buscarLista" class="tab-pane fade in buscarLista ">           
+          <!--form role="form" name="formBuscarLista" id="formBuscarLista" class="form-principal" enctype="multipart/form-data"></form-->
             <div class="contenedorFotosLista colorFondo" id="contenedorFotosLista">
               
-              <!--div class="contenedorLista" id="f1">
-                <div class="fotoL"></div>
-                
-                <div class="">
-                  <strong>nombre de usuario contacto</strong> foto perfil
-                  <strong>precio 1</strong> dato 2
-                </div>
-              </div>
-              <div class="contenedorLista" id="f2">
-                <div class="fotoL"></div>
-                     
-                <div class="">
-                  <strong>nombre de usuario contacto</strong> foto perfil
-                  <strong>precio 1</strong> dato 2
-                </div>
-              </div-->
-              <!--div class="fotoL" id="f3">
-                <div class="">
-                  <strong>nombre de usuario contacto</strong> foto perfil
-                </div>
-                <img src="./img/madrid1.jpg"  class="">      
-                <div class="">
-                  <strong>precio 1</strong> dato 2
-                </div>
-              </div>
-              <div class="fotoL" id="f4">
-                <div class="">
-                  <strong>nombre de usuario contacto</strong> foto perfil
-                </div>
-                <img src="./img/londres1.jpg"  class="">
-                <div class="">
-                  <strong>precio 1</strong> dato 2
-                </div>
-              </div>
-              <div class="fotoL" id="f5">
-                <div class="">
-                  <strong>nombre de usuario contacto</strong> foto perfil
-                </div>
-                <img src="./img/londres1.jpg"  class="">
-                <div class="">
-                  <strong>precio 1</strong> dato 2
-                </div>
-              </div-->
+              
             </div><!--fotosLista -->
-          </form>         
+                   
         </div><!--fin buscar lista-->        
       </div><!--fin tab-content-->
     </div><!--fin paginaListaMapas-->
@@ -433,8 +408,11 @@
     <div class="div-custom-principal" id="paginaPublicar">
       <div class="div-secundario divPublicar" id="publicarDireccion">
         <div class="header navbar-fixed-top headerPublicar">
-          <span class="glyphicon glyphicon glyphicon-arrow-left " id="btnAtrasDireccion"></span>
-          <span class="posHeadCenter">1: Ubicación</span> 
+          <div class=" btnAtrasPu" id="btnAtrasDireccion">
+            <span class="glyphicon glyphicon glyphicon-arrow-left"></span>
+          </div>
+          <div class="posHeadCenter">1: Ubicación            
+          </div>
         </div>
         <div class="contenedorDireccion">
           <form role="form" name="formPublicarDireccion" id="formPublicarDireccion" class="form-principal-publicar" enctype="multipart/form-data" >
@@ -482,8 +460,13 @@
       </div><!--fin publicar Direccion-->
       <div class="div-secundario divPublicar" id="publicarFotoUbicacion"> 
         <div class="header navbar-fixed-top headerPublicar">
-          <span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" id="btnAtrasfotoUbicacion"></span>
-          <span class="posHeadCenter">2: Fotos</span> 
+
+          <div class=" btnAtrasPu" id="btnAtrasfotoUbicacion">
+            <span class="glyphicon glyphicon glyphicon-arrow-left"></span>
+          </div>
+          <div class="posHeadCenter">2: Fotos </div>
+          <!--span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" ></span>
+          <span class="posHeadCenter"></span--> 
         </div>   
         <form role="form" name="formPublicarFotoUbicacion" id="formPublicarFotoUbicacion" class="form-principal-publicar" enctype="multipart/form-data" >
           <fieldset>                 
@@ -578,8 +561,12 @@
       </div><!--fin publicarFotoUbicacion-->
       <div class="div-secundario divPublicar" id="publicarVivienda"> 
         <div class="header navbar-fixed-top headerPublicar">
-          <span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" id="btnAtrasVivienda"></span>
-          <span class="posHeadCenter">3: Vivienda</span> 
+          <div class=" btnAtrasPu" id="btnAtrasVivienda">
+            <span class="glyphicon glyphicon glyphicon-arrow-left"></span>
+          </div>
+          <div class="posHeadCenter">3: Vivienda </div>
+          <!--span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" ></span>
+          <span class="posHeadCenter"></span--> 
         </div>   
         <form role="form" name="formPublicarVi" id="formPublicarVi" class="form-principal-publicar" enctype="multipart/form-data" >
           <div>
@@ -668,8 +655,12 @@
       </div><!--fin publicarVivienda-->
       <div class="div-secundario divPublicar" id="publicarServicios"> 
         <div class="header navbar-fixed-top headerPublicar">
-          <span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" id="btnAtrasServicios"></span>
-          <span class="posHeadCenter">Servicios Disponibles </span> 
+          <div class=" btnAtrasPu" id="btnAtrasServicios">
+            <span class="glyphicon glyphicon glyphicon-arrow-left"></span>
+          </div>
+          <div class="posHeadCenter">Servicios Disponibles </div>
+          <!--span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" ></span>
+          <span class="posHeadCenter"> </span--> 
         </div>   
         <form role="form" name="formPublicarSe" id="formPublicarSe" class="form-principal-publicar" enctype="multipart/form-data" >
         <div class="contenedorServiciosLi">          
@@ -763,8 +754,12 @@
 
     <div class="div-secundario divPublicar" id="publicarHabitacion"> 
       <div class="header navbar-fixed-top headerPublicar" >
-        <span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar" id="btnAtrasHabitacion" ></span>
-        <span class="posHeadCenter">4: Habitacion</span> 
+        <div class=" btnAtrasPu" id="btnAtrasHabitacion">
+          <span class="glyphicon glyphicon glyphicon-arrow-left"></span>
+        </div>
+        <div class="posHeadCenter">4: Habitacion </div>
+        <!--span class="glyphicon glyphicon glyphicon-arrow-left btnLeftPublicar"  ></span>
+        <span class="posHeadCenter"></span--> 
       </div>   
       <form role="form" name="formPublicarHabitacion" id="formPublicarHabitacion" class="form-principal-publicar" enctype="multipart/form-data" >
         <div>
@@ -884,210 +879,265 @@
     </div><!--fin publicarPiso-->
   </div><!--fin div Publicar-->
   <div class="div-custom-principal " id="paginaMensaje">
-
+  <!-- para chat -->
   </div>
         
-      <div class="div-custom-principal " id="paginaUsuarioPerfilEditar">
-        <div class="div-secundario">
-          <form role="form" name="formPerfil" id="formPerfil" class="form-principal-perfil" enctype="multipart/form-data">
-            <fieldset>
-              <legend class="label-custom-color">Perfil de usuario</legend>
-              <div class="form-group" >                       
-                <div class="fotoMensaje" style="display:inline-flex;" >
-                  <div class="contendorFotoPerfilE">
-                    <div data-toggle="modal" data-target="#modalEditarPerfil" class="fotoPerfilE" id="fotoPerfilE" name="fotoPerfilE">
-                      <span class="glyphicon glyphicon-trash" id="clistA"></span>                      
-                    </div>  
-                  </div>
-                  <div class="alert" id="mensajeClick" style="padding: 2px;"  >
-                    <span class="text-danger-custom1" id="mensajefotoA">
-                      <strong>No es una foto.!</strong> 
-                    </span>
-                    <div class="label-custom-medio">Haz clic en la imagen</div>
-                    <div class="label-custom-medio">para una foto o buscar en tus carpetas.</div>  
-                  </div>
-                </div>
-                <!-- Modal -->
-                  <div class="modal fade" id="modalEditarPerfil" role="dialog">
-                    <div class="modal-dialog">
-                      <!-- Modal content-->
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                          <h4 class="modal-title">Elije una opción</h4>
-                        </div>
-                        <div class="modal-body">              
-                          <div class="form-group" id="CamaraEditarPerfil">
-                            <label for="">Camara</label>
-                          </div>
-                          <div class="form-group" id="CargarEditarPerfil" >
-                            <label for="">Galeria</label>                            
-                          </div>
-                        </div>            
+  <div class="div-custom-principal " id="paginaUsuarioPerfilEditar">
+    <div class="div-secundario">
+      <form role="form" name="formPerfil" id="formPerfil" class="form-principal-perfil" enctype="multipart/form-data">
+        <fieldset>
+          <legend class="label-custom-color">Perfil de usuario</legend>
+          <div class="form-group" >                       
+            <div class="fotoMensaje" style="display:inline-flex;" >
+              <div class="contendorFotoPerfilE">
+                <div data-toggle="modal" data-target="#modalEditarPerfil" class="fotoPerfilE" id="fotoPerfilE" name="fotoPerfilE">
+                  <span class="glyphicon glyphicon-trash" id="clistA"></span>                      
+                </div>  
+              </div>
+              <div class="alert" id="mensajeClick" style="padding: 2px;"  >
+                <span class="text-danger-custom1" id="mensajefotoA">
+                  <strong>No es una foto.!</strong> 
+                </span>
+                <div class="label-custom-medio">Haz clic en la imagen</div>
+                <div class="label-custom-medio">para una foto o buscar en tus carpetas.</div>  
+              </div>
+            </div>
+            <!-- Modal -->
+              <div class="modal fade" id="modalEditarPerfil" role="dialog">
+                <div class="modal-dialog">
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Elije una opción</h4>
+                    </div>
+                    <div class="modal-body">              
+                      <div class="form-group" id="CamaraEditarPerfil">
+                        <label for="">Camara</label>
                       </div>
-                    </div>
-                  </div><!--fin modalEditarPerfil-->
-              </div>
-              <div class="form-group">         
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-user"></i>
-                  <input type="text" name="nombreP" id="nombreP" placeholder="Nombre" required value="" class="form-control"/>
-                </div>
-                <span class="text-danger" id="mensajeErrorNombreP"></span>
-              </div>
-              <div class="form-group">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-user"></i>
-                  <input type="text" name="apellidosP" id="apellidosP" placeholder="Apellidos" required value="" class="form-control" />
-                </div>
-                <span class="text-danger" id="mensajeErrorApellidosP"></span>
-              </div>
-              <div class="form-group" style="display: inline-flex;">
-                <label class="label-custom-color"> Sexo </label>                
-                <div class="divSexo" id="imgSexoH">
-                  <div class="imgSexoRH" id="imgSexoRH">
-                    <input type="radio" name="imgSexo" value="1" id="radioH" required>
-                    <p class="sexoHM" id="mensjeHS">Hombre</p>           
-                  </div>                 
-                </div>
-                <div class="divSexo" id="imgSexoM"> 
-                  <div class="imgSexoRM" id="imgSexoRM" >
-                    <input type="radio" name="imgSexo" value="2" id="radioM">
-                    <p class="sexoHM" id="mensjeMS">Mujer</p>           
-                  </div>          
-                </div>
-                <span class="text-danger"></span>
-              </div>
-              <div class="form-group">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-calendar"></i>
-                  <input type="date" name="fechaNacP" id="fechaNacP" placeholder="" value="" class="form-control" />
-                </div>
-                <span class="text-danger"></span>
-              </div>
-              <div class="form-group">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-phone"></i>
-                  <input type="text" name="telefonoP" id="telefonoP" placeholder="telefono" value="" class="form-control" />
-                </div>
-                <span class="text-danger" id="mensajeErrortelefonoP"></span>
-              </div>                   
-              <div class="form-group">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-envelope"></i>
-                  <input type="email" name="emailP" id="emailP" placeholder="Correo Electrónico" required value="" class="form-control" readonly>
-                </div>
-                <span class="text-danger" id="mensajeErrorEmailP"></span>          
-              </div> 
-              <div class="form-group">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-lock"></i>              
-                    <input type="text" name="passwordP" id="passwordP" placeholder="Escribe tu contraseña actual" class="form-control"/> 
-                </div>
-                <span class="text-danger" id="mensajeErrorContrasenyaPD"></span>
-                <span class="text-success" id="mensajeErrorContrasenyaPS"></span>
-              </div> 
-              <div class="form-group">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-lock"></i>
-                  <input type="password" name="passwordNP" id="passwordNP" placeholder="Nueva Contraseña"  class="form-control" disabled />
-                </div>                        
-                <span class="text-danger" id="mensajeErrorContrasenyaNP"></span>
-              </div>
-              <div class="form-group">
-                <div class="inner-addon left-addon">
-                  <i class="glyphicon glyphicon-lock"></i>
-                  <input type="password" name="cpasswordNP" id="cpasswordNP" placeholder="Repite Nueva Contraseña" class="form-control" disabled />
-                </div>                        
-                <span class="text-danger" id="mensajeErrorCContrasenyaNP"></span>
-              </div>             
-            </fieldset>
-            <span class="text-success" id="mPS"></span>
-            <span class="text-danger" id="mPD"></span>
-          </form>
-        </div>
-        <div class="navbar-fixed-bottom footerbtn">
-          <button form="formPerfil" id="btnActualizar" name="btnActualizar" class="btn btn-primary btn-md btn-block btnFormularioPrincipal" >Actualizar
-          </button>
-        </div><!--fin footerbtn-->             
-      </div><!-- fin pagina editar peril usuario-->        
-      <div class="div-custom-principal " id="paginaUsuarioPerfilMostrar">
-        <div class="div-secundario">          
-          <form role="form" name="" id="formPerfilMo" class="form-principal-perfil" enctype="multipart/form-data">
-            <fieldset>
-              <legend class="label-custom-color">Perfil de usuario</legend>
-              <div class="form-group" >
-                <div class="contendorFotoPerfilM">                  
-                  <div class="fotoPerfilM" id="fotoPerfilM"> 
-                     <button type="button" class="btn btn-primary btn-circle " id="btnEditarPerfil" ><i class="glyphicon glyphicon-pencil"></i></button>
+                      <div class="form-group" id="CargarEditarPerfil" >
+                        <label for="">Galeria</label>                            
+                      </div>
+                    </div>            
                   </div>
-                </div>            
-              </div>
-              <div class="form-group" style="display: inline-flex;">         
-                <div class="divCarac" id="divCarac">
-                  <div class="imgCarac" id="imgSexo"></div>
                 </div>
-                <div>&nbsp</div>
-                <div id="nombrePM">nombre </div> 
-                <div>&nbsp</div>
-                <div id="apellidosPM">apellidos</div>                
+              </div><!--fin modalEditarPerfil-->
+          </div>
+          <div class="form-group">         
+            <div class="inner-addon left-addon">
+              <i class="glyphicon glyphicon-user"></i>
+              <input type="text" name="nombreP" id="nombreP" placeholder="Nombre" required value="" class="form-control"/>
+            </div>
+            <span class="text-danger" id="mensajeErrorNombreP"></span>
+          </div>
+          <div class="form-group">
+            <div class="inner-addon left-addon">
+              <i class="glyphicon glyphicon-user"></i>
+              <input type="text" name="apellidosP" id="apellidosP" placeholder="Apellidos" required value="" class="form-control" />
+            </div>
+            <span class="text-danger" id="mensajeErrorApellidosP"></span>
+          </div>
+          <div class="form-group" style="display: inline-flex;">
+            <label class="label-custom-color"> Sexo </label>                
+            <div class="divSexo" id="imgSexoH">
+              <div class="imgSexoRH" id="imgSexoRH">
+                <input type="radio" name="imgSexo" value="1" id="radioH" required>
+                <p class="sexoHM" id="mensjeHS">Hombre</p>           
+              </div>                 
+            </div>
+            <div class="divSexo" id="imgSexoM"> 
+              <div class="imgSexoRM" id="imgSexoRM" >
+                <input type="radio" name="imgSexo" value="2" id="radioM">
+                <p class="sexoHM" id="mensjeMS">Mujer</p>           
+              </div>          
+            </div>
+            <span class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <div class="inner-addon left-addon">
+              <i class="glyphicon glyphicon-calendar"></i>
+              <input type="date" name="fechaNacP" id="fechaNacP" placeholder="" value="" class="form-control" />
+            </div>
+            <span class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <div class="inner-addon left-addon">
+              <i class="glyphicon glyphicon-phone"></i>
+              <input type="text" name="telefonoP" id="telefonoP" placeholder="telefono" value="" class="form-control" />
+            </div>
+            <span class="text-danger" id="mensajeErrortelefonoP"></span>
+          </div>                   
+          <div class="form-group">
+            <div class="inner-addon left-addon">
+              <i class="glyphicon glyphicon-envelope"></i>
+              <input type="email" name="emailP" id="emailP" placeholder="Correo Electrónico" required value="" class="form-control" readonly>
+            </div>
+            <span class="text-danger" id="mensajeErrorEmailP"></span>          
+          </div> 
+          <div class="form-group">
+            <div class="inner-addon left-addon">
+              <i class="glyphicon glyphicon-lock"></i>              
+                <input type="text" name="passwordP" id="passwordP" placeholder="Escribe tu contraseña actual" class="form-control"/> 
+            </div>
+            <span class="text-danger" id="mensajeErrorContrasenyaPD"></span>
+            <span class="text-success" id="mensajeErrorContrasenyaPS"></span>
+          </div> 
+          <div class="form-group">
+            <div class="inner-addon left-addon">
+              <i class="glyphicon glyphicon-lock"></i>
+              <input type="password" name="passwordNP" id="passwordNP" placeholder="Nueva Contraseña"  class="form-control" disabled />
+            </div>                        
+            <span class="text-danger" id="mensajeErrorContrasenyaNP"></span>
+          </div>
+          <div class="form-group">
+            <div class="inner-addon left-addon">
+              <i class="glyphicon glyphicon-lock"></i>
+              <input type="password" name="cpasswordNP" id="cpasswordNP" placeholder="Repite Nueva Contraseña" class="form-control" disabled />
+            </div>                        
+            <span class="text-danger" id="mensajeErrorCContrasenyaNP"></span>
+          </div>             
+        </fieldset>
+        <span class="text-success" id="mPS"></span>
+        <span class="text-danger" id="mPD"></span>
+      </form>
+    </div>
+    <div class="navbar-fixed-bottom footerbtn">
+      <button form="formPerfil" id="btnActualizar" name="btnActualizar" class="btn btn-primary btn-md btn-block btnFormularioPrincipal" >Actualizar
+      </button>
+    </div><!--fin footerbtn-->             
+  </div><!-- fin pagina editar peril usuario-->        
+  <div class="div-custom-principal " id="paginaUsuarioPerfilMostrar">
+    <!--div class="div-secundario"-->          
+      <form role="form" name="" id="formPerfilMo" class="form-principal-perfil" enctype="multipart/form-data">
+        <fieldset>
+          <legend class="label-custom-color">Perfil de usuario</legend>
+          <div class="form-group" >
+            <div class="contendorFotoPerfilM">                  
+              <div class="fotoPerfilM" id="fotoPerfilM"> 
+                 <button type="button" class="btn btn-primary btn-circle " id="btnEditarPerfil" ><i class="glyphicon glyphicon-pencil"></i></button>
               </div>
+            </div>            
+          </div>
+          <div class="form-group" style="display: inline-flex;">         
+            <div class="divCarac" id="divCarac">
+              <div class="imgCarac" id="imgSexo"></div>
+            </div>
+            <div>&nbsp</div>
+            <div id="nombrePM">nombre </div> 
+            <div>&nbsp</div>
+            <div id="apellidosPM">apellidos</div>                
+          </div>
+        </fieldset>
+          <span class="text-success" id="mPMS"></span>
+          <span class="text-danger" id="mPMD"></span>
+        </form>
+        <form role="form" name="" id="formPubliMo" class="form-principal-perfil" enctype="multipart/form-data">
+          <div class="contendorPublicados" id="contendorPublicados">          
+            <fieldset>
+              <legend class="label-custom-color">Publicados</legend>
+                <div class="form-group" >
+                  <div class="contenedorFotoMensajePublicados" id="contenedorFotoMensajePublicados">
+                    <!--div class='publicadoM' id=''>aqui creados elementos con javascript </div-->
+                  </div>            
+                </div>
             </fieldset>
-              <span class="text-success" id="mPMS"></span>
-              <span class="text-danger" id="mPMD"></span>
-            </form>
-            <form role="form" name="" id="formPubliMo" class="form-principal-perfil" enctype="multipart/form-data">
-              <div class="contendorPublicados" id="contendorPublicados">
+            <span class="text-success" id="mPuMS"></span>
+            <span class="text-danger" id="mPuMD"></span>          
+          </div>
+        </form>              
+      <!--/div--><!-- fin div secundario de pagina mostrar peril usuario-->             
+    </div><!-- fin pagina mostrar peril usuario--> 
+    <!--div class="div-secundario"-->  
+    <div class="div-custom-secundario " id="paginaPublicadoMostrar">
+      <div class="header navbar-fixed-top headerFotosPublicados" id="headerFotosPublicados" >
+          <div class=" btnAtrasPu" id="btnAtrasPublicadoMostrar">
+            <span class="glyphicon glyphicon glyphicon-arrow-left"></span>
+          </div>
+          <div class="posHeadCenter"></div>
+      </div>
+      <div class="contenedorFotosPublicadoM">                  
+        <div class="fotoPublicadoMSwipe" id="fotoPublicadoMSwipe"> 
+          <div class="swiper-container" id="swiper-containerFotosPublicados">
+            <div class="swiper-wrapper" id="swiper-wrapperFotosPublicados">
+              <!--aqui esta implementado div de la db con jquery -->                
+            </div><!--fin swiper-wrapper-->
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+          </div><!--fin contenedor-swiper-->           
+        </div>
+      </div> 
+      <div class="contenedorMensajeAnuncio" id="contenedorMensajeAnuncio" >
+        <fieldset>
+          <div class="form-group" >
+             <span class="BoldFoPuM" id="precioFoPuM"></span>  
+             <span class="label label-colorM"  id="incluyeFoPuM"></span> 
+             <!--div  id="fianzaFoPuM">pide fianza</div-->                              
+          </div>
+          <div class="form-group" >
+             <div class="BoldFoPuM" id="tituloFoPuM"></div>           
+          </div>
+          <div class="form-group" >
+             <div  id="comentarioFoPuM"></div>           
+          </div>
+          <div class="form-group" >
+             <div class="BoldFoPuM"  id="zonaFoPuM"></div>           
+          </div>
+          <div class="form-group" >
+            <div class="label-custom-negro">disponible:</div> 
+            <div class="disponibleFoPuM">                
+             <div  id="desdeFoPuM"></div>           
+             <div  id="hastaFoPuM"></div>
+             <div  id="minFoPuM"></div>           
+             <div  id="maxFoPuM"></div>
+           </div>                      
+          </div>
+          <div class="form-group">
+            <div class="label-custom-negro">Habitacion:</div> 
+            <div class="habitacionFoPuM">                
+             <div class="imgHabitacion" id="paraFoPuM"></div>           
+             <div class="imgHabitacion" id="dimensionFoPuM"></div>
+             <div class="imgHabitacion" id="camaFoPuM"></div>            
+           </div>
+          </div>
+          <div class="form-group">
+            <div class="label-custom-negro">Compartir con:</div> 
+            <div class="contenedorcompartirFoPuM" id="contenedorcompartirFoPuM">                
+             
+           </div>
+          </div>
+          <div class="form-group">
+            <div class="label-custom-negro">Servicios:</div> 
+            <div class="contenedorServiciosFoPuM" id="contenedorServiciosFoPuM">
+               
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="label-custom-negro">No permiten:</div> 
+            <div class="contenedorpermitenFoPuM" id="contenedorpermitenFoPuM">                
+                        
+           </div>
+          </div>
 
-              
-                <fieldset>
-                  <legend class="label-custom-color">Publicados</legend>
-                    <div class="form-group" >
-                      <div class="contenedorFotoMensajePublicados" id="contenedorFotoMensajePublicados">
-                        <!--div class='publicadoM' id=''>
-                          <div class="fotoPublicadoM">
-                            <img src="./img/barcelona1.jpg" class="imgPubli">
-                            <button type='button' class='btn btn-primary btn-circlePu' id='' ><i class='glyphicon glyphicon-pencil'></i></button>
-                          </div>                          
-                          <div class='mensajePublicadoM'>
-                            <div class='strPreTiPublicado'>250€/m
-                            </div>
-                            <div class='strPreTiPublicado'>titulo de habitacion linda
-                            </div>
-                            <div class='zonaPublicado'>Zona de Barcelona 
-                            </div>
-                          </div>
-                        </div>
-                        <div class='publicadoM' id=''>
-                          <div class="fotoPublicadoM">
-                            <img src="./img/madrid1.jpg" class="imgPubli">
-                            <button type='button' class='btn btn-primary btn-circlePu' id='' ><i class='glyphicon glyphicon-pencil'></i></button>
-                          </div>
-                          <div class='mensajePublicadoM'>
-                            <div class='strPreTiPublicado'>150€/m
-                            </div>
-                            <div class='strPreTiPublicado'>titulo de habitacion linda
-                            </div>
-                            <div class='zonaPublicado'>Zona de Barcelona 
-                            </div>
-                          </div>
-                        </div-->
-                      </div>            
-                    </div>
-                </fieldset>
-                <span class="text-success" id="mPuMS"></span>
-                <span class="text-danger" id="mPuMD"></span>
-              
-              </div>
-            </form>              
-          </div><!-- fin div secundario de pagina mostrar peril usuario-->             
-        </div><!-- fin pagina mostrar peril usuario--> 
+             
+          
+        </fieldset>
+      </div>
+    </div><!-- fin pagina paginaPublicadoMostrar-->
+     
+      
+
+
+           
+     
+
+
+
+
       <div class="div-custom-principal" id="divFooter">
         <div class="navbar-fixed-bottom footer">
           <div class="icoFooter ripple" id="icoBuscar">
             <div class="icoFooterBuscar"></div>
-            <div class="icoFooterMensaje" id="icoFMBuscar">Buscar
-            </div>
+            <div class="icoFooterMensaje" id="icoFMBuscar">Buscar</div>
           </div>
           <div class="icoFooter ripple" id="icoPublicar">
             <div class="icoFooterPublicar"></div>
@@ -1107,6 +1157,6 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCVnl1VBm-qnyhhi0l8VTXHR6NadW-DNQ&libraries=places"></script>
-    <script src="js/swiper.min.js"></script>    
+    <script src="js/swiper537.min.js"></script>    
   </body>
 </html>

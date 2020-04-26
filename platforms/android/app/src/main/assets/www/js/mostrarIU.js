@@ -40,7 +40,9 @@ $(document).ready(function(){
     selDivSe = $("#contenedorServicios");//para las servicios publicadas
     selDivPu = $("#contenedorFotoMensajePublicados"); //para lo publicado
     selDivMostrarPubliTodoSwipe = $("#swiper-wrapper"); //mostrar todo lo publicado dentro de swiper contenedor 
-    selDivMostrarPubliTodoLista = $("#contenedorFotosLista");// mostrrar todo lo publicado en fotos listas
+    selDivMostrarPubliTodoLista = $("#contenedorFotosLista");// mostrar todo lo publicado en fotos listas
+    selDivMostrarFotosSwipe = $("#swiper-wrapperFotosPublicados"); //mostrar fotos publicados por id publicados dentro de swiper contenedor fotos publicados 
+    htmlMostrarDatosPu=" ";//inicia vacio 
     inicioSesion(); //recupera y almacena datos locales 
 	 /* mostrar tabs divInicio inicio sesion y registrar*/            
     $("#aRegistrar").click(function(){
@@ -53,147 +55,115 @@ $(document).ready(function(){
     $("#linkRegistrar").click(function(){
         $("#aRegistrar").tab('show');
     });  
-           
+    $('#mostrarPassIn .glyphicon').on('click', function() {
+        $(this).toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open'); // toggle our classes for the eye icon
+        console.log($("#inPassword").attr('type'));
+        $("#inPassword").attr('type', $("#inPassword").attr('type')=='password' ? 'text' : 'password');
+        /*if ($("#inPassword").attr('type')=='password') { $('#inPassword').attr('type', 'text'); }
+        else{    $('#inPassword').attr('type', 'password'); }
+        */        
+    });   
+    $('#mostrarPassRe .glyphicon').on('click', function() {
+        $(this).toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open'); // toggle our classes for the eye icon
+        //console.log($("#contrasenya").attr('type'));
+        $("#contrasenya").attr('type', $("#contrasenya").attr('type')=='password' ? 'text' : 'password');        
+    });   
+    $('#cMostrarPassRe .glyphicon').on('click', function() {
+        $(this).toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open'); // toggle our classes for the eye icon
+        //console.log($("#contrasenya").attr('type'));
+        $("#cContrasenya").attr('type', $("#cContrasenya").attr('type')=='password' ? 'text' : 'password');        
+    }); 
     $("#linkBuscarListaMapa").click(function(){
-        //event.preventDefault(); 
-        //cambioZona=1;
+               
         $("#paginaPrincipal").css("display", "none");
+        $("#paginaPublicadoMostrar").css("display", "none");
         $("#paginaListaMapas").css("display", "block");
         $("#divFooter").css("display", "none");
-     //aqui si no cambio de posicion no entra mas si cambio de posision entra  tal vez implementar un limite de mostrar publicados ej.max 100 por zonas
-    // consultamos todo lo publicado dependiendo de la ciudad o la zona para empezar todo 
-        if (cambioZona==1) { // control para que cargue la consulta cada vez que se presione el linkbuscarmapa
-            $.ajax({
-                type :'POST',
-                url:'http://' + ipConex + '/wasiWeb/php/consultarPublicadosTodos.php',
-                dataType : 'json',                
-                data: {idUsuario:$datosLocal['usrId']},                 
-                crossDomain: true,
-                cache: false,
-                success: function(datosConsPubliTodos){
-                    console.log("datosConsPubliTodos "+JSON.stringify(datosConsPubliTodos));
-                   
-                    if (datosConsPubliTodos['publicados']>0) {//0 existen datos y no se completo la publicacion, -1 no existen 
-                        // tal vez no haga falta  datos remoto de publicados todo
-                        $datosRemotoConsultarPubliTodos=JSON.stringify(datosConsPubliTodos);
-                        localStorage.setItem('datosPubliT', $datosRemotoConsultarPubliTodos);
-                        $datosLocalPubliTodo=JSON.parse(localStorage.getItem('datosPubliT'));
+        if (swiperMoPuTo==1) {
+            $("#swiper-container div").remove(".slidePuTo");
+            swiperMapa.destroy(false,false);//false,true
+            $("#swiper-wrapperFotosPublicados div").remove(".slideFoIdPu"); // quitar los elementos vrados con icousuario para
+            swiperFoPu.destroy();
+            $("#contenedorcompartirFoPuM div").remove(".imgHabitacion");
+            $("#contenedorServiciosFoPuM div").remove(".imgHabitacion");
+            $("#contenedorpermitenFoPuM div").remove(".imgHabitacion");
+            swiperMoPuTo=0;
+        }
+        $("#buscarMapa").addClass('active');//fade in 
+        $("#aBuscarMapa").tab('show');
+        mostrarSwiperMapa(); 
+        
+    });
+    $("#btnAtrasPublicadoMostrar").click(function(){
 
-
-                        for (var i = 0; i < datosConsPubliTodos['publicados']; i++) {
-                            $contadorServicios=0;
-                            htmlMostrarPubliTodoSwipe+="<div class='swiper-slide' id="+datosConsPubliTodos['idPubliArray'][i]+">";
-                            htmlMostrarPubliTodoSwipe+=" <div class = 'fotoD' style='background:url(http://"+ipConex+"/wasiWeb/"+datosConsPubliTodos['rutaFotoArray'][i] +") no-repeat center center; background-size:cover;' >";
-                            //htmlMostrarPubliTodoSwipe+="     <img src=http://"+ipConex+"/wasiWeb/"+datosConsPubliTodos['rutaFotoArray'][i]+" class='imgD'>";
-                            htmlMostrarPubliTodoSwipe+=" </div>";
-                            htmlMostrarPubliTodoSwipe+=" <div class='mensajeD'>";
-                            htmlMostrarPubliTodoSwipe+="     <div class='mensajeDPrecio'>"+datosConsPubliTodos['precioArray'][i]+" €/m </div>";
-                            htmlMostrarPubliTodoSwipe+="     <div class='mensajeDZona'>"+datosConsPubliTodos['zonaArray'][i]+"</div>";    
-                            htmlMostrarPubliTodoSwipe+="     <div class='contenedorMensajeServiciosPe'>";
-                            htmlMostrarPubliTodoSwipe+="         <div class='mensajePerPu' style='background:url(http://"+ipConex+"/wasiWeb/"+datosConsPubliTodos['fotoPerfilArray'][i] +") no-repeat center center; background-size:cover;'></div>";
-                            if (datosConsPubliTodos['ascensorArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/ascensorN.png) no-repeat center center; background-size:cover;'> </div>";          
-                                $contadorServicios++;
-                            }
-                            if (datosConsPubliTodos['calefaccionArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/calefaccionN.png) no-repeat center center; background-size:cover;'> </div>";      
-                                $contadorServicios++;   
-                            }
-                            if (datosConsPubliTodos['estacionamientoArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/estacionamientoN.png) no-repeat center center; background-size:cover;'> </div>";      
-                                $contadorServicios++;
-                            }
-                            if (datosConsPubliTodos['lavadoraArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/lavadoraN.png) no-repeat center center; background-size:cover;'> </div>";      
-                                $contadorServicios++;
-                            }  
-                            if (datosConsPubliTodos['lavaVajillaArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/lavaVajillasN.png) no-repeat center center; background-size:cover;'> </div>";      
-                                $contadorServicios++;                                
-                            }
-                            if (datosConsPubliTodos['mueblesArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/mueblesN.png) no-repeat center center; background-size:cover;'> </div>";      
-                                $contadorServicios++;    
-                            } 
-                            if (datosConsPubliTodos['piscinaArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/piscinaN.png) no-repeat center center; background-size:cover;'> </div>";      
-                                $contadorServicios++;
-                            }
-                            if (datosConsPubliTodos['porteroArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/porteroN.png) no-repeat center center; background-size:cover;'> </div>";      
-                                $contadorServicios++;    
-                            }
-                            if (datosConsPubliTodos['radiadorArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/radiadorN.png) no-repeat center center; background-size:cover;'> </div>";      
-                                $contadorServicios++;    
-                            }
-                            if (datosConsPubliTodos['secadorArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/secadorN.png) no-repeat center center; background-size:cover;'> </div>";      
-                                $contadorServicios++;    
-                            } 
-                            if (datosConsPubliTodos['tvArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/tvN.png) no-repeat center center; background-size:cover;'> </div>";      
-                                $contadorServicios++;
-                            }
-                            if (datosConsPubliTodos['wifiArray'][i]==1 && $contadorServicios < 7) {
-                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/wifiN.png) no-repeat center center; background-size:cover;'> </div>";      
-                                $contadorServicios++;    
-                            }    
-                            htmlMostrarPubliTodoSwipe+="     </div>";
-                            htmlMostrarPubliTodoSwipe+=" </div>";                        
-                            htmlMostrarPubliTodoSwipe+="</div> ";                         
-                               
-                        }
-                    
-                        selDivMostrarPubliTodoSwipe.append(htmlMostrarPubliTodoSwipe); 
-                        activarSwipe();  
-                        htmlMostrarPubliTodoSwipe=" ";
-                                 
-                    }
-                    if (datosConsPubliTodos['publicados']==0) {
-                        
-                   }        
-                },
-                error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
-                }
-            });
-        cambioZona=0;
-        }        
-        //activarSwipe();
+        $("#paginaPrincipal").css("display", "none");
+        $("#paginaPublicadoMostrar").css("display", "none");
+        $("#paginaListaMapas").css("display", "block");
+        $("#divFooter").css("display", "none");
+        if (entroTabLista==0) {
+            if (swiperMoPuTo==1) {//no entra al inicio
+                $("#swiper-container div").remove(".slidePuTo");
+                swiperMapa.destroy(false,false);//false,true
+                $("#swiper-wrapperFotosPublicados div").remove(".slideFoIdPu"); // quitar los elementos vrados con icousuario para
+                swiperFoPu.destroy();
+                $("#contenedorcompartirFoPuM div").remove(".imgHabitacion");
+                $("#contenedorServiciosFoPuM div").remove(".imgHabitacion");
+                $("#contenedorpermitenFoPuM div").remove(".imgHabitacion");
+                swiperMoPuTo=0;
+            }
+            $("#buscarMapa").addClass('active');//fade in 
+            $("#aBuscarMapa").tab('show');
+            mostrarSwiperMapa();
+        }
+        else{
+            $("#swiper-wrapperFotosPublicados div").remove(".slideFoIdPu"); // quitar los elementos vrados con icousuario para
+            swiperFoPu.destroy();
+            $("#contenedorcompartirFoPuM div").remove(".imgHabitacion");
+            $("#contenedorServiciosFoPuM div").remove(".imgHabitacion");
+            $("#contenedorpermitenFoPuM div").remove(".imgHabitacion");
+            $("#buscarLista").addClass('active');//fade in 
+            $("#aBuscarLista").tab('show');
+        }
     });
 
+
+    //swiper mapa
     $('body #swiper-container').on('click', '.swiper-slide', function(){
-      console.log($(this).attr('id'));
-
-
-
-
-
-
-
-      /*
-    aqui implementamos mostrar publicadoSwipe en otro div
-      */
-
-
-
-
-    })
+        console.log($(this).attr('id'));
+        $idPublicacionFotos=$(this).attr('id');
+        posPubliDespues=$(this).data("posswiper"); //var global
+        //$("#paginaPrincipal").css("display", "none");
+        $("#paginaListaMapas").css("display", "none");
+        $("#paginaPublicadoMostrar").css("display", "block");
+        $("#divFooter").css("display", "none");
+        mostrarAnuncio($idPublicacionFotos);
+        
+    });    
 
     $("#btnAtras").click(function() {
         $("#paginaPrincipal").css("display", "block");
         $("#paginaListaMapas").css("display", "none");
-        $("#divFooter").css("display", "block"); 
-        cambioZona=0;           
+        $("#divFooter").css("display", "block");
+        $("#swiper-container div").remove(".slidePuTo"); 
+
+        $("#buscarMapa").addClass('active');//fade in
+        $("#buscarLista").removeClass('active');
+
+        swiperMapa.destroy();//false,true
+        posPubliDespues=0;
+        cambioZona=0;//datos para implementar
+        swiperMoPuTo=0;  
+        entroTabLista=0;         
         })
     $("#aBuscarLista").click(function(){
-
-        $("#aBuscarLista").tab('show');
-        console.log("buscar listas "+$datosLocalPubliTodo['publicados']);
+        console.log("aBuscarLista");
         
+        entroTabLista=1;
+        
+        $("#aBuscarLista").tab('show');
+        console.log("buscar listas "+$datosLocalPubliTodo['publicados']);        
         /* aqui implementamos mostrar publicados en listas  */
-        //selDivMostrarPubliTodoLista.remove(htmlMostrarPubliTodoLista);//para vaciar cada vez que ingresan por el momento que netre solo una vez
+        
         if (cambioZona==1 || swipeZona==1) {
            
         
@@ -269,9 +239,32 @@ $(document).ready(function(){
       }      
 
     });
+//tab lista 
+
+    $('body #contenedorFotosLista').on('click', '.contenedorLista', function(){   
+        console.log($(this).attr('id'));
+        $idPublicacionLista=$(this).attr('id');
+        //posPubliDespues=posPubliDespues;//$(this).data("posswiper");
+        
+        //$("#paginaPrincipal").css("display", "none");
+        $("#paginaListaMapas").css("display", "none");
+        $("#paginaPublicadoMostrar").css("display", "block");
+        $("#divFooter").css("display", "none");
+        mostrarAnuncio($idPublicacionLista);
+
+    });
+
     $("#aBuscarMapa").click(function(){
-       // activarSwipe();
-            $("#aBuscarMapa").tab('show');
+        console.log("aBuscarMapa"); 
+        $("#aBuscarMapa").tab('show'); 
+        entroTabLista=0;
+        //event.preventDefault();
+       /* $("#swiper-container div").remove(".slidePuTo");
+        swiperMapa.destroy(false,false);
+            
+            entroTabLista=0;
+           // swiperMapa.init();
+            mostrarSwiperMapa();*/
             
     });
 
@@ -280,6 +273,9 @@ $(document).ready(function(){
         //event.preventDefault();
         btnEditarPublicadoM =0;
         icoUserpublicadosM =0;
+
+        $("#contenedorFotoMensajePublicados div").remove(".publicadoM"); // quitar los elementos vrados con icousuario para 
+
         $(".footer .icoFooterBuscar").css({"background": "url(img/buscarC.png) no-repeat center center","background-size": "30px 30px"});
         $(".footer .icoFooterPublicar").css({"background": "url(img/publicarG.png) no-repeat center center","background-size": "30px 30px"});
         $(".footer .icoFooterMensajes").css({"background": "url(img/mensajeG.png) no-repeat center center","background-size": "30px 30px"});
@@ -294,7 +290,7 @@ $(document).ready(function(){
         $("#paginaUsuarioPerfilMostrar").css("display", "none");           
         //$("#paginaUsuarioPerfil").css("display", "none");
         
-        $("#icoFMBuscar").css({"color":"#008080"});
+        $("#icoFMBuscar").css({"color":"#3A9CB1"});
         $("#icoFMPublicar").css({"color":"rgba(89, 89, 89, 0.8)"});                       
         $("#icoFMMensaje").css({"color":"rgba(89, 89, 89, 0.8)"});            
         $("#icoFMPerfil").css({"color":"rgba(89, 89, 89, 0.8)"});        
@@ -303,6 +299,9 @@ $(document).ready(function(){
     $("#btnPublicarPrincipal, #icoPublicar").click(function(){
         btnEditarPublicadoM =0;
         icoUserpublicadosM =0;
+
+        $("#contenedorFotoMensajePublicados div").remove(".publicadoM"); // quitar los elementos vrados con icousuario para 
+
         $(".div-custom-principal .divPublicar").css({"padding":"0px","background-color": "#f2f2f2"});
         $("#paginaPrincipal").css("display", "none");
         $("#paginaListaMapas").css("display", "none");
@@ -330,6 +329,12 @@ $(document).ready(function(){
                 data: {idUsuario:$datosLocal['usrId']},                 
                 crossDomain: true,
                 cache: false,
+                beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');
+                     //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                    console.log("entro a la crga del gif");
+                },
                 success: function(datosConsultaDir){
                     console.log("btnPublicarPrincipal, icoPublicar datosConsultaDir "+JSON.stringify(datosConsultaDir));
                     $datosRemotoConsultarDir=JSON.stringify(datosConsultaDir);
@@ -353,7 +358,12 @@ $(document).ready(function(){
                     }        
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                },
+                complete: function(){
+                   //$('body').addClass('loading'); 
+                  $('body').removeClass('loading'); //Removemos la clase loading
                 }
             });
             btnAtrasDir=1;    
@@ -363,11 +373,20 @@ $(document).ready(function(){
     $("#btnAtrasDireccion").click(function() {
         console.log("btnEditarPublicadoM "+btnEditarPublicadoM+" icoUserpublicadosM "+icoUserpublicadosM);
 
-        if (btnEditarPublicadoM == 0 && icoUserpublicadosM == 0) {
+        if (btnEditarPublicadoM == 0 && icoUserpublicadosM == 0) { // entra cuando 
+
             $("#paginaPrincipal").css("display", "block");
             $("#paginaPublicar").css("display", "none");
             $("#divFooter").css("display", "block");  
-            $(".footer .icoFooterBuscar").css({"background": "url(img/buscarC.png) no-repeat center center","background-size": "30px 30px"});                
+            $(".footer .icoFooterBuscar").css({"background": "url(img/buscarC.png) no-repeat center center","background-size": "30px 30px"});
+            $(".footer .icoFooterPublicar").css({"background": "url(img/publicarG.png) no-repeat center center","background-size": "30px 30px"}); 
+            $(".footer .icoFooterMensajes").css({"background": "url(img/mensajeG.png) no-repeat center center","background-size": "30px 30px"});
+            $(".footer .icoFooterUsuario").css({"background": "url(img/perfilG.png) no-repeat center center","background-size": "30px 30px"});
+            
+            $("#icoFMBuscar").css({"color":"#3A9CB1"});
+            $("#icoFMPublicar").css({"color":"rgba(89, 89, 89, 0.8)"});                       
+            $("#icoFMMensaje").css({"color":"rgba(89, 89, 89, 0.8)"});            
+            $("#icoFMPerfil").css({"color":"rgba(89, 89, 89, 0.8)"});               
         }
         else{
 
@@ -381,14 +400,14 @@ $(document).ready(function(){
             $("#paginaUsuarioPerfilMostrar").css("display", "block");
 
             $(".icoFooter .icoFooterBuscar").css({"background": "url(img/buscarG.png) no-repeat center center","background-size": "30px 30px"});
-            $(".icoFooter .glyphicon-upload").css({"color":"rgba(89, 89, 89, 0.8)"});
-            $(".icoFooter .glyphicon-comment").css({"color":"rgba(89, 89, 89, 0.8)"});
+            $(".footer .icoFooterPublicar").css({"background": "url(img/publicarG.png) no-repeat center center","background-size": "30px 30px"}); 
+            $(".footer .icoFooterMensajes").css({"background": "url(img/mensajeG.png) no-repeat center center","background-size": "30px 30px"});
             $(".icoFooter .icoFooterUsuario").css({"background": "url(img/perfilC.png) no-repeat center center","background-size": "30px 30px"});  
 
             $("#icoFMBuscar").css({"color":"rgba(89, 89, 89, 0.8)"});  
             $("#icoFMPublicar").css({"color":"rgba(89, 89, 89, 0.8)"});                       
             $("#icoFMMensaje").css({"color":"rgba(89, 89, 89, 0.8)"});            
-            $("#icoFMPerfil").css({"color":"#008080"});      
+            $("#icoFMPerfil").css({"color":"#3A9CB1"});      
                                     
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
@@ -420,15 +439,28 @@ $(document).ready(function(){
                     data: {idUsuario:$datosLocal['usrId']},                 
                     crossDomain: true,
                     cache: false,
+                    beforeSend: function(){
+                         //Agregamos la clase loading al body
+                        $('body').addClass('loading');
+                         //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                        console.log("entro a la crga del gif");
+                        },
                     success: function(datosPublicados){
                         if (datosPublicados['publicados']>0) {                    
                             cargarPublicadosBD(datosPublicados);                        
                         }
                         console.log("datosPublicados "+JSON.stringify(datosPublicados)); 
-                        console.log("longitudPublicados "+ datosPublicados['publicados']);      
+                        console.log("longitudPublicados "+ datosPublicados['publicados']);
+                        $('body').removeClass('loading'); //Removemos la clase loading      
                     },
                     error : function(jqXHR, textStatus, errorThrown) {
-                        alert("error consultarFotoPublicado: " + jqXHR.status + " " + textStatus + " " + errorThrown);                    
+                        $('body').removeClass('loading'); //Removemos la clase loading
+                        alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);                    
+                    },
+                    complete: function(){
+                       //$('body').addClass('loading'); 
+                      $('body').removeClass('loading'); //Removemos la clase loading
+                      
                     }
                 }); 
                 icoUserpublicadosM=1; 
@@ -601,7 +633,7 @@ $(document).ready(function(){
             $("#icoFMBuscar").css({"color":"rgba(89, 89, 89, 0.8)"});  
             $("#icoFMPublicar").css({"color":"rgba(89, 89, 89, 0.8)"});                       
             $("#icoFMMensaje").css({"color":"rgba(89, 89, 89, 0.8)"});            
-            $("#icoFMPerfil").css({"color":"#008080"});      
+            $("#icoFMPerfil").css({"color":"#3A9CB1"});      
                                     
             /*datdo recuperados de local storage*/
             // $("#imgPerfil").attr({"src":"http://192.168.0.160/wasiWeb/"+ $datosLocal['usrImg']});
@@ -632,6 +664,12 @@ $(document).ready(function(){
                     data: {idUsuario:$datosLocal['usrId']},                 
                     crossDomain: true,
                     cache: false,
+                    beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');
+                     //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                    console.log("entro a la crga del gif");
+                    },
                     success: function(datosPublicados){
                         if (datosPublicados['publicados']>0) {                    
                             cargarPublicadosBD(datosPublicados);                        
@@ -640,7 +678,12 @@ $(document).ready(function(){
                         console.log("longitudPublicados "+ datosPublicados['publicados']);      
                     },
                     error : function(jqXHR, textStatus, errorThrown) {
-                        alert("error consultarFotoPublicado: " + jqXHR.status + " " + textStatus + " " + errorThrown);                    
+                        $('body').removeClass('loading'); //Removemos la clase loading
+                        alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);                    
+                    },
+                    complete: function(){
+                       //$('body').addClass('loading'); 
+                      $('body').removeClass('loading'); //Removemos la clase loading
                     }
                 }); 
                 icoUserpublicadosM=1;   
@@ -767,7 +810,7 @@ $(document).ready(function(){
             $contHombres++;                
         }
         if ($contHoNe) { // para que entre solo una vez despues de pasar de 1
-            $("#imgViHo").css({"background": "url(img/hombreNViPu.png) no-repeat center center ","background-size": "85px 85px"});
+            $("#imgViHo").css({"background": "url(img/hombreNViPu.png) no-repeat center center ","background-size": "65px 70px"});
             $contHoNe=0;
             $("#mensajeErrorPersonasPu").html("");
             cHoMPu=1;
@@ -795,7 +838,7 @@ $(document).ready(function(){
             }            
         }
         if ($contHoG) {
-            $("#imgViHo").css({"background": "url(img/hombreGViPu.png) no-repeat center center ","background-size": "85px 85px"});
+            $("#imgViHo").css({"background": "url(img/hombreGViPu.png) no-repeat center center ","background-size": "65px 70px"});
             $contHoG=0;
             cHoMPu=0;
             if (cHoMPu == 0 && cMuMPu == 0) {
@@ -815,7 +858,7 @@ $(document).ready(function(){
             $contMujeres++;    
         }
         if ($contMuNe) {
-            $("#imgViMu").css({"background": "url(img/mujerNViPu.png) no-repeat center center ","background-size": "85px 85px"});
+            $("#imgViMu").css({"background": "url(img/mujerNViPu.png) no-repeat center center ","background-size": "65px 70px"});
             $contMuNe=0;
             $("#mensajeErrorPersonasPu").html("");
             cMuMPu=1;
@@ -842,7 +885,7 @@ $(document).ready(function(){
             }
         }
         if ($contMuG) {
-            $("#imgViMu").css({"background": "url(img/mujerGViPu.png) no-repeat center center ","background-size": "85px 85px"});
+            $("#imgViMu").css({"background": "url(img/mujerGViPu.png) no-repeat center center ","background-size": "65px 70px"});
             $contMuG=0;
             cMuMPu=0;
             if (cHoMPu == 0 && cMuMPu == 0) {
@@ -1548,19 +1591,33 @@ $(window).on("scroll", function(e) {
 });//fin $(document).ready(function()
 
 
- ubicacionPrincipal  = window.pageYOffset;
-   $(window).on("scroll",function(e){
-        DesplazamientoActual = window.pageYOffset;
-        if(ubicacionPrincipal >= DesplazamientoActual){
-            document.getElementById('inputBuscar').style.top = '0';
-            //document.getElementById('btnPublicarPrincipal').style.bottom = '0';
-        }
-        else{
-            document.getElementById('inputBuscar').style.top = '-50px';
-            //document.getElementById('btnPublicarPrincipal').style.bottom = '-70';
-        }
-        ubicacionPrincipal = DesplazamientoActual;
-   });
+ubicacionPrincipal  = window.pageYOffset;
+$(window).on("scroll",function(e){
+    DesplazamientoActual = window.pageYOffset;
+    if(ubicacionPrincipal >= DesplazamientoActual){
+        document.getElementById('inputBuscar').style.top = '0';
+        //document.getElementById('btnPublicarPrincipal').style.bottom = '0';
+    }
+    else{
+        document.getElementById('inputBuscar').style.top = '-50px';
+        //document.getElementById('btnPublicarPrincipal').style.bottom = '-70';
+    }
+    ubicacionPrincipal = DesplazamientoActual;
+});
+
+ubicacionPrincipalM  = window.pageYOffset;
+$(window).on("scroll",function(e){
+    DesplazamientoActualM = window.pageYOffset;
+    if(ubicacionPrincipalM >= DesplazamientoActualM){
+        document.getElementById('headerFotosPublicados').style.background = 'none';
+        //document.getElementById('btnPublicarPrincipal').style.bottom = '0';
+    }
+    else{
+        document.getElementById('headerFotosPublicados').style.background = '#fff';
+        //document.getElementById('btnPublicarPrincipal').style.bottom = '-70';
+    }
+    ubicacionPrincipalM = DesplazamientoActualM;
+});
 
 /*function toggleBounce() {
   if (markerD.getAnimation() !== null) {
@@ -1579,8 +1636,8 @@ function inicioSesion(){
         $("body").css("background","#f2f2f2");
         $("#divInicio").css("display", "none");
         $("#divPrincipal").css("display", "block");
-        $("#icoFMBuscar").css({"color":"#008080"});
-        $(".icoFooter .glyphicon-search").css({"color":"#008080"});
+        $("#icoFMBuscar").css({"color":"#3A9CB1"});
+        //$(".icoFooter .glyphicon-search").css({"color":"#008080"});
         //$("#imgP").html($datosLocal['usrImg']);
         //$("#divInicio").css("display", "none");
         $idCliente = $datosLocal['usrId'];
@@ -1604,6 +1661,12 @@ function iniciarSession(){
         cache: false,
         contentType: false,
         processData: false,
+        beforeSend: function(){
+             //Agregamos la clase loading al body
+            $('body').addClass('loading');
+             //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+            console.log("entro a la crga del gif");
+        },
         success: function(datosI){   
             //alert("entra ajax");
             if(datosI.usr==1){
@@ -1623,18 +1686,35 @@ function iniciarSession(){
             }
         },
         error : function(jqXHR, textStatus, errorThrown) {
-            alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+            $('body').removeClass('loading'); //Removemos la clase loading
+            alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+        },
+        complete: function(){
+            //$('body').addClass('loading'); 
+            $('body').removeClass('loading'); //Removemos la clase loading
         }
     });    
 }
 // cPassword =0 no se cambio el password =1 se cambio pasword  
 function activarSwipe(){
-    swiper = new Swiper('.swiper-container', {
+    swiperMapa = new Swiper('#swiper-container', {
         slidesPerView: 'auto',
-        centeredSlides: true,
-        spaceBetween: 10      
+        centeredSlides: true,        
+        spaceBetween: 5,
+        speed:500
+        
+    });    
+  }
+ 
+function activarSwipeFotosPublicados(){
+    swiperFoPu = new Swiper('#swiper-containerFotosPublicados', {
+        slidesPerView: 1,//auto
+        centeredSlides: true,        
+        spaceBetween: 0, 
+        pagination: {el: '.swiper-pagination'},  
     });
   }
+
 // al continuar direcion insertamos o actualizamos datos de direccion,mostramos foto y datos consultamos si hay datos y fotos en la bse de datos 
 function continuarDireccion(){
     event.preventDefault();
@@ -1666,6 +1746,12 @@ function continuarDireccion(){
                 data: {idUsuario:$datosLocal['usrId'],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon,cPostal:$dirPostal},                 
                 crossDomain: true,
                 cache: false,
+                beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');
+                     //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                    console.log("entro a la crga del gif");
+                },
                 success: function(datosInsDir){
                     console.log("datosInslDir "+ JSON.stringify(datosInsDir));
                     $datosRemotoInsDir=JSON.stringify(datosInsDir);
@@ -1675,7 +1761,12 @@ function continuarDireccion(){
                     console.log(" continuarDireccion()=-1 datosLocalInsDir "+ JSON.stringify($datosLocalDir));
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                },
+                complete: function(){
+                    //$('body').addClass('loading'); 
+                    $('body').removeClass('loading'); //Removemos la clase loading
                 }
             });
         }
@@ -1689,6 +1780,12 @@ function continuarDireccion(){
                 data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon,cPostal:$dirPostal},                 
                 crossDomain: true,
                 cache: false,
+                beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');
+                     //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                    console.log("entro a la crga del gif");
+                },
                 success: function(datosActDir){
                         console.log("datosLocalActDir "+ JSON.stringify(datosActDir));
                         $datosRemotoActDir=JSON.stringify(datosActDir);
@@ -1698,7 +1795,12 @@ function continuarDireccion(){
                         console.log("continuarDireccion()=0 datosLocalActDir "+ JSON.stringify($datosLocalDir));                    
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                },
+                complete: function(){
+                    //$('body').addClass('loading'); 
+                    $('body').removeClass('loading'); //Removemos la clase loading
                 }
             });
         }       
@@ -1714,6 +1816,12 @@ function continuarDireccion(){
                 data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar']},                 
                 crossDomain: true,
                 cache: false,
+                beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');
+                     //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                    console.log("entro a la crga del gif");
+                },
                 success: function(datosFoto){
                     if (datosFoto['fotos']>0) {                        
                         $("#tituloMPu").val(datosFoto['tituloArray'][0]);
@@ -1759,11 +1867,16 @@ function continuarDireccion(){
                     btnAtrasFoto=1;                      
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error consultarFotoPublicado: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
                     tMPu=0;
                     pMPu=0;
                     cMPu=0;
                     btnAtrasFoto=0;
+                },
+                complete: function(){
+                    //$('body').addClass('loading'); 
+                    $('body').removeClass('loading'); //Removemos la clase loading
                 }
             });
         }
@@ -1789,6 +1902,12 @@ function continuarFotoUbi(){
             data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],titulo:$('#tituloMPu').val(),precio:$('#precioMPu').val(),incluyeGastos:$('#cboxIncluyeGastos').val(),fianza:$('#fianzaMPu').val(),comentario:$('#comentarioMPu').val()},                 
             crossDomain: true,
             cache: false,
+            beforeSend: function(){
+                 //Agregamos la clase loading al body
+                $('body').addClass('loading');
+                 //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                console.log("entro a la crga del gif");
+            },
             success: function(datosActFoto){
                 //analizar si aqui es necesario un localstoragedir
                 console.log("datosLocalActDir "+JSON.stringify(datosActFoto));
@@ -1796,7 +1915,12 @@ function continuarFotoUbi(){
             },
             error : function(jqXHR, textStatus, errorThrown) {
                 btnAtrasCarac=0;
-                alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                $('body').removeClass('loading'); //Removemos la clase loading
+                alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+            },
+            complete: function(){
+                //$('body').addClass('loading'); 
+                $('body').removeClass('loading'); //Removemos la clase loading
             }
         });        
     }
@@ -1809,6 +1933,12 @@ function continuarFotoUbi(){
             data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar']},                 
             crossDomain: true,
             cache: false,
+            beforeSend: function(){
+                 //Agregamos la clase loading al body
+                $('body').addClass('loading');
+                 //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                console.log("entro a la crga del gif");
+            },
             success: function(datosVivienda){
                 if (datosVivienda['publicadoSeVi']==1) {
                     $("#superficiePu").val(datosVivienda['superficie']);
@@ -1834,14 +1964,14 @@ function continuarFotoUbi(){
                         
                     }                        
                     if (datosVivienda['cuantosVivenHo']>0) {
-                        $("#imgViHo").css({"background": "url(img/hombreNViPu.png) no-repeat center center ","background-size": "85px 85px"});
+                        $("#imgViHo").css({"background": "url(img/hombreNViPu.png) no-repeat center center ","background-size": "65px 70px"});
                         cHoMPu=1;
                         $("#cantHombres").val(datosVivienda['cuantosVivenHo']);
                         $contHombres=datosVivienda['cuantosVivenHo'];
 
                     }
                     if (datosVivienda['cuantosVivenMu']>0) {
-                        $("#imgViMu").css({"background": "url(img/mujerNViPu.png) no-repeat center center ","background-size": "85px 85px"});
+                        $("#imgViMu").css({"background": "url(img/mujerNViPu.png) no-repeat center center ","background-size": "65px 70px"});
                         cMuMPu=1;
                         $("#cantMujeres").val(datosVivienda['cuantosVivenMu']);
                         $contMujeres=datosVivienda['cuantosVivenMu'];
@@ -1989,9 +2119,13 @@ function continuarFotoUbi(){
                 console.log("datosVivienda "+JSON.stringify(datosVivienda));                       
             },
             error : function(jqXHR, textStatus, errorThrown) {
-                alert("error consultarVivienda: " + jqXHR.status + " " + textStatus + " " + errorThrown);
-                //continuarVi=1;
+                $('body').removeClass('loading'); //Removemos la clase loading
+                alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
                 btnAtrasVi=0;
+            },
+            complete: function(){
+                //$('body').addClass('loading'); 
+                $('body').removeClass('loading'); //Removemos la clase loading
             }
         });
     }
@@ -2021,13 +2155,24 @@ function guardarServicios(){
                 data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],cbAscensor:$("#cboxAscensor").val(),cbCalefaccion:$("#cboxCalefaccion").val(),cbEstacionamiento:$("#cboxEstacionamiento").val(),cbLavadora:$("#cboxLavadora").val(),cbLavaVajilla:$("#cboxLavaVajilla").val(),cbMuebles:$("#cboxMuebles").val(),cbPiscina:$("#cboxPiscina").val(),cbPortero:$("#cboxPortero").val(),cbRadiador:$("#cboxRadiador").val(),cbSecador:$("#cboxSecador").val(),cbTv:$("#cboxTv").val(),cbWifi:$("#cboxWifi").val()},
                 crossDomain: true,
                 cache: false,
+                beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');
+                     //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                    console.log("entro a la crga del gif");
+                },
                 success: function(datosInsSe){
                     console.log("datosLocalSe "+ JSON.stringify(datosInsSe));
                     guardarSe = 1;
                     $guardarSeAnt=guardarSe;
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                },
+                complete: function(){
+                    //$('body').addClass('loading'); 
+                    $('body').removeClass('loading'); //Removemos la clase loading
                 }
             });
         }
@@ -2040,11 +2185,22 @@ function guardarServicios(){
                 data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],cbAscensor:$("#cboxAscensor").val(),cbCalefaccion:$("#cboxCalefaccion").val(),cbEstacionamiento:$("#cboxEstacionamiento").val(),cbLavadora:$("#cboxLavadora").val(),cbLavaVajilla:$("#cboxLavaVajilla").val(),cbMuebles:$("#cboxMuebles").val(),cbPiscina:$("#cboxPiscina").val(),cbPortero:$("#cboxPortero").val(),cbRadiador:$("#cboxRadiador").val(),cbSecador:$("#cboxSecador").val(),cbTv:$("#cboxTv").val(),cbWifi:$("#cboxWifi").val()},
                 crossDomain: true,
                 cache: false,
+                beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');
+                     //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                    console.log("entro a la crga del gif");
+                },
                 success: function(datosActSe){
                     console.log("datosLocalSe "+ JSON.stringify(datosActSe));                    
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                },
+                complete: function(){
+                    //$('body').addClass('loading'); 
+                    $('body').removeClass('loading'); //Removemos la clase loading
                 }
             });
         }
@@ -2069,6 +2225,12 @@ function continuarVivienda(){
             data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],superficie:$("#superficiePu").val(),soloComp:$("input[name='radioVivienda']:checked").val(),cuantosHo:$("#cantHombres").val(),cuantosMu:$("#cantMujeres").val(),noFumar:$("#cboxNoFumar").val(),noMascota:$("#cboxNoMascota").val(),noPareja:$("#cboxNoPareja").val()},                 
             crossDomain: true,
             cache: false,
+            beforeSend: function(){
+                 //Agregamos la clase loading al body
+                $('body').addClass('loading');
+                 //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                console.log("entro a la crga del gif");
+            },
             success: function(datosInsViSeHa){
                // alert("exitos");
                 $datosRemotoInsViSeHa=JSON.stringify(datosInsViSeHa);
@@ -2078,7 +2240,12 @@ function continuarVivienda(){
                 console.log("datosLocalViSeHa "+ $datosLocalViSeHa);
             },
             error : function(jqXHR, textStatus, errorThrown) {
-                alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                $('body').removeClass('loading'); //Removemos la clase loading
+                alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+            },
+            complete: function(){
+                //$('body').addClass('loading'); 
+                $('body').removeClass('loading'); //Removemos la clase loading
             }
         });
     }
@@ -2094,6 +2261,12 @@ function continuarVivienda(){
                 data: {idUsuario:$datosLocalDir['id'],idPublicacion:$datosLocalDir['idPublicar']},                 
                 crossDomain: true,
                 cache: false,
+                beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');
+                     //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                    console.log("entro a la crga del gif");
+                },
                 success: function(datosConHabitacion){
                     $datosRemotoConHabi=JSON.stringify(datosConHabitacion);
                     localStorage.setItem('datosHabi', $datosRemotoConHabi);
@@ -2279,7 +2452,8 @@ function continuarVivienda(){
                     //console.log("datosConHabitacion "+JSON.stringify(datosConHabitacion));                                           
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error consultarFotoPublicado: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("NProblemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
                     camaMPu=0;
                     inFMPu=0;
                     finFMPu=0;
@@ -2287,6 +2461,10 @@ function continuarVivienda(){
                     finMMPu=0;
                     dimMPu=0;
                     btnAtrasHabi=0;
+                },
+                complete: function(){
+                    //$('body').addClass('loading'); 
+                    $('body').removeClass('loading'); //Removemos la clase loading
                 }
             });
         }
@@ -2319,6 +2497,12 @@ function publicarCaHabitacion(){
                 data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],cama:$("input[name='radioCama']:checked").val(),fechaDesde:$("#fechaDesde").val(),hasta:$("#cboxfechaHasta").val(),fechaHasta:$("#fechaHasta").val(),mesMin:$("#tiempoMin").val(),mesMax:$("#tiempoMax").val(),dimHabi:$("input[name='radioHa']:checked").val()},                 
                 crossDomain: true,
                 cache: false,
+                beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');
+                     //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                    console.log("entro a la crga del gif");
+                },
                 success: function(datosInsHabi){
                     $datosRemotoInsHabi=JSON.stringify(datosInsHabi);
                     localStorage.setItem('datosHabi', $datosRemotoInsHabi);
@@ -2327,7 +2511,12 @@ function publicarCaHabitacion(){
                     console.log("datosLocalHabi "+ JSON.stringify($datosLocalHabi));
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                },
+                complete: function(){
+                    //$('body').addClass('loading'); 
+                    $('body').removeClass('loading'); //Removemos la clase loading
                 }
             });        
         }    
@@ -2340,6 +2529,12 @@ function publicarCaHabitacion(){
                 data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],cama:$("input[name='radioCama']:checked").val(),fechaDesde:$("#fechaDesde").val(),hasta:$("#cboxfechaHasta").val(),fechaHasta:$("#fechaHasta").val(),mesMin:$("#tiempoMin").val(),mesMax:$("#tiempoMax").val(),dimHabi:$("input[name='radioHa']:checked").val()},                 
                 crossDomain: true,
                 cache: false,
+                beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');
+                     //setTimeout(function(){ console.log("LOADING"); throbbed = true;}, 3000);
+                    console.log("entro a la crga del gif");
+                },
                 success: function(datosActHabi){
                     $datosRemotoActHabi=JSON.stringify(datosActHabi);
                     localStorage.setItem('datosHabi', $datosRemotoActHabi);
@@ -2348,7 +2543,12 @@ function publicarCaHabitacion(){
                     console.log("datosLocalHabi "+ JSON.stringify($datosLocalHabi));
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                },
+                complete: function(){
+                    //$('body').addClass('loading'); 
+                    $('body').removeClass('loading'); //Removemos la clase loading
                 }
             });
         }
@@ -2387,55 +2587,332 @@ function publicarCaHabitacion(){
     }
 
 }
-/*
-//direccion nueva
-    if (continuarDir==1 ) {
-       
-        if ($datosLocalDir['publicado']==-1) {
+function mostrarSwiperMapa(){
+    //aqui si no cambio de posicion no entra mas si cambio de posision entra  tal vez implementar un limite de mostrar publicados ej.max 100 por zonas
+    // consultamos todo lo publicado dependiendo de la ciudad o la zona para empezar todo 
+    if (true) { // control para que cargue la consulta cada vez que se presione el linkbuscarmapa cambioZona==1
             $.ajax({
-                type: "POST",
-                dataType: 'json',
-                url: 'http://' + ipConex + '/wasiWeb/php/insertarDirecion.php',
-                data: {idUsuario:$datosLocal['usrId'],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon},                 
+                type :'POST',
+                url:'http://' + ipConex + '/wasiWeb/php/consultarPublicadosTodos.php',
+                dataType : 'json',                
+                data: {idUsuario:$datosLocal['usrId']},                 
                 crossDomain: true,
+                //timeout: 2000,
                 cache: false,
-                success: function(datosInsDir){
-                    $datosRemotoInsDir=JSON.stringify(datosInsDir);
-                    localStorage.setItem('datosDir', $datosRemotoInsDir);
-                    $datosLocalDir=JSON.parse(localStorage.getItem('datosDir')); 
-                    continuarDir=0;          
-                    console.log("datosLocalDir "+ $datosLocalDir);
+                beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');                    
+                    console.log("entro a la crga del gif");
+                },
+                success: function(datosConsPubliTodos){
+                    console.log("datosConsPubliTodos "+JSON.stringify(datosConsPubliTodos));
+                    if (datosConsPubliTodos['publicados']>0) {//0 existen datos y no se completo la publicacion, -1 no existen 
+                        // tal vez no haga falta  datos remoto de publicados todo
+                        $datosRemotoConsultarPubliTodos=JSON.stringify(datosConsPubliTodos);
+                        localStorage.setItem('datosPubliT', $datosRemotoConsultarPubliTodos);
+                        $datosLocalPubliTodo=JSON.parse(localStorage.getItem('datosPubliT'));
+                        for (var i = 0; i < datosConsPubliTodos['publicados']; i++) {
+                            $contadorServicios=0;
+                            htmlMostrarPubliTodoSwipe+="<div class='swiper-slide slidePuTo' id="+datosConsPubliTodos['idPubliArray'][i]+" data-posswiper="+datosConsPubliTodos['posPubliSwiper'][i]+">";
+                            htmlMostrarPubliTodoSwipe+=" <div class = 'fotoD' style='background:url(http://"+ipConex+"/wasiWeb/"+datosConsPubliTodos['rutaFotoArray'][i] +") no-repeat center center; background-size:cover;' >";
+                            htmlMostrarPubliTodoSwipe+=" </div>";
+                            htmlMostrarPubliTodoSwipe+=" <div class='mensajeD'>";
+                            htmlMostrarPubliTodoSwipe+="     <div class='mensajeDPrecio'>"+datosConsPubliTodos['precioArray'][i]+" €/m </div>";
+                            htmlMostrarPubliTodoSwipe+="     <div class='mensajeDZona'>"+datosConsPubliTodos['zonaArray'][i]+"</div>";    
+                            htmlMostrarPubliTodoSwipe+="     <div class='contenedorMensajeServiciosPe'>";
+                            htmlMostrarPubliTodoSwipe+="             <div class='mensajePerPu' style='background:url(http://"+ipConex+"/wasiWeb/"+datosConsPubliTodos['fotoPerfilArray'][i] +") no-repeat center center; background-size:cover;'></div>";
+                            if (datosConsPubliTodos['ascensorArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/ascensorN.png) no-repeat center center; background-size:cover;'> </div>";          
+                                $contadorServicios++;
+                            }
+                            if (datosConsPubliTodos['calefaccionArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/calefaccionN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;   
+                            }
+                            if (datosConsPubliTodos['estacionamientoArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/estacionamientoN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;
+                            }
+                            if (datosConsPubliTodos['lavadoraArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/lavadoraN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;
+                            }  
+                            if (datosConsPubliTodos['lavaVajillaArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/lavaVajillasN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;                                
+                            }
+                            if (datosConsPubliTodos['mueblesArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/mueblesN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;    
+                            } 
+                            if (datosConsPubliTodos['piscinaArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/piscinaN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;
+                            }
+                            if (datosConsPubliTodos['porteroArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/porteroN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;    
+                            }
+                            if (datosConsPubliTodos['radiadorArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/radiadorN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;    
+                            }
+                            if (datosConsPubliTodos['secadorArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/secadorN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;    
+                            } 
+                            if (datosConsPubliTodos['tvArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/tvN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;
+                            }
+                            if (datosConsPubliTodos['wifiArray'][i]==1 && $contadorServicios < 7) {
+                                htmlMostrarPubliTodoSwipe+="         <div class='mensajeServiciosPu' style='background:url(./img/wifiN.png) no-repeat center center; background-size:cover;'> </div>";      
+                                $contadorServicios++;    
+                            }    
+                            htmlMostrarPubliTodoSwipe+="     </div>";
+                            htmlMostrarPubliTodoSwipe+=" </div>";                        
+                            htmlMostrarPubliTodoSwipe+="</div> ";                         
+                        }
+                        //htmlMostrarPubliTodoSwipe+="<div class='swiper-pagination'></div>";
+                        selDivMostrarPubliTodoSwipe.append(htmlMostrarPubliTodoSwipe); 
+                        activarSwipe();  
+                        swiperMapa.slideTo(posPubliDespues, 0);
+                        htmlMostrarPubliTodoSwipe=" ";
+                        swiperMoPuTo=1; 
+                        entroTabLista=0;     
+                    }
+                    if (datosConsPubliTodos['publicados']==0) {
+                        
+                   }
+                   //$('body').addClass('loading'); //Removemos la clase loading        
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
-                }
-            });
-        }
-        //existe direccion en la base de datos, actualizar direccion
-        if ($datosLocalDir['publicado']==0) {
-            $.ajax({
-                type: "POST",
-                dataType: 'json',
-                url: 'http://' + ipConex + '/wasiWeb/php/actualizarDireccion.php',
-                data: {idUsuario:$datosLocal['usrId'],idPublicacion:$datosLocalDir["idPublicar"],zona:$dirZona,ciudad:$dirCiudad,direccion:$dirDireccion,Lat:$dirLat,Lon:$dirLon},                 
-                crossDomain: true,
-                cache: false,
-                success: function(datosActDir){                    
-                        $datosRemotoActDir=JSON.stringify(datosActDir);
-                        localStorage.setItem('datosDir', $datosRemotoActDir);
-                        $datosLocalDir=JSON.parse(localStorage.getItem('datosDir')); 
-                        continuarDir=0;
-                        console.log("datosLocalActDir "+ $datosLocalDir);                    
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
                 },
-                error : function(jqXHR, textStatus, errorThrown) {
-                    alert("error de ajax: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                complete: function(){
+                   //$('body').addClass('loading'); 
+                  $('body').removeClass('loading'); //Removemos la clase loading
                 }
             });
-        }
-    }
-    //consultamos si hay datos almacenados en tabla publicaciones y fotopublicaciones
-    
+        cambioZona=0;
+        } 
+}
+function mostrarAnuncio(idPublicacion){
+    $idPubliFotos=idPublicacion;
 
+    if (true) { // control para accceso falta  implentar 
+            $.ajax({
+                type :'POST',
+                url:'http://' + ipConex + '/wasiWeb/php/consultarFotosIdPublicados.php',
+                dataType : 'json',                
+                data: {idPublicacion:$idPubliFotos},                 
+                crossDomain: true,
+                //timeout: 2000,
+                cache: false,
+                beforeSend: function(){                     
+                    $('body').addClass('loading');                                        
+                },
+                success: function(datosConsFotosPubli){
+                    console.log("datosConsFotosPubli "+JSON.stringify(datosConsFotosPubli));
+                    
+                    if (datosConsFotosPubli['fotosPublicados']>0) {// hay fotos  
+                        for (var i = 0; i < datosConsFotosPubli['fotosPublicados']; i++) {
+                            htmlMostrarFotosSwipe+=" <div class='swiper-slide slideFoIdPu ' >";
+                            htmlMostrarFotosSwipe+="    <div class = 'fotoPublicadoMSwipe' style='background:url(http://"+ipConex+"/wasiWeb/"+datosConsFotosPubli['rutaFotoArray'][i] +") no-repeat center center; background-size:cover;' >";
+                            htmlMostrarFotosSwipe+="    </div>";
+                            htmlMostrarFotosSwipe+=" </div>";                               
+                        }
+                        //htmlMostrarFotosSwipe+="<div class='swiper-pagination slideFoIdPu'></div>";                    
+                        selDivMostrarFotosSwipe.append(htmlMostrarFotosSwipe);
+                        activarSwipeFotosPublicados();
+                        htmlMostrarFotosSwipe=" ";                              
+                    }
+                    if (datosConsFotosPubli['fotosPublicados']==0) {                        
+                   }                   
+                },
+                error : function(jqXHR, textStatus, errorThrown) {
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                },
+                complete: function(){                   
+                  $('body').removeClass('loading'); //Removemos la clase loading
+                }
+            });
+            //activarSwipeFotosPublicados();
+            $.ajax({
+                type :'POST',
+                url:'http://' + ipConex + '/wasiWeb/php/consultarDatosIdPublicados.php',
+                dataType : 'json',                
+                data: {idPublicacion:$idPubliFotos},                 
+                crossDomain: true,
+                //timeout: 2000,
+                cache: false,
+                beforeSend: function(){                     
+                    $('body').addClass('loading');                                        
+                },
+                success: function(datosConsDatosPubli){
+                    console.log("datosConsDatosPubli "+JSON.stringify(datosConsDatosPubli));                   
+                    if (datosConsDatosPubli['datosPublicado']>0) {//hay datos 
+
+                        $("#precioFoPuM").html(datosConsDatosPubli['precio']+" €/m");
+                        if (datosConsDatosPubli['gastos']==1) {
+                            $("#incluyeFoPuM").html("Incluye gastos");    
+                        }                        
+                        $("#tituloFoPuM").html(datosConsDatosPubli['titulo']);
+                        $("#comentarioFoPuM").html(datosConsDatosPubli['comentario']);
+                        $("#zonaFoPuM").html(datosConsDatosPubli['zona']);
+                       
+                        $fechaDe= new Date(datosConsDatosPubli['fechaDesde']).toLocaleDateString('es-ES',{ year: 'numeric', month: 'long', day: 'numeric' });                        
+                        
+                        $("#desdeFoPuM").html("De: "+$fechaDe);
+                        if (datosConsDatosPubli['hasta']==1) {
+                            $fechaA= new Date(datosConsDatosPubli['fechaHasta']).toLocaleDateString('es-ES',{ year: 'numeric', month: 'long', day: 'numeric' }); 
+                            $("#hastaFoPuM").html(" A: "+$fechaA);
+                        }
+                        else{
+                            $("#hastaFoPuM").html("");   
+                        }                        
+                        if (datosConsDatosPubli['mesMin']>0) {
+                            $("#minFoPuM").html(" Min: "+datosConsDatosPubli['mesMin']+" Mes/es ");
+                        }
+                        else{
+                            $("#minFoPuM").html(" ");   
+                        }
+                        if (datosConsDatosPubli['mesMax']>0) {
+                            $("#maxFoPuM").html(" Max: "+datosConsDatosPubli['mesMax']);
+                        }             
+                        else{
+                            $("#maxFoPuM").html(" ");
+                        }
+
+                        if (datosConsDatosPubli['quePublicas']==1) {//marcamos Hab. solo
+                            $("#paraFoPuM").css({"background": "url(img/camaSN.png) no-repeat center center ","background-size": "58px 58px"});
+                        }
+                        if (datosConsDatosPubli['quePublicas']==2){//marcamos Hab. compartido
+                            $("#paraFoPuM").css({"background": "url(img/camaLN.png) no-repeat center center ","background-size": "58px 58px"})
+                        }                        
+                        if (datosConsDatosPubli['dimHabitacion']==1){//marcamos Habitacion. pequeño
+                            $("#dimensionFoPuM").css({"background": "url(img/dimensionesSNLe.png) no-repeat center center ","background-size": "58px 58px"});
+                        }    
+                        if (datosConsDatosPubli['dimHabitacion']==2){//marcamos Habitacion. mediano
+                            $("#dimensionFoPuM").css({"background": "url(img/dimensionesMNLe.png) no-repeat center center ","background-size": "58px 58px"});                            
+                        }
+                        if (datosConsDatosPubli['dimHabitacion']==3){//marcamos Habitacion. pequeño
+                            $("#dimensionFoPuM").css({"background": "url(img/dimensionesLNLe.png) no-repeat center center ","background-size": "58px 58px"});                            
+                        }                        
+                        if (datosConsDatosPubli['cama']==1) {//marcamos cama. solo
+                            $("#camaFoPuM").css({"background": "url(img/camaSimpleNLe.png) no-repeat center center ","background-size": "58px 58px"});            
+                        }
+                        if (datosConsDatosPubli['cama']==2){//marcamos cama. doble
+                            $("#camaFoPuM").css({"background": "url(img/camaDobleNLe.png) no-repeat center center ","background-size": "58px 58px"});
+                        }
+                        if (datosConsDatosPubli['cama']==3){//marcamos cama. camasofa
+                            $("#camaFoPuM").css({"background": "url(img/camaSofaNLe.png) no-repeat center center ","background-size": "58px 58px"});
+                        }                        
+                        if (datosConsDatosPubli['cama']==4){//marcamos cama. litera
+                            $("#camaFoPuM").css({"background": "url(img/camaLiteraNLe.png) no-repeat center center ","background-size": "58px 58px"});
+                        }
+                        if (datosConsDatosPubli['cama']==5){//marcamos cama. solos 
+                            $("#camaFoPuM").css({"background": "url(img/camaSolosNLe.png) no-repeat center center ","background-size": "58px 58px"});
+                        }
+                        if (datosConsDatosPubli['cama']==6){//marcamos cama. nada
+                            $("#camaFoPuM").css({"background": "url(img/camaNadaNLe.png) no-repeat center center ","background-size": "58px 58px"});                           
+                        } 
+
+                        selDivMostrarDatosPu=$("#contenedorcompartirFoPuM");
+
+                        if (datosConsDatosPubli['cuantosVivenH']>0) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/hombreNViPu.png) no-repeat center center; background-size:58px 58px;' ><span class='cuantosHoMuDaPu'>"+datosConsDatosPubli['cuantosVivenH']+"</span></div>";
+                        }
+                        if (datosConsDatosPubli['cuantosVivenM']>0) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/mujerNViPu.png) no-repeat center center; background-size:58px 58px;' ><span class='cuantosHoMuDaPu'>"+datosConsDatosPubli['cuantosVivenM']+"</span></div>";
+                        }
+
+                        selDivMostrarDatosPu.append(htmlMostrarDatosPu);
+                        htmlMostrarDatosPu=" ";
+                        selDivMostrarDatosPu=$("#contenedorServiciosFoPuM");
+
+                        if (datosConsDatosPubli['ascensor']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/ascensorNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                        if (datosConsDatosPubli['calefaccion']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/calefaccionNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                        if (datosConsDatosPubli['estacionamiento']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/estacionamientoNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                        if (datosConsDatosPubli['lavaVajilla']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/lavaVajillasNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                        if (datosConsDatosPubli['lavadora']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/lavadoraNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                        if (datosConsDatosPubli['muebles']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/mueblesNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                        if (datosConsDatosPubli['piscina']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/piscinaNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                        if (datosConsDatosPubli['portero']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/porteroNLe.png) no-repeat center center; background-size:58px 58x;' ></div>";
+                        }
+                        if (datosConsDatosPubli['radiador']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/radiadorNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                        if (datosConsDatosPubli['secador']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/secadorNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                        if (datosConsDatosPubli['tv']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/tvNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                        if (datosConsDatosPubli['wifi']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/wifiNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+
+                        selDivMostrarDatosPu.append(htmlMostrarDatosPu);
+                        htmlMostrarDatosPu=" ";
+                        selDivMostrarDatosPu=$("#contenedorpermitenFoPuM");
+
+                        if (datosConsDatosPubli['noFumar']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/noFumarNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                        if (datosConsDatosPubli['noMascota']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/noMascotaNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                        }
+                          
+                        if (datosConsDatosPubli['noPareja']==1) {
+                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/noParejaNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";                   
+                        } 
+
+                        selDivMostrarDatosPu.append(htmlMostrarDatosPu);
+                        htmlMostrarDatosPu=" ";
+                    }
+                    if (datosConsDatosPubli['fotosPublicado']==0) {                        
+                   }
+                },
+                error : function(jqXHR, textStatus, errorThrown) {
+                    $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                },
+                complete: function(){
+                  $('body').removeClass('loading'); //Removemos la clase loading
+                }
+            });         
+        } 
+
+}
+/*
+function toLocaleDateStringSupportsLocales() {
+  try {
+    new Date().toLocaleDateString('es-ES');
+  } catch (e) {
+    return e.name === 'RangeError';
+    alert(e.name);
+  }
+  alert("sin error");
+  return false;
+}
 */
 
         

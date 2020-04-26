@@ -63,6 +63,11 @@ $(document).ready(function(){
                     data: "email="+$vEmail,
                     crossDomain: true,
                     cache: false,
+                    beforeSend: function(){
+                         //Agregamos la clase loading al body
+                        $('body').addClass('loading');                    
+                        console.log("entro a la crga del gif");
+                    },
                     success: function(resp){                                                  
                         if(resp){//si resp = 1 hay un email ya registrado
                             $('#mensajeErrorEmailR').html(resp.emsg);
@@ -70,7 +75,12 @@ $(document).ready(function(){
                         }                        
                     },
                     error : function(jqXHR, textStatus, errorThrown) {
-                        alert("mi "+jqXHR.status +" "+ textStatus+" "+ errorThrown);
+                        $('body').removeClass('loading'); //Removemos la clase loading
+                        alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                    },
+                    complete: function(){
+                       //$('body').addClass('loading'); 
+                      $('body').removeClass('loading'); //Removemos la clase loading
                     }
                 });
            // });
@@ -261,6 +271,11 @@ si la contraseña es igual al de la base de datos */
                 data: {password : $passwordP,idUsuario:$vidUsuario},                 
                 crossDomain: true,
                 cache: false,
+                beforeSend: function(){
+                     //Agregamos la clase loading al body
+                    $('body').addClass('loading');                    
+                    console.log("entro a la crga del gif");
+                },
                 success: function(resp){                                                  
                     if(resp.pReg==1){
                         $('#mensajeErrorContrasenyaPS').html(resp.pMsg);
@@ -283,7 +298,12 @@ si la contraseña es igual al de la base de datos */
                     $passwordExiste=resp.pReg;                         
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.status +" "+ textStatus+" "+ errorThrown);
+                   $('body').removeClass('loading'); //Removemos la clase loading
+                    alert("Problemas con la conexion. No se pude hacer la consulta, Intente una vez mas: " + jqXHR.status + " " + textStatus + " " + errorThrown);
+                },
+                complete: function(){
+                   //$('body').addClass('loading'); 
+                  $('body').removeClass('loading'); //Removemos la clase loading
                 }
             });                     
         }
