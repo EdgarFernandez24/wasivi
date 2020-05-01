@@ -1,18 +1,18 @@
 var app = {
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+        document.addEventListener('backbutton',onBackKeyDown , false);  
     },
     onDeviceReady: function() {
-        this.receivedEvent('deviceready');
-        navigator.geolocation.getCurrentPosition(onMapSuccess, onMapError, { enableHighAccuracy: true, timeout: 10000,maximumAge: 0 }); 
-        //watchMapPosition();
-        //navigator.camera.PictureSourceType.PHOTOLIBRARY;
-        //watchWeatherPosition(); reinicia varias veces 
-        autoCompletar();
+        this.receivedEvent('deviceready');          
     },
-    receivedEvent: function(id) {       
-       //watchWeatherPosition();
-       //navigator.geolocation.getCurrentPosition(onWeatherSuccess, onWeatherError, { enableHighAccuracy: true, timeout: 3000});      
+    receivedEvent: function(id) {
+      //StatusBar.overlaysWebView(false); 
+      //StatusBar.backgroundColorByHexString("#3a9cb1"); 
+      navigator.geolocation.getCurrentPosition(onMapSuccess, onMapError, { enableHighAccuracy: true, timeout: 10000,maximumAge: 0 });  
+      autoCompletar();  
+      
+
     }
 };
 app.initialize();
@@ -47,8 +47,19 @@ var htmlMostrarFotosSwipe = "";//para cargar div contenedor publicados en swipe
 var selDivMostrarPubliTodoLista ="";//div para mostrar lo publicado en listas
 var htmlMostrarPubliTodoLista ="";//para cargar div contenedor publicar listas
 
-var selDivMostrarDatosPu="";//para mosrtar lo publicado cuantos ho mu, servicios, no permitido
+var selDivMostrarDatosPu="";//para mostrar lo publicado cuantos ho mu, servicios, no permitido
 var htmlMostrarDatosPu="";//para cargar div mostrar publicado cuantos ho mu, servicios, no permitido
+
+//var ubicacionPrincipalM='';//para cambiar de fondo de color anuncio 
+//var DesplazamientoActualM='';//para cambiar de fondo de color de anuncio
+//var ubicacionPrincipalC='';//para cambiar de forma de boton de anuncio 
+//var DesplazamientoActualC='';//para cambiar de forma de botone anuncio
+
+//var selDivMostrarBtnChat="";//cargar div par amostrar btn chat 
+//var htmlMostrarBtnChat="";//mostrar boton chat
+//var ubicacionFinal='';//ubicaion finala de cada div anuncio 
+//var entroAnuncio='';//para que no entre por que aun no se creo el div
+
 var autoCDir=0;
 var autoCCiu=0;
 var storedFiles = [];//array de img por foto libreria
@@ -77,6 +88,7 @@ var btnAtrasDir=0;//para controlar la consulta de direccion
 //var ContPlaceCiu=0;// contador para saber si entro a automletar ciudad
 var tMPu = 0; //titulo para validar de la publicacion en zona fotos
 var pMPu = 0; //precio para validar  de la publicacion en zona fotos
+var fMPu = 0;//fianza para validar de la publicacion en zona fotos
 var cMPu = 0;//comentario para validar de la publicacion en zona fotos 
 var continuarFUbi='';//no hay datos de Fotos y caracteristicas guardadas
 var btnAtrasFoto = 0;//si se presion btn atras foto ubicacion
@@ -105,6 +117,56 @@ var btnPublicarTodo = 0; //para control la publicacion y reseteo de forms
 var icoUserpublicadosM = 0;//para mostrar la consulta de publicados one time
 var btnEditarPublicadoM = 0;//para controlar btn editar publicado
 // Success callback for get geo coordinates
+var navi=''; 
+function onBackKeyDown(evt) {
+  evt.preventDefault();
+  navi=0;
+    if (cordova.platformId !== 'android') {
+    console.log("cordova.platformId "+cordova.platformId);
+    return;
+    }
+  //mostrar pagina principal  desde perfil mostrar  
+  if($('#paginaUsuarioPerfilMostrar').css('display')=='block'){
+    navi='$("#paginaUsuarioPerfilMostrar").trigger("click")';
+    $("#icoBuscar").click();//.trigger("click");    
+  }
+  //mostrar pagina principal  desde lista mapas  
+  if($('#paginaListaMapas').css('display')=='block'){
+    navi='$("#paginaListaMapas").trigger("click")';
+    $("#btnAtras").click();//trigger("click");    
+  }
+  //mostrar pagina lista mapas   desde mostrar foto y datos publicados   
+  if($('#paginaPublicadoMostrar').css('display')=='block'){
+    navi='$("#paginaListaMapas").trigger("click")';
+    $("#btnAtrasPublicadoMostrar").click();//trigger("click");    
+  }  
+  //mostrar pagina mostrar perfil  desde pagina editar direccion
+  if($('#paginaPublicar').css('display')=='block' && $('#publicarDireccion').css('display')=='block' ){
+    navi='desde editar direccion';
+    $("#btnAtrasDireccion").click();    
+  }
+  //mostrar pagina direccion  desde pagina fotos y datos 
+  if($('#paginaPublicar').css('display')=='block' && $('#publicarFotoUbicacion').css('display')=='block' ){
+    navi='desde fotos y datos';
+    $("#btnAtrasfotoUbicacion").click();
+  }
+  //mostrar pagina fotos y datos  desde pagina vivienda
+  if($('#paginaPublicar').css('display')=='block' && $('#publicarVivienda').css('display')=='block' ){
+    navi='desde vivienda ';
+    $("#btnAtrasVivienda").click();
+  }
+  //mostrar pagina vivienda desde pagina servicios
+  if($('#paginaPublicar').css('display')=='block' && $('#publicarServicios').css('display')=='block' ){
+    navi='desde editar servicios';
+    $("#btnAtrasVivienda").click();
+  }
+  //mostrar pagina vivienda desde pagina habitacion
+  if($('#paginaPublicar').css('display')=='block' && $('#publicarHabitacion').css('display')=='block' ){
+    navi='desde editar habitacion';
+    $("#btnAtrasHabitacion").click();
+  }
+}
+
 
 var onMapSuccess = function (position) {
     Latitude = position.coords.latitude;

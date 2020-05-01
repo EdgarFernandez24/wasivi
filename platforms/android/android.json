@@ -79,6 +79,14 @@
             {
               "xml": "<feature name=\"ImagePicker\"><param name=\"android-package\" value=\"com.synconset.ImagePicker\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"BackbuttonPlugin\"><param name=\"android-package\" value=\"com.badrit.Backbutton.BackbuttonPlugin\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -106,6 +114,12 @@
       "PACKAGE_NAME": "com.SoftBot.WasiVI"
     },
     "cordova-plugin-imagepicker": {
+      "PACKAGE_NAME": "com.SoftBot.WasiVI"
+    },
+    "cordova-plugin-backbutton": {
+      "PACKAGE_NAME": "com.SoftBot.WasiVI"
+    },
+    "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "com.SoftBot.WasiVI"
     }
   },
@@ -361,6 +375,22 @@
       "clobbers": [
         "plugins.imagePicker"
       ]
+    },
+    {
+      "id": "cordova-plugin-backbutton.Backbutton",
+      "file": "plugins/cordova-plugin-backbutton/www/Backbutton.js",
+      "pluginId": "cordova-plugin-backbutton",
+      "clobbers": [
+        "navigator.Backbutton"
+      ]
+    },
+    {
+      "id": "cordova-plugin-statusbar.statusbar",
+      "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+      "pluginId": "cordova-plugin-statusbar",
+      "clobbers": [
+        "window.StatusBar"
+      ]
     }
   ],
   "plugin_metadata": {
@@ -370,6 +400,8 @@
     "cordova-plugin-file": "6.0.2",
     "cordova-plugin-splashscreen": "5.0.3",
     "cordova-plugin-file-transfer": "1.7.1",
-    "cordova-plugin-imagepicker": "1.1.0"
+    "cordova-plugin-imagepicker": "1.1.0",
+    "cordova-plugin-backbutton": "0.3.0",
+    "cordova-plugin-statusbar": "2.4.3"
   }
 }

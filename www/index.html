@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="./css/index.css">
     
-    <link rel="stylesheet" href="./css/swiper537.min.css">
+    <link rel="stylesheet" href="./css/swiper.min.css">
     <link rel="stylesheet" href="./css/datepicker.css">
     <link rel="stylesheet" href="./css/ripple.css">
     
@@ -226,15 +226,15 @@
                 <label class="label-custom">
                   <input type="checkbox" name="terminosCond" id="terminosCond" required=""> 
                   <!-- Button trigger modal -->
-                  <input type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ternimosCondiciones" value="Terminos y condiciones"><span class="text-danger"></span>
+                  <input type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ternimosCondiciones" value="Terminos y condiciones"><span class="label label-danger"></span>
                 </label>
               </div> 
               <div class="form-group">
                 <button id="btnRegistrar" name="btnRegistrar" class="btn btn-primary btn-md btn-block btnFormulario" >Registrar</button>
               </div>
             </fieldset>
-            <span class="text-success" id="mRS"></span>
-            <span class="text-danger" id="mRD"></span>            
+            <span class="label label-success" id="mRS"></span>
+            <span class="label label-danger" id="mRD"></span>            
           </form>
         </div><!-- fin tab pane div registrar-->    
       </div><!--fin tab-content-->        
@@ -277,7 +277,7 @@
   </div><!--fin divInicio-->
   <div class="modalLoading"></div>
   <div class="container container-custom-principal" id="divPrincipal">   
-    <div class="div-custom-principal " id="paginaPrincipal">
+    <div class="div-custom-principal" id="paginaPrincipal">
       <div class="header navbar-fixed-top" id="inputBuscar" ><!-- -fixed-top-->
         <!--span class="glyphicon glyphicon glyphicon-arrow-left"> </span>
         <span id="imgP">
@@ -475,7 +475,7 @@
               <div class="text-center imgPublicar" id="imgPublicar" data-cont="0">
                 <div class="divImgPublicarG"></div>
                   <div data-toggle="modal" data-target="#modalPublicar" id="divImgPublicarG" class="divImgPublicarG">
-                    <span class="text-danger" id="mensajeModalFotoPublicar"></span>            
+                    <span class="label label-danger" id="mensajeModalFotoPublicar"></span>            
                     <img src="./img/photo-camera2.png">
                     <p class="label-custom-negro">Haz clic en la imagen.</p>
                     <p class="label-custom-medio">Para buscar en tus carpetas o hacer una foto.</p> 
@@ -493,7 +493,7 @@
                 <i class="glyphicon glyphicon-tags"></i>
                 <input type="text" name="tituloMPu" id="tituloMPu" placeholder="Titulo de tu publicacion" class="form-control" required />
               </div>
-              <span class="text-danger" id="mensajeErrorTituloPu"></span>
+              <span class="label label-danger" id="mensajeErrorTituloPu"></span>
             </div>
             <label class="label-custom-color">Cuanto quieres cobrar al mes</label>            
             <div class="form-group">         
@@ -501,7 +501,7 @@
                 <i class="glyphicon glyphicon-euro"></i>
                 <input type="text" name="precioMPu" id="precioMPu" placeholder="Cantidad Euros" class="form-control" required />
               </div>
-              <span class="text-danger" id="mensajeErrorPrecioPu"></span>
+              <span class="label label-danger" id="mensajeErrorPrecioPu"></span>
             </div>
             <div class="form-group">
               <div class="incluyeGastos" id="incluyeGastos">
@@ -515,14 +515,14 @@
                 <i class="glyphicon glyphicon-euro"></i>
                 <input type="text" name="fianzaMPu" id="fianzaMPu" placeholder="Cantidad Euros" class="form-control" />
               </div>
-              <span class="text-danger" id="mensajeErrorFianzaPu"></span>
+              <span class="label label-danger" id="mensajeErrorFianzaPu"></span>
             </div>
             <label class="label-custom-color">Tienes algun comentario para tu anuncio</label>            
             <div class="form-group">         
               <div class="inner-addon left-addon">
                 <textarea name="comentarioMPu" id="comentarioMPu" cols="3" placeholder="Que te gustaria contar sobre el piso y tus compañeros" class="form-control" required ></textarea>
               </div>
-              <span class="text-danger" id="mensajeErrorcomentarioPu"></span>
+              <span class="label label-danger" id="mensajeErrorcomentarioPu"></span>
             </div>     
             <p id="mensajePublicar"></p>
             <p id="mensajePublicar1"></p>
@@ -577,7 +577,7 @@
               <i class="glyphicon"> m<sup>2</sup></i>
               <input type="text" name="superficiePu" id="superficiePu" placeholder="  ingresa un numero " class="form-control" required />
             </div>
-            <span class="text-danger" id="mensajeErrorSuperficiePu"></span>
+            <span class="label label-danger" id="mensajeErrorSuperficiePu"></span>
           </div>
           <div>
             <label class="label-custom-color">¿Quieres Alquilar la Habitación Para?</label>
@@ -618,7 +618,7 @@
               </div>                                       
             </div>             
           </div>
-          <span class="text-danger" id="mensajeErrorPersonasPu"></span>  
+          <span class="label label-danger" id="mensajeErrorPersonasPu"></span>  
           <label class="label-custom-color">¿Que servicios tienes disponibles?</label>            
           <div class="form-group">         
             <div class="contenedorServicios" id="contenedorServicios">
@@ -626,7 +626,7 @@
                 <div class="btn-circleMM " id="btnMasServicios" ><i class="glyphicon glyphicon-plus"></i></div>
               </div>              
             </div>
-            <span class="text-danger" id="mensajeErrorServiciosPu"></span>
+            <span class="label label-danger" id="mensajeErrorServiciosPu"></span>
           </div>
           <label class="label-custom-color">¿Que no esta permitido en tu domicilio?</label>            
           <div class="form-group">  
@@ -641,7 +641,7 @@
                 <input type="checkbox" name="cboxNoPareja" id="cboxNoPareja">                               
               </div>
             </div>           
-            <span class="text-danger" id="mensajeErrorNormasPu"></span>
+            <span class="label label-danger" id="mensajeErrorNormasPu"></span>
           </div>
           <span id="mensajePF"></span>            
         </form>          
@@ -668,7 +668,7 @@
             <div class="imgSeAscensor ripple" id="imgSeAscensor" >             
               <input type="checkbox" name="cboxAscensor" value="0" id="cboxAscensor">
               <label for="cboxAscensor"><span></span> Ascensor</label>
-              <span class="text-danger" id="mensajeErrorAscensor"></span>
+              <span class="label label-danger" id="mensajeErrorAscensor"></span>
             </div>           
           </div>
           <div class="form-group">         
@@ -738,7 +738,7 @@
             </div>           
           </div>
           <div class="form-group">         
-            <span class="text-danger" id="mensajeErrorServiciosPuLi"></span>           
+            <span class="label label-danger" id="mensajeErrorServiciosPuLi"></span>           
           </div>
         </div>  
       </form>
@@ -749,9 +749,7 @@
         </div>
         <button form="formPublicarSe" id="btnContinuarSe" name="btnContinuarSe" class="btn btn-primary btn-md btn-block btnFormularioContinuar ripple" >Guardar</button>
       </div><!--fin footerbtn-->
-    </div><!-- fin de publicar Servicios-->  
-       
-
+    </div><!-- fin de publicar Servicios--> 
     <div class="div-secundario divPublicar" id="publicarHabitacion"> 
       <div class="header navbar-fixed-top headerPublicar" >
         <div class=" btnAtrasPu" id="btnAtrasHabitacion">
@@ -786,7 +784,7 @@
               <input type="radio" name="radioCama" value="6" id="radioCaNada">
             </div>                                      
           </div>
-          <span class="text-danger" id="mensajeErroCama"></span>
+          <span class="label label-danger" id="mensajeErroCama"></span>
         </div>
         <div>           
           <label class="label-custom-color">¿Cuando estara disponoble?</label>
@@ -797,7 +795,7 @@
               <i class="glyphicon">Desde:</i>
               <input type="text" name="fechaDesde" id="fechaDesde" placeholder="  Ingresa una fecha " class="form-control" required readonly/>
             </div>
-            <span class="text-danger" id="mensajeErrorDisponibleD"></span>    
+            <span class="label label-danger" id="mensajeErrorDisponibleD"></span>    
           </div>
           <div class="contenedorHasta-collapse-custom" id="contenedorHasta">              
             <label class="containerHasta label-custom-color" id="containerHasta">
@@ -810,11 +808,11 @@
                     <i class="glyphicon">Hasta:</i>
                     <input type="text" name="fechaHasta" id="fechaHasta" placeholder=" Sin fecha " class="form-control " readonly/>
                   </div>
-                  <span class="text-danger" id="mensajeErrorDisponibleH"></span>    
+                  <span class="label label-danger" id="mensajeErrorDisponibleH"></span>    
                 </div>                                           
             </div>
           </div>
-          <span class="text-danger" id="mensajeErrorHasta"></span>
+          <span class="label label-danger" id="mensajeErrorHasta"></span>
         </div>
         <div>
           <label class="label-custom-color">¿Cuanto tiempo estara disponible?</label>            
@@ -834,7 +832,7 @@
                 <i></i>
               </select>
             </div>
-            <span class="text-danger" id="mensajeErrorDisponibleMi"></span>    
+            <span class="label label-danger" id="mensajeErrorDisponibleMi"></span>    
           </div>
           <div class="form-group content-select">
             <div class="inner-addon left-addon">
@@ -847,9 +845,9 @@
                 <i></i>
               </select>
             </div>
-            <span class="text-danger" id="mensajeErrorDisponibleMa"></span>    
+            <span class="label label-danger" id="mensajeErrorDisponibleMa"></span>    
           </div>
-          <span class="text-danger" id="mensajeErrorTiempoDisponible"></span>  
+          <span class="label label-danger" id="mensajeErrorTiempoDisponible"></span>  
         </div>
         <div>
           <label class="label-custom-color">¿La habitacion es?</label>              
@@ -866,7 +864,7 @@
               <input type="radio" name="radioHa" value="3" id="radioHaL">
             </div>               
           </div>
-          <span class="text-danger" id="mensajeErrorHabitacion"></span>
+          <span class="label label-danger" id="mensajeErrorHabitacion"></span>
         </div>
       </form>
       <div class="navbar-fixed-bottom footerbtnConti">
@@ -928,14 +926,14 @@
               <i class="glyphicon glyphicon-user"></i>
               <input type="text" name="nombreP" id="nombreP" placeholder="Nombre" required value="" class="form-control"/>
             </div>
-            <span class="text-danger" id="mensajeErrorNombreP"></span>
+            <span class="label label-danger" id="mensajeErrorNombreP"></span>
           </div>
           <div class="form-group">
             <div class="inner-addon left-addon">
               <i class="glyphicon glyphicon-user"></i>
               <input type="text" name="apellidosP" id="apellidosP" placeholder="Apellidos" required value="" class="form-control" />
             </div>
-            <span class="text-danger" id="mensajeErrorApellidosP"></span>
+            <span class="label label-danger" id="mensajeErrorApellidosP"></span>
           </div>
           <div class="form-group" style="display: inline-flex;">
             <label class="label-custom-color"> Sexo </label>                
@@ -951,54 +949,54 @@
                 <p class="sexoHM" id="mensjeMS">Mujer</p>           
               </div>          
             </div>
-            <span class="text-danger"></span>
+            <span class="label label-danger"></span>
           </div>
           <div class="form-group">
             <div class="inner-addon left-addon">
               <i class="glyphicon glyphicon-calendar"></i>
               <input type="date" name="fechaNacP" id="fechaNacP" placeholder="" value="" class="form-control" />
             </div>
-            <span class="text-danger"></span>
+            <span class="label label-danger"></span>
           </div>
           <div class="form-group">
             <div class="inner-addon left-addon">
               <i class="glyphicon glyphicon-phone"></i>
               <input type="text" name="telefonoP" id="telefonoP" placeholder="telefono" value="" class="form-control" />
             </div>
-            <span class="text-danger" id="mensajeErrortelefonoP"></span>
+            <span class="label label-danger" id="mensajeErrortelefonoP"></span>
           </div>                   
           <div class="form-group">
             <div class="inner-addon left-addon">
               <i class="glyphicon glyphicon-envelope"></i>
               <input type="email" name="emailP" id="emailP" placeholder="Correo Electrónico" required value="" class="form-control" readonly>
             </div>
-            <span class="text-danger" id="mensajeErrorEmailP"></span>          
+            <span class="label label-danger" id="mensajeErrorEmailP"></span>          
           </div> 
           <div class="form-group">
             <div class="inner-addon left-addon">
               <i class="glyphicon glyphicon-lock"></i>              
                 <input type="text" name="passwordP" id="passwordP" placeholder="Escribe tu contraseña actual" class="form-control"/> 
             </div>
-            <span class="text-danger" id="mensajeErrorContrasenyaPD"></span>
-            <span class="text-success" id="mensajeErrorContrasenyaPS"></span>
+            <span class="label label-danger" id="mensajeErrorContrasenyaPD"></span>
+            <span class="label label-success" id="mensajeErrorContrasenyaPS"></span>
           </div> 
           <div class="form-group">
             <div class="inner-addon left-addon">
               <i class="glyphicon glyphicon-lock"></i>
               <input type="password" name="passwordNP" id="passwordNP" placeholder="Nueva Contraseña"  class="form-control" disabled />
             </div>                        
-            <span class="text-danger" id="mensajeErrorContrasenyaNP"></span>
+            <span class="label label-danger" id="mensajeErrorContrasenyaNP"></span>
           </div>
           <div class="form-group">
             <div class="inner-addon left-addon">
               <i class="glyphicon glyphicon-lock"></i>
               <input type="password" name="cpasswordNP" id="cpasswordNP" placeholder="Repite Nueva Contraseña" class="form-control" disabled />
             </div>                        
-            <span class="text-danger" id="mensajeErrorCContrasenyaNP"></span>
+            <span class="label label-danger" id="mensajeErrorCContrasenyaNP"></span>
           </div>             
         </fieldset>
-        <span class="text-success" id="mPS"></span>
-        <span class="text-danger" id="mPD"></span>
+        <span class="label label-success" id="mPS"></span>
+        <span class="label label-danger" id="mPD"></span>
       </form>
     </div>
     <div class="navbar-fixed-bottom footerbtn">
@@ -1028,8 +1026,8 @@
             <div id="apellidosPM">apellidos</div>                
           </div>
         </fieldset>
-          <span class="text-success" id="mPMS"></span>
-          <span class="text-danger" id="mPMD"></span>
+          <span class="label label-success" id="mPMS"></span>
+          <span class="tlabel label-danger" id="mPMD"></span>
         </form>
         <form role="form" name="" id="formPubliMo" class="form-principal-perfil" enctype="multipart/form-data">
           <div class="contendorPublicados" id="contendorPublicados">          
@@ -1041,8 +1039,8 @@
                   </div>            
                 </div>
             </fieldset>
-            <span class="text-success" id="mPuMS"></span>
-            <span class="text-danger" id="mPuMD"></span>          
+            <span class="label label-success" id="mPuMS"></span>
+            <span class="label label-danger" id="mPuMD"></span>          
           </div>
         </form>              
       <!--/div--><!-- fin div secundario de pagina mostrar peril usuario-->             
@@ -1116,10 +1114,7 @@
             <div class="contenedorpermitenFoPuM" id="contenedorpermitenFoPuM">                
                         
            </div>
-          </div>
-
-             
-          
+          </div>          
         </fieldset>
       </div>
     </div><!-- fin pagina paginaPublicadoMostrar-->
@@ -1157,6 +1152,6 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCVnl1VBm-qnyhhi0l8VTXHR6NadW-DNQ&libraries=places"></script>
-    <script src="js/swiper537.min.js"></script>    
+    <script src="js/swiper.min.js"></script>    
   </body>
 </html>

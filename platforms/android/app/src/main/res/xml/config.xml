@@ -25,6 +25,13 @@
     <feature name="ImagePicker">
         <param name="android-package" value="com.synconset.ImagePicker" />
     </feature>
+    <feature name="BackbuttonPlugin">
+        <param name="android-package" value="com.badrit.Backbutton.BackbuttonPlugin" />
+    </feature>
+    <feature name="StatusBar">
+        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+        <param name="onload" value="true" />
+    </feature>
     <name>WasiVI</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
@@ -58,5 +65,8 @@
     <allow-intent href="market:*" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="orientation" value="portrait" />
-    <preference name="SplashScreenDelay" value="5000" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#3a9cb1" />
+    <preference name="StatusBarDefaultScrollToTop" value="false" />
 </widget>

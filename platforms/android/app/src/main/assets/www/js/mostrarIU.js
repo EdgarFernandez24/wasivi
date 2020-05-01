@@ -1595,37 +1595,35 @@ ubicacionPrincipal  = window.pageYOffset;
 $(window).on("scroll",function(e){
     DesplazamientoActual = window.pageYOffset;
     if(ubicacionPrincipal >= DesplazamientoActual){
-        document.getElementById('inputBuscar').style.top = '0';
+        document.getElementById('inputBuscar').style.top = '0px';
         //document.getElementById('btnPublicarPrincipal').style.bottom = '0';
     }
     else{
-        document.getElementById('inputBuscar').style.top = '-50px';
+        document.getElementById('inputBuscar').style.top = '-56px';
         //document.getElementById('btnPublicarPrincipal').style.bottom = '-70';
     }
     ubicacionPrincipal = DesplazamientoActual;
 });
 
 ubicacionPrincipalM  = window.pageYOffset;
+//ubicacionPrincipalM+=100;
 $(window).on("scroll",function(e){
+
     DesplazamientoActualM = window.pageYOffset;
-    if(ubicacionPrincipalM >= DesplazamientoActualM){
-        document.getElementById('headerFotosPublicados').style.background = 'none';
-        //document.getElementById('btnPublicarPrincipal').style.bottom = '0';
+    console.log("uPrincipalM: "+ubicacionPrincipalM+" dActualM: "+DesplazamientoActualM);
+    if (DesplazamientoActualM>=100) {
+        document.getElementById('headerFotosPublicados').style.background = '#fff';
+        document.getElementById('btnAtrasPublicadoMostrar').style.color='#474e5d';   
     }
     else{
-        document.getElementById('headerFotosPublicados').style.background = '#fff';
-        //document.getElementById('btnPublicarPrincipal').style.bottom = '-70';
+        document.getElementById('headerFotosPublicados').style.background = 'none';
+        document.getElementById('btnAtrasPublicadoMostrar').style.color='#fff';
     }
     ubicacionPrincipalM = DesplazamientoActualM;
+   
 });
 
-/*function toggleBounce() {
-  if (markerD.getAnimation() !== null) {
-    markerD.setAnimation(null);
-  } else {
-    markerD.setAnimation(google.maps.Animation.BOUNCE);
-  }
-}*/
+
 
 function inicioSesion(){
     $datosLocal=JSON.parse(localStorage.getItem('datosInicioSesion'));
@@ -1647,8 +1645,8 @@ function inicioSesion(){
 }
 
 function iniciarSession(){
-    $('#mIS').html(" ");
-    $('#mID').html(" ");
+    $('#mIS').html("");
+    $('#mID').html("");
     //alert("entra btn inicio");
     event.preventDefault();
     $.ajax({
@@ -2777,13 +2775,13 @@ function mostrarAnuncio(idPublicacion){
                             $("#minFoPuM").html(" Min: "+datosConsDatosPubli['mesMin']+" Mes/es ");
                         }
                         else{
-                            $("#minFoPuM").html(" ");   
+                            $("#minFoPuM").html("");   
                         }
                         if (datosConsDatosPubli['mesMax']>0) {
                             $("#maxFoPuM").html(" Max: "+datosConsDatosPubli['mesMax']);
                         }             
                         else{
-                            $("#maxFoPuM").html(" ");
+                            $("#maxFoPuM").html("");
                         }
 
                         if (datosConsDatosPubli['quePublicas']==1) {//marcamos Hab. solo

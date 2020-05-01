@@ -56,7 +56,7 @@ body.loading .modalLoading {
     color:#f2f2f2;
 }
 .container .form-control{
-  padding: 6px 12px 0px 0px;
+  padding: 5px 10px 5px 10px;
 }
 /***************************************************/
 /* div inicio */
@@ -331,16 +331,16 @@ text-align: center;
   margin: 0;  
 }
 .container-custom-principal .div-custom-principal{  
-  margin-top:10px;
-  padding: 0px;
-  background-color: #f2f2f2;  
+  /*margin-top:10px;*/
+  padding:20px 0px 50px 0px;
+  background-color: #fff;  
 }
 .container-custom-principal .header{
-  padding: 5px 10px 4px 10px;
+  padding: 15px 10px 4px 10px;
   color: #f2f2f2;
   background-color:#3a9cb1;/* #008080;*/
   transition: top 0.5s;
-  top:0;
+  /*top:23px;*/
   
 }
 /*
@@ -377,20 +377,21 @@ text-align: center;
 
 }
 .container-custom-principal .left-addon .glyphicon {
-  right: 10px;
-  color: #008080;  /*#f2f2f2#246175;*/
+  left: 0px;
+  color: #474e5d;   /*#f2f2f2#246175;#008080;*/
 
 }
 .container-custom-principal .right-addon .glyphicon {
   right: 0px;
-  color: #008080;  /*#f2f2f2#246175;*/
+  color: #474e5d;/* #008080;  /*#f2f2f2#246175;*/
 
 }
+/*
 .div-custom-principal .left-addon .glyphicon {
   left: 0px;
   color:#009999;  /*#246175;*/
 
-}
+/*}*/
 .container-custom-principal .right-addon input {
   padding-right: 30px;
 
@@ -587,6 +588,7 @@ font-size: 10px;
   position: absolute;
   top: 0px;
   left: 20%;
+  padding-top: 10px;
 }
 
 .div-custom-principal .nav-tabs > li > a,
@@ -633,7 +635,7 @@ font-size: 10px;
       height: 200px;
       background: transparent;
       position: fixed;
-      top: 50px;
+      top: 65px;
       /*border: 1px solid red;*/
     }
 #swiper-container .slidePuTo {
@@ -731,7 +733,7 @@ font-size: 10px;
   display: none;
 }
 .container-custom-principal .contenedorFotosLista{
-margin: 5px;
+margin: 25px 0px 0px 0px;
 display: grid;
 grid-template-columns: auto auto;
 }  
@@ -792,6 +794,7 @@ grid-template-columns: auto auto;
 /**********************div publicar general ******************/
 .container-custom-principal .btnAtrasPu{
   width: 20%;
+  font-size: 20px;  
 }
 .container-custom-principal .btnAtrasListaMapa{
   width: 20%;
@@ -823,7 +826,7 @@ top: 8px;
 }
 .container-custom-principal .headerPublicar {
   padding: 5px 10px 0px 10px ;
-  color: #008080;
+  color: #474e5d;/*#008080;*/
   background-color:#f2f2f2;
   border-bottom: 3px solid #b3cccc;
   font-size: 20px;  
@@ -840,7 +843,8 @@ top: 8px;
   font-family: 'Ubuntu', sans-serif;
 
   padding-left: 10px;
-  color:#008080; /*#f2f2f2;*/
+  color:#474e5d; /*#f2f2f2;#008080;*/
+  margin: 0px;
   /*font-size: 20px;*/
 }
 .div-custom-principal .div-secundario{
@@ -848,7 +852,7 @@ top: 8px;
 }
 .div-custom-principal .divPublicar{
   /*border: 1px solid pink;*/
-  margin: 30px 0px 50px 0px;
+  margin: 18px 0px 50px 0px;
   /*margin-top:40px;*/
   /*padding: 10px;*/
   background-color: #fff;  
@@ -1045,9 +1049,9 @@ height: 26px;
 line-height: 1;
   text-align: center;
 border-radius: 13px;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+/*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
 background-color:#f2f2f2; 
-color:#008080; 
+color:#474e5d;/*#008080; */
 font-size: 14px;
 }
 
@@ -1087,10 +1091,10 @@ font-size: 14px;
   padding: 6px 0;
   line-height: 1.428571429;
   text-align: center;
-  border:1px solid #008080;/*none;*/
+  border:1px solid #474e5d;/*#008080;/*none;*/
   background-color:#f2f2f2; 
   text-decoration:none; 
-  color:#008080;  
+  color:#474e5d;/*#008080;  */
   cursor:pointer;
   outline: none;
   /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);     */
@@ -1646,7 +1650,7 @@ font-size: 14px;
   left: 0;
   height: 18px;
   width: 18px;
-  border:2px solid #008080;
+  border:2px solid #474e5d;/*#008080;*/
   border-radius: 2px;
 }
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -1665,7 +1669,7 @@ font-size: 14px;
   top: 0px;
   width: 6px;
   height: 10px;
-  border: solid #008080;
+  border: solid #474e5d;/*#008080;*/
   border-width: 0 2px 2px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
@@ -1675,7 +1679,7 @@ font-size: 14px;
   position: absolute;
   padding: 2px;
   pointer-events: none;
-  color:#008080;    
+  color:#474e5d;/*#008080;    */
   right: 10px;
   /*border: 1px solid #000;*/
 }
@@ -1711,7 +1715,7 @@ font-size: 14px;
 }
 */
 .container-custom-principal .contenedorHasta-collapse-custom {
-  color:#f2f2f2;
+  color:#474e5d;/*#f2f2f2;*/
   padding: 0px;
   margin-bottom: 10px;
   border-bottom:1px solid #008080; 
@@ -1868,6 +1872,7 @@ dos bordes con color y que giramos con transform: rotate(-45deg);
     border-radius: 0;
     height: 45px;
     font-size: 20px;
+    bottom: auto;
 }
 .container-custom-principal button.btnFormularioContinuar:focus {
     border:none;
@@ -2085,14 +2090,14 @@ border:1px solid #999999;
   width: 30px;
   height: 30px;
   border-radius: 15px;
-  padding: 8px;
+  padding: 7px;
   opacity: 0.7;
   line-height: 1;
   text-align: center;
-  border:1px solid #008080;/*none;*/
+  border:1px solid #474e5d;/*#008080;/*none;*/
   background-color:#f2f2f2; 
   text-decoration:none; 
-  color:#008080;  
+  color:#474e5d;/*#008080;  */
   
   outline: none;
   cursor:pointer;
@@ -2110,10 +2115,10 @@ border:1px solid #999999;
   opacity: 0.7;
   line-height: 1;
   text-align: center;
-  border:1px solid #008080;/*none;*/
+  border:1px solid #474e5d;/*#008080;/*none;*/
   background-color:#f2f2f2; 
   text-decoration:none; 
-  color:#008080;  
+  color:#474e5d;/*#008080;  */
   
   outline: none;
   cursor:pointer;
@@ -2131,7 +2136,7 @@ border:1px solid #999999;
   display: none;
 }
 .div-custom-secundario{
-margin: 0;
+margin-bottom: 50px;
 padding: 0;
 background: #fff;
 }
@@ -2188,11 +2193,16 @@ padding: 10px;
     display: flex;    
   }
   .contenedorMensajeAnuncio .imgHabitacion { 
-     margin: 5px; 
-    
+     margin: 5px;     
      height: 60px; 
-     width: 60px;
-    
+     width: 60px;    
+     border-radius: 5px; 
+     border: 1px solid #000;
+  }
+  .contenedorMensajeAnuncio .imgServicio { 
+          
+     height: 60px; 
+     width: 60px;    
      border-radius: 5px; 
      border: 1px solid #000;
   }
@@ -2203,7 +2213,9 @@ padding: 10px;
   margin: 3px;
   }
 .contenedorMensajeAnuncio .contenedorServiciosFoPuM{
-    display: flex; /*grid*/   
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  grid-gap: 10px;  
   }
 .contenedorMensajeAnuncio .contenedorpermitenFoPuM{
     display: flex;    
@@ -2214,15 +2226,33 @@ padding: 10px;
   height: 100%;
 }*/
 .container-custom-principal .headerFotosPublicados {
-  /*padding: 5px 10px 0px 10px ;*/
-  color: #008080;
+  padding: 10px 10px 0px 10px ;
+  color: #fff;
   background:transparent;
   height: 40px;
   /*border-bottom: 3px solid #b3cccc;
   font-size: 20px;  
   display: flex;*/
 }
-
+.container-custom-principal button.btnEnviarMensaje {
+    /*display:scroll;*/
+    position:fixed;
+    bottom:10px;
+    left: 25%;
+    width: 50%;
+    height: 40px;
+    background: linear-gradient(135deg, #3a9cb1, #008080);
+    border:none;
+    font-size: 15px;
+    text-decoration:none; 
+    color:#f2f2f2; 
+    cursor:pointer;
+    outline: none;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: top 0.5s;
+    /*background-color:#008080; */
+}
 /******************************************fin mostrar fotos publicados****************/
 
 
@@ -2328,7 +2358,7 @@ padding: 10px;
     border-radius: 20px;
     background-color:#f2f2f2;
     
-    color: #008080; 
+    color: #474e5d;/*#008080; */
     font-size: 24px;
   }  
 .container-custom-principal .fotoB{
@@ -2368,7 +2398,7 @@ padding: 10px;
   height: 30px;
   border-radius: 15px;
   background-color:#f2f2f2;    
-  color: #008080; 
+  color: #474e5d;/*#008080; */
   font-size: 18px;
 }   
   .container-custom-principal .fotoB{
@@ -2407,7 +2437,7 @@ padding: 10px;
     border-radius: 13px;
     background-color:#f2f2f2;
     
-    color: #008080; 
+    color: #474e5d;/*#008080; */
     font-size: 14px;
   }
   .container-custom-principal .fotoB{

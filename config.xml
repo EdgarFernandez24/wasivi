@@ -31,8 +31,11 @@
         </domain-config>           
     </network-security-config>
     <preference name="orientation" value="portrait" />
-
-    <preference name="SplashScreenDelay" value="5000" />
+    
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#3a9cb1" />
+    <preference name="StatusBarDefaultScrollToTop" value="false" />
     <platform name="android">
         <allow-intent href="market:*"/>
     </platform>

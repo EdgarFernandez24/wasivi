@@ -346,7 +346,7 @@ si la contraseña es igual al de la base de datos */
         }
         else{            
             continuarFUbi=1;
-            $("#mensajeErrorTituloPu").html(" ");
+            $("#mensajeErrorTituloPu").html("");
             tMPu=1;
         }
         if (tMPu==1 && pMPu==1 && cMPu==1 && contImg > 0) {
@@ -370,7 +370,7 @@ si la contraseña es igual al de la base de datos */
             pMPu=1;
             $("#mensajeErrorPrecioPu").html("");
         }    
-        if (tMPu==1 && pMPu==1 && cMPu==1 && contImg > 0) {
+        if (tMPu==1 && pMPu==1 && fMPu==1 && cMPu==1 && contImg > 0) {
             //alert("si precioMPu");
             $("#btnContinuarFoUb").css({"background-color":"#008080"});//color tema
         }
@@ -392,7 +392,7 @@ si la contraseña es igual al de la base de datos */
             continuarFUbi=1;
             fMPu=1;
             $("#mensajeErrorFianzaPu").html("");
-            if (tMPu==1 && pMPu==1 && cMPu==1 && contImg > 0) {
+            if (tMPu==1 && pMPu==1 && fMPu==1 &&cMPu==1 && contImg > 0) {
                 
                 $("#btnContinuarFoUb").css({"background-color":"#008080"});//color tema
             }
@@ -403,15 +403,15 @@ si la contraseña es igual al de la base de datos */
         if ($comentarioPu =='' || $comentarioPu ==null) {
             $("#mensajeErrorcomentarioPu").html("Escribe algun comentario ");
             cMPu=0;
-            $("#btnContinuarFoUb").css({"background-color":"#808080"});//gris    
+            $("#btnContinuarFoUb").css({"background-color":"#808080"});//gris   
+            return false;  
         }
         else{
             $("#mensajeErrorcomentarioPu").html("");
             cMPu=1;
-            continuarFUbi=1;
-            
+            continuarFUbi=1;            
         }
-        if (tMPu==1 && pMPu==1 && cMPu==1 && contImg > 0) {
+        if (tMPu==1 && pMPu==1 && fMPu==1 &&cMPu==1 && contImg > 0) {
             //alert("si comentarioMPu");
             $("#btnContinuarFoUb").css({"background-color":"#008080"});//color tema
         }           
@@ -836,7 +836,7 @@ continuarHabi=1;
             return false;
         }
         else{
-            $("#mensajeErrorDireccion").html(" ");
+            $("#mensajeErrorDireccion").html("");
             //$formPD=1;
         }
         if (!autoCCiu) {
@@ -846,7 +846,7 @@ continuarHabi=1;
             return false;
         }
         else{
-            $("#mensajeErrorCiudad").html(" ");
+            $("#mensajeErrorCiudad").html("");
             //$formPD=1;
         }
         if (!autoCDir) {
@@ -856,7 +856,7 @@ continuarHabi=1;
             return false;
         }
         else{
-            $("#mensajeErrorDireccion").html(" ");
+            $("#mensajeErrorDireccion").html("");
             //$formPD=1;
         }
         //if ($formPD==1) {}
@@ -895,7 +895,8 @@ continuarHabi=1;
         $fianzaPu = $("#fianzaMPu").val();        
         if (!/^([0-9])*$/.test($fianzaPu)){
             $fianzaErrorPu = "La fianza debe contener solo numeros.";        
-            $("#mensajeErrorFianzaPu").html($fianzaErrorPu);       
+            $("#mensajeErrorFianzaPu").html($fianzaErrorPu); 
+                
             return false;            
         } 
         else{           

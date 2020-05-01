@@ -43,6 +43,7 @@ $(document).ready(function(){
     selDivMostrarPubliTodoLista = $("#contenedorFotosLista");// mostrar todo lo publicado en fotos listas
     selDivMostrarFotosSwipe = $("#swiper-wrapperFotosPublicados"); //mostrar fotos publicados por id publicados dentro de swiper contenedor fotos publicados 
     htmlMostrarDatosPu=" ";//inicia vacio 
+    selDivMostrarBtnChat=$("#paginaPublicadoMostrar");
     inicioSesion(); //recupera y almacena datos locales 
 	 /* mostrar tabs divInicio inicio sesion y registrar*/            
     $("#aRegistrar").click(function(){
@@ -85,7 +86,7 @@ $(document).ready(function(){
             $("#swiper-wrapperFotosPublicados div").remove(".slideFoIdPu"); // quitar los elementos vrados con icousuario para
             swiperFoPu.destroy();
             $("#contenedorcompartirFoPuM div").remove(".imgHabitacion");
-            $("#contenedorServiciosFoPuM div").remove(".imgHabitacion");
+            $("#contenedorServiciosFoPuM div").remove(".imgServicio");
             $("#contenedorpermitenFoPuM div").remove(".imgHabitacion");
             swiperMoPuTo=0;
         }
@@ -107,7 +108,7 @@ $(document).ready(function(){
                 $("#swiper-wrapperFotosPublicados div").remove(".slideFoIdPu"); // quitar los elementos vrados con icousuario para
                 swiperFoPu.destroy();
                 $("#contenedorcompartirFoPuM div").remove(".imgHabitacion");
-                $("#contenedorServiciosFoPuM div").remove(".imgHabitacion");
+                $("#contenedorServiciosFoPuM div").remove(".imgServicio");
                 $("#contenedorpermitenFoPuM div").remove(".imgHabitacion");
                 swiperMoPuTo=0;
             }
@@ -119,11 +120,12 @@ $(document).ready(function(){
             $("#swiper-wrapperFotosPublicados div").remove(".slideFoIdPu"); // quitar los elementos vrados con icousuario para
             swiperFoPu.destroy();
             $("#contenedorcompartirFoPuM div").remove(".imgHabitacion");
-            $("#contenedorServiciosFoPuM div").remove(".imgHabitacion");
+            $("#contenedorServiciosFoPuM div").remove(".imgServicio");
             $("#contenedorpermitenFoPuM div").remove(".imgHabitacion");
             $("#buscarLista").addClass('active');//fade in 
             $("#aBuscarLista").tab('show');
         }
+        //$("#paginaPublicadoMostrar").scrollTop('0');
     });
 
 
@@ -153,7 +155,12 @@ $(document).ready(function(){
         posPubliDespues=0;
         cambioZona=0;//datos para implementar
         swiperMoPuTo=0;  
-        entroTabLista=0;         
+        entroTabLista=0; 
+        //ubicacionPrincipal=0;
+        //DesplazamientoActual=0;
+       //$("#inputBuscar").css({"top":'0px'});        
+        //$currentScrollPos=0;
+        //$prevScrollpos=0;
         })
     $("#aBuscarLista").click(function(){
         console.log("aBuscarLista");
@@ -273,6 +280,7 @@ $(document).ready(function(){
         //event.preventDefault();
         btnEditarPublicadoM =0;
         icoUserpublicadosM =0;
+        window.scrollTo(0, 0); 
 
         $("#contenedorFotoMensajePublicados div").remove(".publicadoM"); // quitar los elementos vrados con icousuario para 
 
@@ -282,6 +290,7 @@ $(document).ready(function(){
         $(".footer .icoFooterUsuario").css({"background": "url(img/perfilG.png) no-repeat center center","background-size": "30px 30px"});
         
         $("#paginaPrincipal").css("display", "block");
+        $("#paginaPrincipal").css({'top':'0'});//para mostrar top 0 
         $("#paginaListaMapas").css("display", "none");            
         $("#paginaPublicar").css("display", "none");
 
@@ -1591,41 +1600,27 @@ $(window).on("scroll", function(e) {
 });//fin $(document).ready(function()
 
 
-ubicacionPrincipal  = window.pageYOffset;
-$(window).on("scroll",function(e){
-    DesplazamientoActual = window.pageYOffset;
-    if(ubicacionPrincipal >= DesplazamientoActual){
-        document.getElementById('inputBuscar').style.top = '0';
-        //document.getElementById('btnPublicarPrincipal').style.bottom = '0';
-    }
-    else{
-        document.getElementById('inputBuscar').style.top = '-50px';
-        //document.getElementById('btnPublicarPrincipal').style.bottom = '-70';
-    }
-    ubicacionPrincipal = DesplazamientoActual;
-});
 
+/*
 ubicacionPrincipalM  = window.pageYOffset;
+
 $(window).on("scroll",function(e){
+
     DesplazamientoActualM = window.pageYOffset;
-    if(ubicacionPrincipalM >= DesplazamientoActualM){
-        document.getElementById('headerFotosPublicados').style.background = 'none';
-        //document.getElementById('btnPublicarPrincipal').style.bottom = '0';
+    console.log("uPrincipalM: "+ubicacionPrincipalM+" dActualM: "+DesplazamientoActualM);
+    if (DesplazamientoActualM>=100) {
+        document.getElementById('headerFotosPublicados').style.background = '#fff';
+        document.getElementById('btnAtrasPublicadoMostrar').style.color='#474e5d';   
     }
     else{
-        document.getElementById('headerFotosPublicados').style.background = '#fff';
-        //document.getElementById('btnPublicarPrincipal').style.bottom = '-70';
+        document.getElementById('headerFotosPublicados').style.background = 'none';
+        document.getElementById('btnAtrasPublicadoMostrar').style.color='#fff';
     }
     ubicacionPrincipalM = DesplazamientoActualM;
+   
 });
 
-/*function toggleBounce() {
-  if (markerD.getAnimation() !== null) {
-    markerD.setAnimation(null);
-  } else {
-    markerD.setAnimation(google.maps.Animation.BOUNCE);
-  }
-}*/
+*/
 
 function inicioSesion(){
     $datosLocal=JSON.parse(localStorage.getItem('datosInicioSesion'));
@@ -1641,14 +1636,34 @@ function inicioSesion(){
         //$("#imgP").html($datosLocal['usrImg']);
         //$("#divInicio").css("display", "none");
         $idCliente = $datosLocal['usrId'];
-        $emailCliente = $datosLocal['usrEmail'];    
+        $emailCliente = $datosLocal['usrEmail'];  
+        window.scrollTo(0, 0);  
         //alert($datosLocal['usrEmail'] + " " + $datosLocal['usrId']);
+    /*
+        if ($("#paginaPrincipal").css('display')=='block') {           
+            ubicacionPrincipal=0;
+            ubicacionPrincipal  = window.pageYOffset;
+            DesplazamientoActual = 0;// window.pageYOffset;
+            console.log("uP: "+ubicacionPrincipal+" dA: "+DesplazamientoActual);
+            $("#paginaPrincipal").scrollTop(0);
+            $(window).on("scroll",function(e){
+               
+                DesplazamientoActual = window.pageYOffset;               
+                if(ubicacionPrincipal >= (DesplazamientoActual)){
+                    document.getElementById('inputBuscar').style.top = '0px';                    
+                }
+                else{
+                    document.getElementById('inputBuscar').style.top = '-56px';                    
+                }
+                ubicacionPrincipal = DesplazamientoActual;
+            });
+        }*/
     }
 }
 
 function iniciarSession(){
-    $('#mIS').html(" ");
-    $('#mID').html(" ");
+    $('#mIS').html("");
+    $('#mID').html("");
     //alert("entra btn inicio");
     event.preventDefault();
     $.ajax({
@@ -2777,13 +2792,13 @@ function mostrarAnuncio(idPublicacion){
                             $("#minFoPuM").html(" Min: "+datosConsDatosPubli['mesMin']+" Mes/es ");
                         }
                         else{
-                            $("#minFoPuM").html(" ");   
+                            $("#minFoPuM").html("");   
                         }
                         if (datosConsDatosPubli['mesMax']>0) {
                             $("#maxFoPuM").html(" Max: "+datosConsDatosPubli['mesMax']);
                         }             
                         else{
-                            $("#maxFoPuM").html(" ");
+                            $("#maxFoPuM").html("");
                         }
 
                         if (datosConsDatosPubli['quePublicas']==1) {//marcamos Hab. solo
@@ -2834,40 +2849,40 @@ function mostrarAnuncio(idPublicacion){
                         selDivMostrarDatosPu=$("#contenedorServiciosFoPuM");
 
                         if (datosConsDatosPubli['ascensor']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/ascensorNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/ascensorNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
                         if (datosConsDatosPubli['calefaccion']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/calefaccionNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/calefaccionNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
                         if (datosConsDatosPubli['estacionamiento']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/estacionamientoNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/estacionamientoNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
                         if (datosConsDatosPubli['lavaVajilla']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/lavaVajillasNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/lavaVajillasNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
                         if (datosConsDatosPubli['lavadora']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/lavadoraNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/lavadoraNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
                         if (datosConsDatosPubli['muebles']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/mueblesNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/mueblesNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
                         if (datosConsDatosPubli['piscina']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/piscinaNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/piscinaNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
                         if (datosConsDatosPubli['portero']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/porteroNLe.png) no-repeat center center; background-size:58px 58x;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/porteroNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
                         if (datosConsDatosPubli['radiador']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/radiadorNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/radiadorNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
                         if (datosConsDatosPubli['secador']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/secadorNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/secadorNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
                         if (datosConsDatosPubli['tv']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/tvNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/tvNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
                         if (datosConsDatosPubli['wifi']==1) {
-                            htmlMostrarDatosPu+="<div class='imgHabitacion' style='background:url(img/wifiNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
+                            htmlMostrarDatosPu+="<div class='imgServicio' style='background:url(img/wifiNLe.png) no-repeat center center; background-size:58px 58px;' ></div>";
                         }
 
                         selDivMostrarDatosPu.append(htmlMostrarDatosPu);
@@ -2887,6 +2902,10 @@ function mostrarAnuncio(idPublicacion){
 
                         selDivMostrarDatosPu.append(htmlMostrarDatosPu);
                         htmlMostrarDatosPu=" ";
+                        /*
+                        htmlMostrarBtnChat+="<button class='btn btn-primary btn-md btn-block btnEnviarMensaje' id='btn'><div class='icoBuscarBtnPuPrin btnPosDer'></div>Enviar mensaje</button>"
+                        selDivMostrarBtnChat.append(htmlMostrarBtnChat);
+                        htmlMostrarBtnChat="";*/
                     }
                     if (datosConsDatosPubli['fotosPublicado']==0) {                        
                    }

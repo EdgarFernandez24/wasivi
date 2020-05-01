@@ -250,6 +250,30 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "plugins.imagePicker"
       ]
+    },
+    {
+      "id": "cordova-plugin-backbutton.Backbutton",
+      "file": "plugins/cordova-plugin-backbutton/www/Backbutton.js",
+      "pluginId": "cordova-plugin-backbutton",
+      "clobbers": [
+        "navigator.Backbutton"
+      ]
+    },
+    {
+      "id": "cordova-plugin-statusbar.statusbar",
+      "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+      "pluginId": "cordova-plugin-statusbar",
+      "clobbers": [
+        "window.StatusBar"
+      ]
+    },
+    {
+      "id": "cz.blocshop.socketsforcordova.Socket",
+      "file": "plugins/cz.blocshop.socketsforcordova/socket.js",
+      "pluginId": "cz.blocshop.socketsforcordova",
+      "clobbers": [
+        "window.Socket"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -259,6 +283,9 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-file": "6.0.2",
     "cordova-plugin-splashscreen": "5.0.3",
     "cordova-plugin-file-transfer": "1.7.1",
-    "cordova-plugin-imagepicker": "1.1.0"
+    "cordova-plugin-imagepicker": "1.1.0",
+    "cordova-plugin-backbutton": "0.3.0",
+    "cordova-plugin-statusbar": "2.4.3",
+    "cz.blocshop.socketsforcordova": "1.1.0"
   };
 });

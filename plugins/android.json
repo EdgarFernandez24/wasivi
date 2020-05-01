@@ -28,6 +28,12 @@
     },
     "cordova-plugin-imagepicker": {
       "PACKAGE_NAME": "com.SoftBot.WasiVI"
+    },
+    "cordova-plugin-backbutton": {
+      "PACKAGE_NAME": "com.SoftBot.WasiVI"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.SoftBot.WasiVI"
     }
   },
   "dependent_plugins": {}
